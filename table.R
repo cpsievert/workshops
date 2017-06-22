@@ -56,6 +56,7 @@ d <- bind_rows(dauto, dalt)
 d %>%
   mutate(date = as.Date(date, format = "%Y%m%d")) %>%
   arrange(desc(date)) %>%
+  select(date, title, venue, type, recording) %>%
   datatable(escape = F, options = list(pageLength = 50), rownames = FALSE) %>%
   saveWidget(file = "index.html")
 
