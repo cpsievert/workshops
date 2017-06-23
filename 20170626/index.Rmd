@@ -1,0 +1,147 @@
+---
+title: "Interactive data visualization on the web with R"
+venue: "Workshop proposal for NYC Data Science"
+type: "workshop"
+recording: "none"
+output:
+  xaringan::moon_reader:
+    chakra: "../templates/remarkjs/libs/remark-latest.min.js"
+    nature:
+      # approx the golden ratio
+      ratio: '14.6:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      navigation:
+        scroll: false
+date: "Slides: https://workshops.cpsievert.me/ <br /> <br /> Slides released under <a href='https://workshops.cpsievert.me/LICENSE'>Creative Commons</a>"
+author: "Carson Sievert"
+---
+
+```{r setup, echo = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  fig.width = 10,
+  fig.height = 4,
+  comment = "#>",
+  collapse = TRUE,
+  eval = FALSE
+)
+```
+
+## About me
+
+* PhD in statistics from Iowa State (defended in December)
+    * Taught intro to business statistics for 4 years. 
+    * __Thesis:__ Interfacing R with Web Technologies for Interactive Statistical Graphics and Computing
+with Data
+
+* Maintainer of plotly's R package (for nearly 2 years!)
+    * Authored the [plotly book](https://plotly-book.cpsievert.me/) in 2016
+    * Received the John M. Chambers Statistical Software Award in 2017
+    
+* Author of many [other R packages](https://cpsievert.me/software/) 
+    * LDAvis, animint, pitchRx, rdom, etc
+
+* Delivered a handful of R workshops
+    * Most recently (solely) delivered an R workshop at [plotcon](https://plotcon.plot.ly/)
+
+---
+class: inverse, center, middle
+
+## About my workshops
+
+Attendees expected to bring laptop with relevant R packages installed.
+
+The slides and materials are published online (under Creative Commons).
+
+Blend of lecture, coding demos, and hands-on exercises.
+
+Comfortable managing 5-20 attendees...anymore requires assistance.
+
+---
+
+## About this workshop
+
+* Essentially a re-hash of my [plotcon workshop](https://plotcon17.cpsievert.me/workshop/)
+
+* Day 1: Getting (re)-acquainted with R, RStudio, data wrangling, ggplot2, and plotly
+  * Basic R syntax and data structures
+  * Using `ggplotly()` to convert ggplot2 to plotly
+  * Using `layout()`/`style()` to modify plotly objects
+  * Tips and info for getting "un-stuck"
+    
+* Day 2: Advanced plotly
+  * Animation
+  * Highlighting/filtering in multiple linked views
+  * Capturing plotly events in shiny
+
+---
+class: inverse, center, middle
+
+# Examples of what students learn
+
+---
+
+## Modern ggplot2 mapping
+
+```{r}
+library(plotly)
+usa <- albersusa::usa_sf("laea")
+p <- ggplot(usa) + geom_sf(aes(fill = pop_2010)) 
+ggplotly(p)
+```
+
+
+<iframe src="map.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"></iframe>
+
+---
+
+## Various ways to customize
+
+```{r}
+p <- ggplot(usa) + 
+  geom_sf(aes(fill = pop_2010, text = paste(name, "had", pop_2010, "\n in 2010"))) 
+style(ggplotly(p, tooltip = "text"), hoverlabel = list(bgcolor = "white"))
+```
+
+<iframe src="map2.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"></iframe>
+
+---
+
+## Define custom interactions
+
+<iframe src="map-outline.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"></iframe>
+
+---
+
+## The code
+
+```{r}
+library(crosstalk)
+usd <- SharedData$new(usa)
+p <- ggplot(usd) + geom_sf(aes(fill = pop_2010))
+highlight(
+  ggplotly(p), "plotly_hover", opacityDim = 0.8,
+  selected = attrs_selected(line = list(color = "black"))
+)
+```
+
+---
+
+## Annotate on click
+
+<img src="../gifs/annotate.gif" width=800 height=400 />
+
+
+
+---
+class: center, middle, inverse
+
+# Thanks!
+
+Twitter: [@cpsievert](https://twitter.com/cpsievert) <br />
+GitHub: [@cpsievert](https://github.com/cpsievert) <br />
+Email: <cpsievert1@gmail.com> <br />
+Web: <https://cpsievert.me>
+
