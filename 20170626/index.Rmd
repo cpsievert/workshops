@@ -21,12 +21,17 @@ author: "Carson Sievert"
 ```{r setup, echo = FALSE}
 knitr::opts_chunk$set(
   message = FALSE,
-  fig.width = 10,
-  fig.height = 4,
+  fig.width = 12.5,
+  fig.height = 5,
   comment = "#>",
   collapse = TRUE,
   eval = FALSE
 )
+```
+
+```{r, eval = TRUE, echo = FALSE}
+library(plotly)
+library(crosstalk)
 ```
 
 ## About me
@@ -43,7 +48,7 @@ with Data
 * Author of many [other R packages](https://cpsievert.me/software/) 
     * LDAvis, animint, pitchRx, rdom, etc
 
-* Delivered a handful of R workshops
+* Delivered a handful of R [workshops](https://workshops.cpsievert.me)
     * Most recently (solely) delivered an R workshop at [plotcon](https://plotcon.plot.ly/)
 
 ---
@@ -51,19 +56,19 @@ class: inverse, center, middle
 
 ## About my workshops
 
-Attendees expected to bring laptop with relevant R packages installed.
+Attendees expected to bring laptop.
 
-The slides and materials are published online (under Creative Commons).
+Materials are published online (under Creative Commons).
 
 Blend of lecture, coding demos, and hands-on exercises.
 
-Comfortable managing 5-20 attendees...anymore requires assistance.
+Works best with 5-20 attendees.
 
 ---
 
 ## About this workshop
 
-* Essentially a re-hash of my [plotcon workshop](https://plotcon17.cpsievert.me/workshop/)
+* Mostly a re-hash of my [plotcon workshop](https://plotcon17.cpsievert.me/workshop/)
 
 * Day 1: Getting (re)-acquainted with R, RStudio, data wrangling, ggplot2, and plotly
   * Basic R syntax and data structures
@@ -79,11 +84,9 @@ Comfortable managing 5-20 attendees...anymore requires assistance.
 ---
 class: inverse, center, middle
 
-# Examples of what students learn
+# Some examples
 
 ---
-
-## Modern ggplot2 mapping
 
 ```{r}
 library(plotly)
@@ -93,7 +96,7 @@ ggplotly(p)
 ```
 
 
-<iframe src="map.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"></iframe>
+<iframe src="map.html" width="100%" height="600" scrolling="no" seamless="seamless" frameBorder="0"></iframe>
 
 ---
 
@@ -105,13 +108,13 @@ p <- ggplot(usa) +
 style(ggplotly(p, tooltip = "text"), hoverlabel = list(bgcolor = "white"))
 ```
 
-<iframe src="map2.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"></iframe>
+<iframe src="map2.html" width="100%" height="600" scrolling="no" seamless="seamless" frameBorder="0"></iframe>
 
 ---
 
 ## Define custom interactions
 
-<iframe src="map-outline.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"></iframe>
+<iframe src="map-outline.html" width="100%" height="600" scrolling="no" seamless="seamless" frameBorder="0"></iframe>
 
 ---
 
@@ -133,7 +136,66 @@ highlight(
 
 <img src="../gifs/annotate.gif" width=800 height=400 />
 
+---
 
+## Highlighting in small multiples
+
+```{r, eval = TRUE}
+d <- subset(txhousing, city %in% c("Galveston", "Midland", "Odessa", "South Padre Island"))
+sd <- SharedData$new(d, ~year)
+p <- ggplot(sd, aes(month, median, group = year)) + geom_line() +
+  facet_wrap(~city, ncol = 2)
+gg <- ggplotly(p, tooltip = "year")
+highlight(gg, on = "plotly_click")
+```
+
+---
+
+## Making comparisons with dynamic brush
+
+```{r}
+highlight(
+  gg, on = "plotly_click", dynamic = TRUE, persistent = TRUE, selectize = TRUE
+)
+```
+
+<iframe src="selectize.html" width="100%" height="420" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+
+
+---
+
+## Animation
+
+```{r, eval = TRUE, warning = FALSE}
+p <- ggplot(sd, aes(month, median)) + 
+  geom_line(aes(group = year), alpha = 0.2) +
+  geom_line(aes(frame = year), color = "red") +
+  facet_wrap(~city, ncol = 2)
+ggplotly(p) %>% animation_opts(1000)
+```
+
+---
+
+## Filter
+
+```{r}
+s <- filter_select("years", "Years", sd, ~year)
+p <- ggplot(sd, aes(month, median, group = year)) + geom_line() + facet_wrap(~city, ncol = 2, scales = "free")
+htmltools::tagList(s, ggplotly(p, dynamicTicks = T))
+```
+
+<iframe src="filter.html" width="100%" height="420" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+
+## Summary
+
+* The `ggplotly()` function makes it easy to create easy interactive graphics via **ggplot2**.
+* Any plotly R object may be modified/customized via the [plotly.js figure reference](https://plot.ly/r/reference/).
+* Crosstalk's `SharedData` class may be leveraged to:
+  * Pose queries (via indirect/indirect manipulation)
+  * Make comparisons (via persistent/dynamic highlighting)
 
 ---
 class: center, middle, inverse
