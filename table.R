@@ -25,35 +25,30 @@ dauto <- talks %>%
 # other workshops that are located elsewhere
 dalt <- tibble(
   title = c(
-    "<a href='https://bit.ly/plotcon17-webinar' target='_blank'> News and updates surrounding plotly for R </a>",
     "<a href='https://cpsievert.github.io/plotcon17/workshop/day1' target='_blank'> Getting (re)-acquainted with R, RStudio, data wrangling, ggplot2, and plotly</a>",
     "<a href='https://cpsievert.github.io/plotcon17/workshop/day2' target='_blank'> Advanced plotly</a>",
     "<a href='https://monash-r.cpsievert.me' target='_blank'> Introduction to Data Science with R </a>",
     "<a href='https://isu-r.cpsievert.me' target='_blank'> Introduction to Data Science with R </a>"
   ),
   venue = c(
-    "The internet",
     "Plotcon 2017",
     "Plotcon 2017",
     "Monash University",
     "Iowa State University"
   ),
   type = c(
-    "webinar",
     "workshop",
     "workshop",
     "workshop",
     "workshop"
   ),
   recording = c(
-    "<a href='https://vimeo.com/214301880' target='_blank'>here</a>",
     "none",
     "none",
     "none",
     "none"
   ),
   date = c(
-    "20170412",
     "20170504",
     "20170505",
     "20160301",
