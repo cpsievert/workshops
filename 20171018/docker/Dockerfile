@@ -6,5 +6,4 @@ RUN apt-get update \
   && apt-get upgrade -y \
   && apt-get install -y --no-install-recommends \
   libprotobuf-dev protobuf-compiler \
-  && Rscript -e "update.packages(ask=FALSE)" \
-  && installGithub.r cpsievert/workshops/20171018
+  && Rscript -e "update.packages(ask=FALSE); devtools::install_github('cpsievert/workshops/20171018')"
