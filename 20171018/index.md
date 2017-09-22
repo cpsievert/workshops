@@ -1,24 +1,8 @@
----
-title: "R Training Workshop"
-author: "[Carson Sievert](https://cpsievert.me/) and ???"
-date: "Washington, DC <br /> October 18th, 2017"
-output: 
-  tufte::tufte_html:
-    keep_md: true
-    mathjax: null
----
+# R Training Workshop
+[Carson Sievert](https://cpsievert.me/) and ???  
+Washington, DC <br /> October 18th, 2017  
 
-```{r, include= FALSE}
-library(knitr)
-library(tufte)
-opts_chunk$set(
-  echo = FALSE,
-  message = FALSE,
-  warning = FALSE,
-  comment = "#>",
-  collapse = TRUE
-)
-```
+
 
 
 # Our philosophy
@@ -32,43 +16,41 @@ This workshop is also designed to be highly interactive -- attendees are expecte
 
 ## Docker
 
-`r margin_note("NOTE: if you already have Docker and are comfortable running terminal commands, you can skip most of these directions and run:")`
-`r margin_note("<code>docker run -p 8787:8787 cpsievert/workshops-20171018</code>")`
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">NOTE: if you already have Docker and are comfortable running terminal commands, you can skip most of these directions and run:</span>
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote"><code>docker run -p 8787:8787 cpsievert/workshops-20171018</code></span>
 
 [Docker](https://www.docker.com/) provides the most seamless installation experience and *guarantees* consistency in computational results (which is why I highly recommend this installation approach). If you don't already have Docker, or have never heard of it, don't worry! I'll walk you through how to use it for our purposes. First off, download and install the [Docker toolbox](https://www.docker.com/products/docker-toolbox) (completely free to use!). The toolbox ships with a number of things, one of them being a graphical interface called Kitematic which makes it easy to find/download/use Docker images. After installing the Docker toolbox, you should be able to find Kitematic in your applications. Go ahead and open it. You should see a welcome page like this:
 
 
-```{r}
-include_graphics("kitematic-welcome.png")
-```
+<img src="kitematic-welcome.png" width="1736"  />
 
 There is no need to create a Docker Hub account (so go ahead and press 'skip' or 'close'), but we'll be downloading an image I've provided [specifically for this workshop](https://hub.docker.com/r/cpsievert/workshops-20171018) from Docker Hub. To download it, just type 'cpsievert' in the search bar and 'create' the relevant image: 
 
-```{r}
-include_graphics("kitematic-images.png")
-```
+<img src="kitematic-images.png" width="1686"  />
 
 This will download the image, which may take a few minutes (we're downloading an entire virtual machine!). Once the image is done downloading, you should see something similar to this:
 
-```{r, fig.margin = TRUE, fig.cap = 'You might need to map docker port 8787 to port 8787 on the host (click gear icon, then go to "Configure Ports" section of the "Hostname/Ports" tab)'}
-include_graphics("kitematic-settings.png")
-```
+<p><span class="marginnote shownote"><!--
+<div class="figure">-->
+<img src="kitematic-settings.png" alt="You might need to map docker port 8787 to port 8787 on the host (click gear icon, then go to &quot;Configure Ports&quot; section of the &quot;Hostname/Ports&quot; tab)" width="778"  />
+<!--
+<p class="caption marginnote">-->You might need to map docker port 8787 to port 8787 on the host (click gear icon, then go to "Configure Ports" section of the "Hostname/Ports" tab)<!--</p>-->
+<!--</div>--></span></p>
 
-```{r}
-include_graphics("kitematic-logs.png")
-```
+<img src="kitematic-logs.png" width="1694"  />
 
 
 
-Finally, point your web browser to <http://locahost:8787>, and you'll see a log-in page for RStudio. Enter 'rstudio' for both the username and password. Once you see an RStudio window like this one, high-five yourself; you're all set up for the workshop! `r emo::ji("tada")` `r emo::ji("tada")` `r emo::ji("tada")`
+Finally, point your web browser to <http://locahost:8787>, and you'll see a log-in page for RStudio. Enter 'rstudio' for both the username and password. Once you see an RStudio window like this one, high-five yourself; you're all set up for the workshop! 🎉 🎉 🎉
 
-```{r, fig.margin = TRUE, fig.cap = "RStudio login"}
-include_graphics("rstudio-login.png")
-```
+<p><span class="marginnote shownote"><!--
+<div class="figure">-->
+<img src="rstudio-login.png" alt="RStudio login" width="371"  />
+<!--
+<p class="caption marginnote">-->RStudio login<!--</p>-->
+<!--</div>--></span></p>
 
-```{r}
-include_graphics("rstudio.png")
-```
+<img src="rstudio.png" width="1900"  />
 
 ## Manual Installation
 
