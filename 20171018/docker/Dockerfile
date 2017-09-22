@@ -7,4 +7,4 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends \
   libprotobuf-dev protobuf-compiler \
   && Rscript -e "update.packages(ask=FALSE)" \
-  && installGithub.r cpsievert/tutorials/20171018
+  && installGithub.r cpsievert/workshops/20171018
