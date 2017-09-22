@@ -1,0 +1,38 @@
+---
+title: "R Training Workshop"
+output: 
+  html_document:
+    keep_md: true
+---
+
+## Workshop philosophy
+
+This workshop is _not_ designed to make you an R expert -- it's designed to get you [doing powerful things quickly](http://varianceexplained.org/r/teach-hard-way/) regardless of your experience with R or programming in general. The goal of the workshop is to accomplish data analysis tasks in an reproducible/efficient/scalable way and present the fruits of their labor in engaging/compelling/portable ways. To get to our goal, we do use R programming as a tool, and will cover some programming concepts, but programming is always treated as a means to an end (not an end to the means).
+
+This workshop is also designed to be highly interactive -- attendees are expected to intermittently complete exercises, and as a result, are expected to have **access to a machine with [proper software installed](#installation) prior to the workshop**.
+
+## Workshop outline
+
+
+
+## Installation
+
+### Docker
+
+
+
+```
+docker run -p 8787:8787 cpsievert/workshops-20171018
+```
+
+
+### Manually
+
+If, for some reason, the docker approach doesn't fit your needs, you can try installing the software dependencies by hand. A bit of warning, this approach is almost guaranteed to cause more headaches than the docker approach. That being said, first off, make sure you are set up with [prerequisites for building R packages](https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prerequisites). At that point, you can try installing all the R packages necessary for this workshop by doing:
+
+```r
+devtools::install_github('cpsievert/workshops', subdir = "20171018")
+```
+
+
+
