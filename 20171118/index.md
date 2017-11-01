@@ -1,6 +1,6 @@
-# R Training Workshop
-[Carson Sievert](https://cpsievert.me/) and ???  
-Washington, DC <br /> October 18th, 2017  
+# Plotcon 2018 workshop
+[Carson Sievert](https://cpsievert.me/)  
+King's College, New York, NY <br /> November 18-19th, 2017  
 
 
 
@@ -17,14 +17,14 @@ This workshop is also designed to be highly interactive -- attendees are expecte
 ## Docker
 
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">NOTE: if you already have Docker and are comfortable running terminal commands, you can skip most of these directions and run:</span>
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote"><code>docker run -p 8787:8787 cpsievert/workshops-20171018</code></span>
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote"><code>docker run -p 8787:8787 cpsievert/workshops-20171118</code></span>
 
 [Docker](https://www.docker.com/) provides the most seamless installation experience and *guarantees* consistency in computational results (which is why I highly recommend this installation approach). If you don't already have Docker, or have never heard of it, don't worry! I'll walk you through how to use it for our purposes. First off, download and install the [Docker toolbox](https://www.docker.com/products/docker-toolbox) (completely free to use!). The toolbox ships with a number of things, one of them being a graphical interface called Kitematic which makes it easy to find/download/use Docker images. After installing the Docker toolbox, you should be able to find Kitematic in your applications. Go ahead and open it. You should see a welcome page like this:
 
 
 <img src="kitematic-welcome.png" width="1736"  />
 
-There is no need to create a Docker Hub account (so go ahead and press 'skip' or 'close'), but we'll be downloading an image I've provided [specifically for this workshop](https://hub.docker.com/r/cpsievert/workshops-20171018) from Docker Hub. To download it, just type 'cpsievert' in the search bar and 'create' the relevant image: 
+There is no need to create a Docker Hub account (so go ahead and press 'skip' or 'close'), but we'll be downloading an image I've provided [specifically for this workshop](https://hub.docker.com/r/cpsievert/workshops-20171118) from Docker Hub. To download it, just type 'cpsievert' in the search bar and 'create' the relevant image: 
 
 <img src="kitematic-images.png" width="1686"  />
 
@@ -59,30 +59,5 @@ If, for some reason, the docker approach doesn't fit your needs, you can try ins
 ```r
 # first, make sure your packages are up-to-date, then install R packages for this workshop
 update.packages(ask=FALSE)
-devtools::install_github('cpsievert/workshops/20171018')
+devtools::install_github('cpsievert/workshops/20171118')
 ```
-
-
-# Workshop outline
-
-Module 1 - Introduction to R (1-2 hours): history, overview of CRAN, applications of R in the real-world, basic data types and concepts
-
-Module 2 - Loading Data into R (1-2 hours): depends on the types of data sources you mostly work with. This could be reading Excel files, various databases, JSON, tabular, etc.
-
-Module 3 - Best Practices (1-2 hours): style (e.g. Hadley Wickham's guide), vectorization, best packages for the job (readr), commenting, reproducibility of code, unit tests (testthat)
-
-Module 4 - Cleaning, Processing, & Manipulating Data in R (tidyr and dplyr) (2-4 hours)
-
-Module 5 - ggplot2 and visualization (2-4 hours): basic visualization best practices, grammar of graphics, theme system, customization
-
-Module 6 - Intro to Tableau (1-2 hours). Importing flat files into Tableau and creating engaging and interactive dashboards for external consumption. 
-
-Advanced 
-
-Module 7 - R Shiny (4 hours): Intro to R Shiny, server.R and ui.R, basic overview of reactivity, styling with shinydashboard, implement example Shiny application per Asurion
-
-Module 8 - Package Creation in R (4 hours), streamline processes, allow users to share code easily
-
-Module 9 - RMarkdown (4 hours) for easy creation of dynamic documents, presentations, and reports from R.
-
-
