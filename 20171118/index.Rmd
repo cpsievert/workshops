@@ -2,6 +2,8 @@
 title: "Plotcon 2018 workshop"
 author: "[Carson Sievert](https://cpsievert.me/)"
 date: "King's College, New York, NY <br /> November 18-19th, 2017"
+venue: "Plotcon 2018"
+recording: "none"
 output: 
   tufte::tufte_html:
     keep_md: true

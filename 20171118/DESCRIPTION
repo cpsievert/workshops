@@ -1,4 +1,4 @@
-Package: wrkshp20171018
+Package: wrkshp20171118
 Title: This is not (really) an R package. It just provides a means for installing dependencies for the workshop
 Version: 0.0.0.9000
 Authors@R: c(person("Carson", "Sievert", role = c("aut", "cre"), email = "cpsievert1@gmail.com"))

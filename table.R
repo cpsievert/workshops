@@ -7,7 +7,7 @@ f <- list.files()
 talks <- f[grepl("[0-9]{8}", f)]
 
 # get yaml front matter fields from a given talk
-get_yaml <- function(talk, fields = c("title", "venue", "type", "recording")) {
+get_yaml <- function(talk, fields = c("title", "venue", "recording")) {
   txt <- readLines(file.path(talk, "index.Rmd"))
   sep <- which(txt == "---")
   front <- txt[seq.int(sep[1] + 1, sep[2] - 1)]
@@ -36,12 +36,6 @@ dalt <- tibble(
     "Monash University",
     "Iowa State University"
   ),
-  type = c(
-    "workshop",
-    "workshop",
-    "workshop",
-    "workshop"
-  ),
   recording = c(
     "none",
     "none",
@@ -61,7 +55,7 @@ d <- bind_rows(dauto, dalt)
 d %>%
   mutate(date = as.Date(date, format = "%Y%m%d")) %>%
   arrange(desc(date)) %>%
-  select(date, title, venue, type, recording) %>%
+  select(date, title, venue, recording) %>%
   datatable(escape = F, options = list(pageLength = 50), rownames = FALSE) %>%
   saveWidget(file = "index.html")
 
