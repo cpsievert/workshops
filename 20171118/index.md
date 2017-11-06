@@ -7,9 +7,9 @@ King's College, New York, NY <br /> November 18-19th, 2017
 
 # About the workshop
 
-This workshop is highly interactive. Attendees are expected to participate in hands-on exercises that are designed augment the lecture material and also encouraged to ask questions. To participate in the exercises, attendees should bring a laptop with relevant software installed **prior to the workshop**. Click [here](#installation) for installation directions.
+This workshop is highly interactive. Attendees are expected to participate in hands-on exercises which augment the lecture material and are encouraged to ask questions. To participate in the exercises, attendees should bring a laptop with relevant software installed **prior to the workshop**. Click [here](#installation) for installation directions.
 
-By the end of this workshop, you should have a good idea how to leverage interactive visualization techniques to perform/present data analysis tasks/findings using [the R package plotly](https://plot.ly/r/). Although it will be beneficial to have some prior knowledge of R and [ggplot2](http://ggplot2.tidyverse.org/), we do not require that attendees have experience with R, and avoid assuming pre-existing knowledge as much as possible. Furthermore, this workshop is _not_ designed to make you an R programming expert -- it's designed to get you [doing powerful things quickly](http://varianceexplained.org/r/teach-hard-way/) regardless of your experience with R or programming in general.
+By the end of this workshop, you should be able to leverage interactive visualization techniques to perform/present data analysis tasks/findings using [the R package plotly](https://plot.ly/r/). Though it would be beneficial to have some prior knowledge of R and [ggplot2](http://ggplot2.tidyverse.org/), we do not require it, and as such, we avoid assuming pre-existing knowledge as much as possible. Furthermore, this workshop is _not_ designed to make you an R programming expert -- it's designed to get you [doing powerful things quickly](http://varianceexplained.org/r/teach-hard-way/) regardless of your experience with R or programming in general.
 
 
 # Installation
@@ -24,9 +24,9 @@ By the end of this workshop, you should have a good idea how to leverage interac
 
 <img src="kitematic-welcome.png" width="1736"  />
 
-There is no need to create a Docker Hub account (so go ahead and press 'skip' or 'close'), but we'll be downloading an image I've provided [specifically for this workshop](https://hub.docker.com/r/cpsievert/workshops-20171118) from Docker Hub. To download it, just type 'cpsievert' in the search bar and 'create' the relevant image: 
+There is no need to create a Docker Hub account (so go ahead and press 'skip' or 'close'), but we'll be downloading an image I've provided [specifically for this workshop](https://hub.docker.com/r/cpsievert/workshops) from Docker Hub. To download it, just type 'cpsievert' in the search bar and 'create' the relevant image: 
 
-<img src="kitematic-images.png" width="1686"  />
+<img src="kitematic-images.png" width="1110"  />
 
 This will download the image, which may take a few minutes (we're downloading an entire virtual machine!). Once the image is done downloading, you should see something similar to this:
 
