@@ -5,11 +5,11 @@ King's College, New York, NY <br /> November 18-19th, 2017
 
 
 
-# Our philosophy
+# About the workshop
 
-This workshop is _not_ designed to make you an R programming expert -- it's designed to get you [doing powerful things quickly](http://varianceexplained.org/r/teach-hard-way/) regardless of your experience with R or programming in general. The goal of the workshop is to accomplish data analysis tasks in an reproducible/efficient/scalable way and present the fruits of your labor in engaging/compelling/portable ways. In order to reach that goal, we do use R as a tool, and will cover some programming concepts, but programming is always treated as a means to an end (not an end to the means).
+This workshop is highly interactive. Attendees are expected to participate in hands-on exercises that are designed augment the lecture material and also encouraged to ask questions. To participate in the exercises, attendees should bring a laptop with relevant software installed **prior to the workshop**. Click [here](#installation) for installation directions.
 
-This workshop is also designed to be highly interactive -- attendees are expected to intermittently complete exercises. To participate in the exercises, attendees will want access to a computer/laptop with relevant software installed **prior to the workshop**. Click [here](#installation) for installation directions.
+By the end of this workshop, you should have a good idea how to leverage interactive visualization techniques to perform/present data analysis tasks/findings using [the R package plotly](https://plot.ly/r/). Although it will be beneficial to have some prior knowledge of R and [ggplot2](http://ggplot2.tidyverse.org/), we do not require that attendees have experience with R, and avoid assuming pre-existing knowledge as much as possible. Furthermore, this workshop is _not_ designed to make you an R programming expert -- it's designed to get you [doing powerful things quickly](http://varianceexplained.org/r/teach-hard-way/) regardless of your experience with R or programming in general.
 
 
 # Installation
@@ -40,14 +40,13 @@ This will download the image, which may take a few minutes (we're downloading an
 <img src="kitematic-logs.png" width="1694"  />
 
 
-
 Finally, point your web browser to <http://locahost:8787>, and you'll see a log-in page for RStudio. Enter 'rstudio' for both the username and password. Once you see an RStudio window like this one, high-five yourself; you're all set up for the workshop! 🎉 🎉 🎉
 
 <p><span class="marginnote shownote"><!--
 <div class="figure">-->
-<img src="rstudio-login.png" alt="RStudio login" width="371"  />
+<img src="rstudio-login.png" alt="Use 'rstudio' for both login and password." width="371"  />
 <!--
-<p class="caption marginnote">-->RStudio login<!--</p>-->
+<p class="caption marginnote">-->Use 'rstudio' for both login and password.<!--</p>-->
 <!--</div>--></span></p>
 
 <img src="rstudio.png" width="1900"  />
