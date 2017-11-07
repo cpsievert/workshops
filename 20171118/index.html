@@ -55,11 +55,11 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <h1>Installation</h1>
 <div id="docker" class="section level2">
 <h2>Docker</h2>
-<p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote">NOTE: if you already have Docker and are comfortable running terminal commands, you can skip most of these directions and run:</span> <label for="tufte-mn-2" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-2" class="margin-toggle"><span class="marginnote"><code>docker run -p 8787:8787 cpsievert/workshops:20171118</code></span></p>
+<p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote">NOTE: if you already have Docker and are comfortable running terminal commands, you can skip most of these directions and run:</span> <label for="tufte-mn-2" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-2" class="margin-toggle"><span class="marginnote"><code>docker run -p 8787:8787 cpsievert/workshops</code></span></p>
 <p><a href="https://www.docker.com/">Docker</a> provides the most seamless installation experience and <em>guarantees</em> consistency in computational results (which is why I highly recommend this installation approach). If you don’t already have Docker, or have never heard of it, don’t worry! I’ll walk you through how to use it for our purposes. First off, download and install the <a href="https://www.docker.com/products/docker-toolbox">Docker toolbox</a> (completely free to use!). The toolbox ships with a number of things, one of them being a graphical interface called Kitematic which makes it easy to find/download/use Docker images. After installing the Docker toolbox, you should be able to find Kitematic in your applications. Go ahead and open it. You should see a welcome page like this:</p>
 <p><img src="kitematic-welcome.png" width="1736"  /></p>
 <p>There is no need to create a Docker Hub account (so go ahead and press ‘skip’ or ‘close’), but we’ll be downloading an image I’ve provided <a href="https://hub.docker.com/r/cpsievert/workshops">specifically for this workshop</a> from Docker Hub. To download it, just type ‘cpsievert’ in the search bar and ‘create’ the relevant image:</p>
-<p><img src="kitematic-images.png" width="1110"  /></p>
+<p><img src="kitematic-images.png" width="1640"  /></p>
 <p>This will download the image, which may take a few minutes (we’re downloading an entire virtual machine!). Once the image is done downloading, you should see something similar to this:</p>
 <p>
 <span class="marginnote shownote"><!--
