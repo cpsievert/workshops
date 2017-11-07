@@ -56,17 +56,20 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div id="docker" class="section level2">
 <h2>Docker</h2>
 <p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote">NOTE: if you already have Docker and are comfortable running terminal commands, you can skip most of these directions and run:</span> <label for="tufte-mn-2" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-2" class="margin-toggle"><span class="marginnote"><code>docker run -p 8787:8787 cpsievert/workshops</code></span></p>
-<p><a href="https://www.docker.com/">Docker</a> provides the most seamless installation experience and <em>guarantees</em> consistency in computational results (which is why I highly recommend this installation approach). If you don’t already have Docker, or have never heard of it, don’t worry! I’ll walk you through how to use it for our purposes. First off, download and install the <a href="https://www.docker.com/products/docker-toolbox">Docker toolbox</a> (completely free to use!). The toolbox ships with a number of things, one of them being a graphical interface called Kitematic which makes it easy to find/download/use Docker images. After installing the Docker toolbox, you should be able to find Kitematic in your applications. Go ahead and open it. You should see a welcome page like this:</p>
+<p><a href="https://www.docker.com/">Docker</a> provides the most seamless installation experience and <em>guarantees</em> consistency in computational results (which is why I highly recommend this installation approach). If you don’t already have Docker, or have never heard of it, don’t worry! I’ll walk you through how to use it for our purposes. First off, download and install the <a href="https://www.docker.com/products/docker-toolbox">Docker toolbox</a> (completely free to use!). The toolbox ships with a number of things, one of them being a graphical interface called Kitematic which makes it easy to find/download/use Docker images. If you’re comfortable running Docker from the command line, feel free to run the command in the side margin (then <a href="#open-rstudio">open RStudio</a>) and skip the Kitematic directions.</p>
+<p>After installing the Docker toolbox, you should be able to find Kitematic in your applications. Go ahead and open it. You should see a welcome page like this:</p>
 <p><img src="kitematic-welcome.png" width="1736"  /></p>
 <p>There is no need to create a Docker Hub account (so go ahead and press ‘skip’ or ‘close’), but we’ll be downloading an image I’ve provided <a href="https://hub.docker.com/r/cpsievert/workshops">specifically for this workshop</a> from Docker Hub. To download it, just type ‘cpsievert’ in the search bar and ‘create’ the relevant image:</p>
 <p><img src="kitematic-images.png" width="1640"  /></p>
-<p>This will download the image, which may take a few minutes (we’re downloading an entire virtual machine!). Once the image is done downloading, you should see something similar to this:</p>
+<p>This will download the image, which may take a few minutes (we’re downloading an entire virtual comuting environment!). Once the image is done downloading, you should see something similar to this:</p>
 <p>
 <span class="marginnote shownote"><!--
 <div class="figure">--> <img src="kitematic-settings.png" alt="You might need to map docker port 8787 to port 8787 on the host (click gear icon, then go to &quot;Configure Ports&quot; section of the &quot;Hostname/Ports&quot; tab)" width="778"  /> <!--
 <p class="caption marginnote">-->You might need to map docker port 8787 to port 8787 on the host (click gear icon, then go to “Configure Ports” section of the “Hostname/Ports” tab)<!--</p>--> <!--</div>--></span>
 </p>
 <p><img src="kitematic-logs.png" width="1694"  /></p>
+<div id="open-rstudio" class="section level3">
+<h3>Open RStudio</h3>
 <p>Finally, point your web browser to <a href="http://locahost:8787" class="uri">http://locahost:8787</a>, and you’ll see a log-in page for RStudio. Enter ‘rstudio’ for both the username and password. Once you see an RStudio window like this one, high-five yourself; you’re all set up for the workshop! 🎉 🎉 🎉</p>
 <p>
 <span class="marginnote shownote"><!--
@@ -74,6 +77,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <p class="caption marginnote">-->Use ‘rstudio’ for both login and password.<!--</p>--> <!--</div>--></span>
 </p>
 <p><img src="rstudio.png" width="1900"  /></p>
+</div>
 </div>
 <div id="manual-installation" class="section level2">
 <h2>Manual Installation</h2>
