@@ -1,0 +1,49 @@
+library(dplyr)
+library(tidyr)
+library(plotly)
+library(htmlwidgets)
+
+
+d <- read.csv("~/Downloads/plotcon 2018-report.csv") %>% 
+  select(matches("How")) %>% 
+  select(-5) %>%
+  mutate(id = seq_len(nrow(.))) %>%
+  gather(variable, value, -id) %>%
+  # make the x-axis labels a bit more readable
+  mutate(var = sapply(strsplit(variable, "\\."), function(x) x[[length(x)]]))
+
+sd <- crosstalk::SharedData$new(d, ~variable)
+
+options(digits = 2)
+
+p <- ggplot(sd, aes(x = value, fill = variable)) +
+  geom_density(alpha = 0.5) + scale_fill_discrete("")
+
+(w <- ggplotly(p, dynamicTicks = TRUE))
+saveWidget(w, "attendees.html")
+
+
+vars <- unique(d$var)
+dims <- list()
+for (i in seq_along(vars)) {
+  dsub <- subset(d, var == vars[[i]])
+  vals <- dsub[["value"]]
+  dims[[i]] <- list(
+    range = c(0, 10),
+    label = vars[[i]],
+    values = vals
+  )
+}
+
+(w2 <- plot_ly(type = 'parcoords', dimensions = dims))
+saveWidget(w2, "attendees2.html")
+
+# sd2 <- crosstalk::SharedData$new(d, ~id)
+
+# p <- ggplot(sd2, aes(var, value, group = id)) +
+#   geom_line() + theme(axis.text.x = element_text(angle = 45)) +
+#   xlab(NULL)
+# 
+# ggplotly(p) %>% 
+#   style(hoverinfo = "none") %>% 
+#   highlight("plotly_hover")

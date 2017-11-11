@@ -1,0 +1,147 @@
+---
+title: "plotly fundamentals"
+venue: "plotcon 18"
+type: "workshop"
+recording: "NA"
+output:
+  xaringan::moon_reader:
+    chakra: "../remark-latest.min.js"
+    nature:
+      # approx the golden ratio
+      ratio: '14.6:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      navigation:
+        scroll: false
+date: "Slides: https://bit.ly/plotcon18-day1 <br /> <br /> Slides released under <a href='https://github.com/cpsievert/talks/blob/gh-pages/LICENSE'>Creative Commons</a>"
+author: "Carson Sievert"
+---
+class: inverse, center
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+## Your Turn
+
+(1) Install the required software <https://workshops.cpsievert.me/20171118/>
+
+(2) Run the docker container so that RStudio appears when you visit <http://localhost:8787>
+
+(3) Using the Files pane in RStudio, click `day1` folder, then `index.html`, and choose 'View in web browser'.
+
+(4) Share (with your neighbor) 3 things you're hoping to take away from this workshop (share them with me, via [Slack](https://plotconrworkshop.slack.com) if you like!)
+
+.footnote[
+PS. remember this background image -- it means I want something from you!
+]
+
+---
+
+### About me
+
+* Maintainer of plotly's R package (for nearly 3 years!)
+    * Before that: animint, LDAvis, pitchRx, rdom
+* PhD in statistics from Iowa State
+    * Thesis: [Interfacing R with Web Technologies for Interactive Statistical Graphics and Computing with Data](https://search.proquest.com/openview/3a91971f82fd4af20a78bebb079f5035/1.pdf?pq-origsite=gscholar&cbl=18750&diss=y)
+* Founder & CEO, [Sievert Consulting LLC](https://consulting.cpsievert.me/)
+    * Currently looking for more projects!
+
+---
+## About the attendees
+
+<iframe src="attendees.html" width="100%" height="450" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+<https://plot.ly/ggplot2/geom_density/>
+
+---
+## About the attendees, another look
+
+<iframe src="attendees2.html" width="100%" height="450" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+<https://plot.ly/r/parallel-coordinates-plot/>
+
+
+---
+## Is there anything in particular that you would like covered?
+
+* I'm most interested in **linking and animating views without shiny**. Already pretty well acquainted with R/RStudio/Plotly, but hoping to learn how to use Plotly more efficiently and extend my current usage with animation, crosstalk, etc.  I use Plotly most often within flexdashboard applications, so most interested in non-Shiny options.
+* I want to learn how to **animate my plotly graphs/charts.**
+* More **shiny** dev
+* **Creating documents with data visualizations in Markdown files**. I've been working to get better with Markdown, but if there's a way to include interactive visualizations and/or animations in Markdown files that can be sent to readers that would be great. I work in consulting so I often need to send reports to executives and including interactive data visualizations in those reports would be incredibly useful for me.
+* Looks good! Stoked for the class. For me, I **don't use rmarkdown** and rarely use ggplot2 - so those could be dropped from the list.
+* Looks like all of Day1 currently would be old news. Wouldn't **half a day of R/RStudio/ggplot2** suffice for your audience?
+
+---
+## Is there anything else that we can help you with at the workshop?
+
+* I'd like to know how plotly performs with displaying **large data** sets
+* Plotting large amounts of **time series** data efficiently
+* Plotly custom **controls and mapping** options. 
+* Learn how to apply **interactive filters** in Plotly if that's supported (e.g. click on a single bar within a bar chart on the left which filters the heat-map to the right). 
+* More advanced visualization techniques such as a chord diagram or a sunburst 
+  * Check out [sunburstR](https://github.com/timelyportfolio/sunburstR)
+* Suggestions/hints on how to create clean, **good code** would be especially appreciated.
+* **Extended breakout session** time for help on specific project i am bringing 
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  eval = FALSE,
+  message = FALSE,
+  comment = "#>",
+  collapse = TRUE,
+  fig.width = 10,
+  fig.height = 4
+)
+```
+
+---
+## A minimal bar chart
+
+* Every **plotly** chart is powered by [plotly.js](https://github.com/plotly/plotly.js), plus some extra R/JS magic `r emo::ji("tophat")` `r emo::ji("rabbit")`.
+* How/why did `plot_ly()` draw a bar chart? What if we want something different?
+
+```{r}
+library(plotly)
+plot_ly(x = c("A", "B"), y = 1:2)
+```
+
+<iframe src="01-simple-bar.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+class: inverse, center
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+## Your Turn
+
+(1) Load plotly by entering `library(plotly)` in your R console.
+
+(2) Now enter `plot_ly(x = c("A", "B"), y = 1:2)`. A message will print in the console. What is it?
+
+(3) Now enter `plot_ly(x = 1:2, y = 1:2)`. What's different about the message/result?
+
+(4) Now enter `schema()`. How many trace types do you see? What is a scatter mode?
+
+---
+## Scatter modes
+
+```{r}
+subplot(shareY = TRUE,
+  plot_ly(x = 1:2, y = 1:2),
+  plot_ly(x = 1:2, y = 1:2, mode = "lines"),
+  plot_ly(x = 1:2, y = 1:2, mode = "markers+lines"),
+  plot_ly(x = 1:2, y = 1:2, text = 1:2, mode = "text"),
+  plot_ly(x = 1:2, y = 1:2, text = 1:2, mode = "markers+lines+text")
+)
+```
+
+<iframe src="02-scatter-modes.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+class: inverse, center, middle
+
+# What is this object we've named `p`?
+
+```r
+plotly_json(p)
+```
