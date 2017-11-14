@@ -114,16 +114,14 @@ background-size: contain
 
 ## Your Turn
 
-(1) Load plotly by entering `library(plotly)` in your R console.
+Open the `day1/your-turn/01.R` script and work through the comments/code/questions.
 
-(2) Now enter `plot_ly(x = c("A", "B"), y = 1:2)`. A message will print in the console. What is it?
-
-(3) Now enter `plot_ly(x = 1:2, y = 1:2)`. What's different about the message/result?
-
-(4) Now enter `schema()`. How many trace types do you see? What is a scatter mode?
+Feel free to work with your neighbor and ask me questions!
 
 ---
 ## Scatter modes
+
+The scatter trace type is quite general and syntax extends to WebGL (scattergl), 3D (scatter3d), Geo (scattergeo), and [mapbox](https://www.mapbox.com/) (scattermapbox).
 
 ```{r}
 subplot(shareY = TRUE,
@@ -138,10 +136,26 @@ subplot(shareY = TRUE,
 <iframe src="02-scatter-modes.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
 
 ---
-class: inverse, center, middle
+## Working with actual data
 
-# What is this object we've named `p`?
+Follow along with me using the `day1/demo/01.R` script.
 
-```r
-plotly_json(p)
-```
+---
+## Arranging multiple views
+
+* `subplot()`
+* `crosstalk::bscols()`
+
+---
+## Maps
+
+* add_polygons()
+* Choropleths
+
+
+---
+## High-performance charts
+
+* scattergl
+  * time-series
+* pointcloud
