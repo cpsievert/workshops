@@ -1,6 +1,16 @@
-# Plotcon 2018 workshop
-[Carson Sievert](https://cpsievert.me/)  
-King's College, New York, NY <br /> November 18-19th, 2017  
+---
+title: "Plotcon 2018 workshop"
+author: "[Carson Sievert](https://cpsievert.me/)"
+date: "King's College, New York, NY <br /> November 18-19th, 2017"
+venue: "Plotcon 2018"
+recording: "none"
+output: 
+  tufte::tufte_html:
+    keep_md: true
+    mathjax: null
+    css: main.css
+    self_contained: false
+---
 
 
 
@@ -53,18 +63,6 @@ Finally, point your web browser to <http://locahost:8787>, and you'll see a log-
 <!--</div>--></span></p>
 
 <img src="rstudio.png" width="1900"  />
-
-## Manual Installation
-
-If, for some reason, the docker approach doesn't fit your needs, you can try installing the software dependencies by hand. A bit of warning, this approach is almost guaranteed to cause more headaches than the docker approach. That being said, first off, make sure you are set up with [prerequisites for building R packages](https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prerequisites). At that point, you can try installing all the R packages necessary for this workshop by doing:
-
-```r
-# first, make sure your packages are up-to-date, then install R packages for this workshop
-update.packages(ask=FALSE)
-devtools::install_github('cpsievert/workshops/20171118')
-```
-
-
 
 # Code of Conduct
 

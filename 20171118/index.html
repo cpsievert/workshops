@@ -21,10 +21,12 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlightingOnLoad(); }, 0);
+  }
 }
 </script>
 
@@ -78,13 +80,6 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </p>
 <p><img src="rstudio.png" width="1900"  /></p>
 </div>
-</div>
-<div id="manual-installation" class="section level2">
-<h2>Manual Installation</h2>
-<p>If, for some reason, the docker approach doesn’t fit your needs, you can try installing the software dependencies by hand. A bit of warning, this approach is almost guaranteed to cause more headaches than the docker approach. That being said, first off, make sure you are set up with <a href="https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prerequisites">prerequisites for building R packages</a>. At that point, you can try installing all the R packages necessary for this workshop by doing:</p>
-<pre class="r"><code># first, make sure your packages are up-to-date, then install R packages for this workshop
-update.packages(ask=FALSE)
-devtools::install_github(&#39;cpsievert/workshops/20171118&#39;)</code></pre>
 </div>
 </div>
 <div id="code-of-conduct" class="section level1">

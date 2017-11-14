@@ -76,18 +76,6 @@ include_graphics("rstudio-login.png")
 include_graphics("rstudio.png")
 ```
 
-## Manual Installation
-
-If, for some reason, the docker approach doesn't fit your needs, you can try installing the software dependencies by hand. A bit of warning, this approach is almost guaranteed to cause more headaches than the docker approach. That being said, first off, make sure you are set up with [prerequisites for building R packages](https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prerequisites). At that point, you can try installing all the R packages necessary for this workshop by doing:
-
-```r
-# first, make sure your packages are up-to-date, then install R packages for this workshop
-update.packages(ask=FALSE)
-devtools::install_github('cpsievert/workshops/20171118')
-```
-
-
-
 # Code of Conduct
 
 We are committed to providing a welcoming and harassment-free experience for everyone, regardless of gender, gender identity and expression, age, sexual orientation, disability, physical appearance, body size, race, ethnicity, religion (or lack thereof), or technology choices. We do not tolerate harassment of conference participants in any form. Sexual language and imagery is not appropriate for any conference venue, including talks, workshops, parties, Twitter and other online media. Participants violating these rules may be sanctioned or expelled from the event at the discretion of the organizers.
