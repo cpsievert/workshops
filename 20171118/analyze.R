@@ -20,7 +20,10 @@ p <- ggplot(sd, aes(x = value, fill = variable)) +
   geom_density(alpha = 0.5) + scale_fill_discrete("")
 
 (w <- ggplotly(p, dynamicTicks = TRUE))
-saveWidget(w, "attendees.html")
+
+withr::with_dir("20171118/slides/day1", {
+  htmlwidgets::saveWidget(w, "attendees.html", selfcontained = FALSE, libdir = "dependencies")
+})
 
 
 vars <- unique(d$var)
@@ -36,7 +39,10 @@ for (i in seq_along(vars)) {
 }
 
 (w2 <- plot_ly(type = 'parcoords', dimensions = dims))
-saveWidget(w2, "attendees2.html")
+
+withr::with_dir("20171118/slides/day1", {
+  htmlwidgets::saveWidget(w, "attendees2.html", selfcontained = FALSE, libdir = "dependencies")
+})
 
 # sd2 <- crosstalk::SharedData$new(d, ~id)
 

@@ -27,6 +27,9 @@ RUN R -e "remotes::install_github('ropensci/plotly')"
 # learnr seems pretty buggy...
 # RUN R -e "install.packages('learnr')"
 
+# plotly derivatives
+RUN R -e "install.packages('heatmaply')"
+
 RUN echo "Sys.setenv('MAPBOX_TOKEN' = 'pk.eyJ1IjoiY3BzaWV2ZXJ0IiwiYSI6ImNpdGRiOWwwMjAwMHQyem84NG5tcXg5eXIifQ.UJ2VwrJmPW8DB8H2d-wN3g')" >> /usr/local/lib/R/etc/Rprofile.site
 
 # copy over workshop materials
