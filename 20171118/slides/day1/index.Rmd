@@ -437,5 +437,7 @@ Visit this post and use trelliscope to visualize all of `txhousing` (or, prefera
 
 
 .footnote[
-Unfortunately, we won't cover mapping in this workshop, but [day 1 of last years workshop](https://plotcon17.cpsievert.me/workshop/day1/#1) covers the topic in depth.
+* Now would be a good time to ask me about personal projects!
+
+* Unfortunately, we won't cover mapping in this workshop, but [day 1 of last years workshop](https://plotcon17.cpsievert.me/workshop/day1/#1) covers the topic in depth.
 ]

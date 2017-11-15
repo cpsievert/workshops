@@ -268,7 +268,7 @@ class: inverse
 
 
 ```r
-plot_ly(logs, x = ~date, y = ~count) %&gt;% group_by(package) %&gt;% add_lines(alpha=0.3)
+plot_ly(logz, x = ~date, y = ~count) %&gt;% group_by(package) %&gt;% add_lines(alpha=0.3)
 ```
 
 &lt;iframe src="04-lines.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
@@ -279,7 +279,7 @@ plot_ly(logs, x = ~date, y = ~count) %&gt;% group_by(package) %&gt;% add_lines(a
 
 ```r
 library(crosstalk)
-SharedData$new(logs, ~package) %&gt;% 
+SharedData$new(logz, ~package) %&gt;% 
   plot_ly(x = ~date, y = ~count) %&gt;% group_by(package) %&gt;% add_lines(alpha=0.3) %&gt;% 
   highlight(dynamic = TRUE, selectize = TRUE, persistent = TRUE)
 ```
@@ -496,7 +496,9 @@ Visit this post and use trelliscope to visualize all of `txhousing` (or, prefera
 
 
 .footnote[
-Unfortunately, we won't cover mapping in this workshop, but [day 1 of last years workshop](https://plotcon17.cpsievert.me/workshop/day1/#1) covers the topic in depth.
+* Now would be a good time to ask me about personal projects!
+
+* Unfortunately, we won't cover mapping in this workshop, but [day 1 of last years workshop](https://plotcon17.cpsievert.me/workshop/day1/#1) covers the topic in depth.
 ]
     </textarea>
 <script src="../remark-latest.min.js"></script>

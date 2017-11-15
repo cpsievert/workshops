@@ -14,7 +14,7 @@ d <- read.csv("~/Downloads/plotcon 2018-report.csv") %>%
 
 sd <- crosstalk::SharedData$new(d, ~variable)
 
-options(digits = 2)
+options(digits = 2, htmltools.dir.version = FALSE)
 
 p <- ggplot(sd, aes(x = value, fill = variable)) +
   geom_density(alpha = 0.5) + scale_fill_discrete("")
@@ -22,9 +22,8 @@ p <- ggplot(sd, aes(x = value, fill = variable)) +
 (w <- ggplotly(p, dynamicTicks = TRUE))
 
 withr::with_dir("20171118/slides/day1", {
-  htmlwidgets::saveWidget(w, "attendees.html", selfcontained = FALSE, libdir = "dependencies")
+  htmlwidgets::saveWidget(w, "attendees.html", selfcontained = FALSE, libdir = "index_files")
 })
-
 
 vars <- unique(d$var)
 dims <- list()
@@ -41,7 +40,7 @@ for (i in seq_along(vars)) {
 (w2 <- plot_ly(type = 'parcoords', dimensions = dims))
 
 withr::with_dir("20171118/slides/day1", {
-  htmlwidgets::saveWidget(w2, "attendees2.html", selfcontained = FALSE, libdir = "dependencies")
+  htmlwidgets::saveWidget(w2, "attendees2.html", selfcontained = FALSE, libdir = "index_files")
 })
 
 # sd2 <- crosstalk::SharedData$new(d, ~id)
