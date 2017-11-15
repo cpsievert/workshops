@@ -121,9 +121,7 @@ knitr::opts_chunk$set(
 * Every **plotly** chart is powered by [plotly.js](https://github.com/plotly/plotly.js), plus some extra R/JS magic `r emo::ji("tophat")` `r emo::ji("rabbit")`.
 * How/why did `plot_ly()` draw a bar chart? What if we want something different?
 
-```{r}
-library(plotly)
-plot_ly(x = c("A", "B"), y = 1:2)
+```{r, code=readLines("01-simple-bar.R")}
 ```
 
 <iframe src="01-simple-bar.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
@@ -143,14 +141,7 @@ Feel free to work with your neighbor and ask me questions!
 
 The **scatter** trace type is quite general and syntax extends to WebGL (scattergl), 3D (scatter3d), Geo (scattergeo), and [mapbox](https://www.mapbox.com/) (scattermapbox).
 
-```{r}
-subplot(shareY = TRUE,
-  plot_ly(x = 1:2, y = 1:2),
-  plot_ly(x = 1:2, y = 1:2, mode = "lines"),
-  plot_ly(x = 1:2, y = 1:2, mode = "markers+lines"),
-  plot_ly(x = 1:2, y = 1:2, text = 1:2, mode = "text"),
-  plot_ly(x = 1:2, y = 1:2, text = 1:2, mode = "markers+lines+text")
-)
+```{r, code=readLines("02-scatter-modes.R")}
 ```
 
 <iframe src="02-scatter-modes.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
@@ -166,11 +157,7 @@ Follow along with me using the `day1/demo/01.R` script.
 ---
 ## Which visualization is better?
 
-```{r}
-subplot(shareX = TRUE, nrows = 2,
-  plot_ly(logs, x = ~date, y = ~package, z = ~count, type = "heatmap"),
-  plot_ly(logs, x = ~date, y = ~count, color = ~package, mode = "lines")
-)
+```{r, code=readLines("03-heatmap.R")}
 ```
 
 <iframe src="03-heatmap.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
@@ -273,8 +260,7 @@ class: inverse
 ---
 ## With all my `installed.packages()`, yikes!
 
-```{r}
-plot_ly(logs, x = ~date, y = ~count) %>% group_by(package) %>% add_lines(alpha=0.3)
+```{r, code=readLines("04-lines.R")}
 ```
 
 <iframe src="04-lines.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
@@ -282,11 +268,7 @@ plot_ly(logs, x = ~date, y = ~count) %>% group_by(package) %>% add_lines(alpha=0
 ---
 ## Can improve a bit with interaction
 
-```{r}
-library(crosstalk)
-SharedData$new(logs, ~package) %>% 
-  plot_ly(x = ~date, y = ~count) %>% group_by(package) %>% add_lines(alpha=0.3) %>% 
-  highlight(dynamic = TRUE, selectize = TRUE, persistent = TRUE)
+```{r, code=readLines("04-lines-b.R")}
 ```
 
 <iframe src="04-lines-b.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
@@ -331,10 +313,7 @@ For all CRAN packages that use plotly, see the "Reverse dependencies" section on
 
 * 10,000s time series points renders with *SVG*
 
-```{r}
-y <- sample(c(-1, 1), 1e4, TRUE)
-x <- seq(Sys.time(), Sys.time() + length(y) - 1, by = "1 sec")
-plot_ly(x = x, y = cumsum(y)) %>% add_lines() %>% rangeslider()
+```{r, code=readLines("06-rangeslider.R")}
 ```
 
 <a href="06-rangeslider.html" target="_blank">
@@ -348,10 +327,7 @@ plot_ly(x = x, y = cumsum(y)) %>% add_lines() %>% rangeslider()
 
 * 100,000 or so time series points renders with *WebGL* (but [no rangeslider (yet)](https://community.plot.ly/t/is-there-a-way-to-keep-the-range-slider-while-using-scattergl/4556/3))
 
-```{r}
-y <- sample(c(-1, 1), 1e5, TRUE)
-x <- seq(Sys.time(), Sys.time() + length(y) - 1, by = "1 sec")
-plot_ly(x = x, y = cumsum(y)) %>% add_lines() %>% toWebGL()
+```{r, code=readLines("07-webgl.R")}
 ```
 
 <a href="07-webgl.html" target="_blank">
@@ -408,11 +384,7 @@ ggplot(tx, aes(month, median, group = year)) + geom_line() +
 ---
 ## Compare across cities within year *and* across years within city
 
-```{r}
-TX <- SharedData$new(tx, ~year)
-p <- ggplot(TX, aes(month, median, group = year)) + geom_line() +
-  facet_wrap(~city, ncol = 2)
-(gg <- ggplotly(p, tooltip = "year"))
+```{r, code=readLines("08-small-multiples.R")}
 ```
 
 <iframe src="08-small-multiples.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
@@ -420,8 +392,7 @@ p <- ggplot(TX, aes(month, median, group = year)) + geom_line() +
 ---
 ## Set selection mode and default selections
 
-```{r}
-highlight(gg, "plotly_hover", defaultValues = "2006")
+```{r, code=readLines("08-modes.R")}
 ```
 
 <iframe src="08-modes.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
@@ -430,8 +401,7 @@ highlight(gg, "plotly_hover", defaultValues = "2006")
 ---
 ## Make comparisons with dynamic brush
 
-```{r}
-highlight(gg, dynamic = TRUE, persistent = TRUE, selectize = TRUE)
+```{r, code=readLines("08-dynamic.R")}
 ```
 
 <iframe src="08-dynamic.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
@@ -439,11 +409,7 @@ highlight(gg, dynamic = TRUE, persistent = TRUE, selectize = TRUE)
 ---
 ## Customize the appearance of selections
 
-```{r}
-highlight(
-  gg, dynamic = TRUE, persistent = TRUE, 
-  selected = attrs_selected(mode = "markers+lines", marker = list(symbol = "x"))
-)
+```{r, code=readLines("08-custom.R")}
 ```
 
 <iframe src="08-custom.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
@@ -451,12 +417,7 @@ highlight(
 ---
 ## Automate queries via animation
 
-```{r}
-p <- ggplot(tx, aes(month, median)) + 
-  geom_line(aes(group = year), alpha = 0.2) +
-  geom_line(aes(frame = year), color = "red") +
-  facet_wrap(~city, ncol = 2)
-ggplotly(p)
+```{r, code=readLines("08-automate.R")}
 ```
 
 <iframe src="08-automate.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
@@ -475,12 +436,6 @@ Visit this post and use trelliscope to visualize all of `txhousing` (or, prefera
 <http://ryanhafen.com/blog/trelliscopejs-plotly>
 
 
----
-
-End here and 
-
-  * Refresh their memory with highlighting day 2.
-  * Give them a whirlwind of examples, demonstrate power
-  * Explain the framework, briefly
-    * Interface for querying subsets of your _data_
-    * Interface for altering parameters of the visualization requires knowing some JS/shiny
+.footnote[
+Unfortunately, we won't cover mapping in this workshop, but [day 1 of last years workshop](https://plotcon17.cpsievert.me/workshop/day1/#1) covers the topic in depth.
+]

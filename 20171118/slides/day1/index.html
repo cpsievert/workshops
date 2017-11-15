@@ -134,6 +134,8 @@ The **scatter** trace type is quite general and syntax extends to WebGL (scatter
 
 
 ```r
+library(plotly)
+
 subplot(shareY = TRUE,
   plot_ly(x = 1:2, y = 1:2),
   plot_ly(x = 1:2, y = 1:2, mode = "lines"),
@@ -493,15 +495,9 @@ Visit this post and use trelliscope to visualize all of `txhousing` (or, prefera
 &lt;http://ryanhafen.com/blog/trelliscopejs-plotly&gt;
 
 
----
-
-End here and 
-
-  * Refresh their memory with highlighting day 2.
-  * Give them a whirlwind of examples, demonstrate power
-  * Explain the framework, briefly
-    * Interface for querying subsets of your _data_
-    * Interface for altering parameters of the visualization requires knowing some JS/shiny
+.footnote[
+Unfortunately, we won't cover mapping in this workshop, but [day 1 of last years workshop](https://plotcon17.cpsievert.me/workshop/day1/#1) covers the topic in depth.
+]
     </textarea>
 <script src="../remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
