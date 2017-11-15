@@ -41,7 +41,7 @@ for (i in seq_along(vars)) {
 (w2 <- plot_ly(type = 'parcoords', dimensions = dims))
 
 withr::with_dir("20171118/slides/day1", {
-  htmlwidgets::saveWidget(w, "attendees2.html", selfcontained = FALSE, libdir = "dependencies")
+  htmlwidgets::saveWidget(w2, "attendees2.html", selfcontained = FALSE, libdir = "dependencies")
 })
 
 # sd2 <- crosstalk::SharedData$new(d, ~id)

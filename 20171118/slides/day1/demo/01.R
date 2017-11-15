@@ -4,7 +4,7 @@
 
 # Obtain last month's CRAN downloads of some popular int vis packages
 library(cranlogs)
-logs <- cran_downloads(c("plotly", "ggvis", "leaflet", "network3D", "rbokeh"), "last-month")
+logs <- cran_downloads(c("plotly", "ggvis", "leaflet", "networkD3", "rbokeh"), "last-month")
 DT::datatable(logs)
 
 # When referencing column(s) in a data frame (e.g., `logs`), 
@@ -72,17 +72,20 @@ add_lines(col, colors = colMap)
 plot_ly(logs, x = ~date, y = ~count, color = I("black"), symbol = I(3))
 
 # -----------------------------------------------------------
-# Customizing tooltips and layout
+# Customizing tooltips and layout options
 # -----------------------------------------------------------
 
-add_lines(
-  col, hoverinfo = "text", hoverlabel = list(bgcolor = "white"),
-  text = ~paste(package, "had", count, "\n downloads on", date)
-)
+col %>%
+  add_lines(
+    hoverinfo = "text", hoverlabel = list(bgcolor = "white"),
+    text = ~paste(count, "downloads")
+  ) %>% 
+  layout(hovermode = "x")
+
 
 # any ggplot2 users out there?
 gg <- ggplot(logs, aes(x = date, y = count, group = package)) +
-  geom_line(aes(text = paste(package, "had", count, "downloads")))
+  geom_line(aes(text = paste(package, "downloads")))
 ggplotly(gg, tooltip = "text")
 
 
@@ -150,7 +153,7 @@ View(plotly_build(p)$x$data)
 
 # ----------------------------------------------------------------------
 # Your turn:
-#  * Compare the `plotly_json()` of these two plots. What's the key difference?
+#  * Compare the `plotly_json()` of these two plots below. What's the key difference?
 #  * What are benefits/drawbacks of each approach?
 # ----------------------------------------------------------------------
 
@@ -160,3 +163,21 @@ plot_ly(logs, x = ~date, y = ~count) %>%
 
 plot_ly(logs, x = ~date, y = ~count, color = ~package) %>%
   add_lines()
+
+# ----------------------------------------------------------------------
+# Your turn: 
+#   * Be creative! Use a trace type we haven't discussed yet to visualize `logs` 
+#   * What visualization we've seen thus far is the best? Why?
+# ----------------------------------------------------------------------
+
+
+
+
+# bonus: did someone say animation?
+plot_ly(logs, x = ~format(logs$date, "%b %d"), y = ~count, frame = ~package) %>% 
+  add_lines() %>%
+  animation_opts(1000, 0) %>%
+  layout(
+    showlegend = FALSE,
+    xaxis = list(title = "", tickangle = 45)
+  )

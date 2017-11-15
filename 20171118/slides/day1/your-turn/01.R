@@ -24,11 +24,11 @@ schema()
 plot_ly(x = 1:2, y = 1:2, type = "invalid")
 
 # ------------------------------------------------------
-# Questions:
+# Questions for you:
 # (1) How many trace types does plotly.js have? 
 # (2) Read the description for `traces.scatter.mode`.
 #   - Does the default behavior apply to the R package?
-#   - Can you make a plot with two or more modes (hint: use '+')?
+#   - Can you make a plot with two (or more) modes (hint: use '+')?
 # (3) Can you get rid of the messages in the above examples 
 # (by specifying the trace type, etc)?
 # ---------------------------------------------------------
