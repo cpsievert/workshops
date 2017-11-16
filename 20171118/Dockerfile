@@ -23,9 +23,12 @@ RUN R -e "remotes::install_github('rstudio/leaflet#346')"
 RUN R -e "install.packages('remotes')"
 RUN R -e "remotes::install_github('ropensci/plotly')"
 
-# not really needed, but why not
+# other nice to haves
 RUN R -e "install.packages('GGally')"
 RUN R -e "install.packages('heatmaply')"
+RUN R -e "install.packages('listviewer')"
+RUN R -e "remotes::install_github('hafen/trelliscopejs')"
+RUN R -e "install.packages('gapminder')"
 
 # to have plot_mapbox work out-of-the...box 
 RUN echo "Sys.setenv('MAPBOX_TOKEN' = 'pk.eyJ1IjoiY3BzaWV2ZXJ0IiwiYSI6ImNpdGRiOWwwMjAwMHQyem84NG5tcXg5eXIifQ.UJ2VwrJmPW8DB8H2d-wN3g')" >> /usr/local/lib/R/etc/Rprofile.site

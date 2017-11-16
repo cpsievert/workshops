@@ -1,11 +1,13 @@
 ---
 title: "plotly fundamentals"
+author: "Carson Sievert"
 venue: "plotcon 18"
 type: "workshop"
 recording: "NA"
 output:
   xaringan::moon_reader:
     chakra: "../remark-latest.min.js"
+    seal: false
     nature:
       # approx the golden ratio
       ratio: '14.6:9'
@@ -14,10 +16,10 @@ output:
       countIncrementalSlides: false
       navigation:
         scroll: false
-date: "Slides: https://bit.ly/plotcon18-day1 <br /> <br /> Slides released under <a href='https://github.com/cpsievert/talks/blob/gh-pages/LICENSE'>Creative Commons</a>"
-author: "Carson Sievert"
 ---
-class: center, middle
+class: bottom, left
+background-image: url(../plotly-for-r.svg)
+background-size: contain
 
 # Thanks for coming!
 
@@ -34,34 +36,35 @@ background-size: contain
 
 (2) Run the docker container so that RStudio appears when you visit <http://localhost:8787> (in Chrome or Firefox, please!)
 
-(3) Using the Files pane in RStudio, click `day1` folder, then `index.html`, and choose 'View in web browser'.
+(3) In the R console, enter `browseURL("~/day1/index.html")`. If you see [this popup](popup.png), just press "Try Again".
+
+(4) In the toolbar, go to Tools -> Global Options, then configure your pane layout [like this](panes.png).
 
 (4) Share (with your neighbor) 3 things you're hoping to take away from this workshop (share them with me, via [Slack](https://plotconrworkshop.slack.com) if you like!)
 
-.footnote[
-PS. remember this background image -- it means I want something from you!
-]
-
 ---
+class: middle
 
-### About me
+<h3 align="center"> About me </h3>
 
 * Maintainer of plotly's R package (for nearly 3 years!)
     * Before that: animint, LDAvis, pitchRx, rdom
+
 * PhD in statistics from Iowa State
     * Thesis: [Interfacing R with Web Technologies for Interactive Statistical Graphics and Computing with Data](https://search.proquest.com/openview/3a91971f82fd4af20a78bebb079f5035/1.pdf?pq-origsite=gscholar&cbl=18750&diss=y)
+
 * Founder & CEO, [Sievert Consulting LLC](https://consulting.cpsievert.me/)
     * Currently looking for more projects!
 
 ---
-## About the attendees
+## About you
 
 <iframe src="attendees.html" width="100%" height="450" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
 
 <https://plot.ly/ggplot2/geom_density/>
 
 ---
-## About the attendees, another look
+## Same data, another look
 
 <iframe src="attendees2.html" width="100%" height="450" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
 
@@ -106,7 +109,7 @@ PS. remember this background image -- it means I want something from you!
 
 .footnote[
 ### I'll try my best -- 2 days is not enough!
-### Please please please stop me and ask questions
+### PLEASE PLEASE PLEASE stop me to clarify and/or ask questions
 ]
 
 ```{r, include = FALSE}
@@ -140,13 +143,25 @@ background-size: contain
 
 ## Your turn
 
-Open the `day1/your-turn.R` script and work through the comments/code/questions.
+In your R console enter:
+
+```r
+file.edit('~/day1/your-turn.R')
+```
+
+Work through the comments/code/questions in this R script.
 
 Feel free to work with your neighbor and ask me questions!
 
+.footnote[
+If you have question(s) about it **rmarkdown**, now would be a good time to ask (we won't have time to cover it together).
+
+**PS.** Did you know [the workshop slides](index.Rmd) were created with **rmarkdown**?
+]
+
 ---
 
-The **scatter** trace type is quite general and syntax extends to WebGL (scattergl), 3D (scatter3d), Geo (scattergeo), and [mapbox](https://www.mapbox.com/) (scattermapbox).
+The **scatter** trace type is quite general. It provides the foundation for many charts (e.g., [polygons](https://plot.ly/ggplot2/geom_polygon/), [ribbons](https://plot.ly/ggplot2/geom_ribbon/), [filled areas](https://plot.ly/r/filled-area-plots/), etc), extends to different coordinate systems (e.g, [scatter3d](https://plot.ly/r/3d-line-plots/), [scattergeo](https://plot.ly/r/bubble-maps/), and [scattermapbox](https://plot.ly/r/scattermapbox/)), and rendering systems (e.g., [scattergl](https://plot.ly/r/webgl-vs-svg/))
 
 ```{r, code=readLines("02-scatter-modes.R")}
 ```
@@ -159,7 +174,9 @@ class: inverse, middle, center
 
 # Working with actual data
 
-Follow along with me using the `day1/demo/01.R` script.
+```r
+file.edit('~/day1/demo.R')
+```
 
 ---
 ## Which visualization is better?
@@ -215,7 +232,7 @@ class: center, inverse, middle
 <iframe src="03-heatmap.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
 
 ---
-background-image: url(https://klientboost.com/wp-content/uploads/2015/11/ppc-gold-mines.gif)
+background-image: url(https://i.imgur.com/bdd64us.gif)
 background-size: contain
 class: inverse
 
@@ -239,7 +256,7 @@ class: inverse
 ## &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
 
 ---
-background-image: url(https://klientboost.com/wp-content/uploads/2015/11/ppc-gold-mines.gif)
+background-image: url(https://i.imgur.com/bdd64us.gif)
 background-size: contain
 class: inverse
 
@@ -280,6 +297,60 @@ class: inverse
 
 <iframe src="04-lines-b.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
 
+---
+## [heatmaply](https://github.com/talgalili/heatmaply#readme) is awesome for visualizing a numeric matrices!
+
+<iframe src="05-heatmaply.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+background-image: url(https://i.imgur.com/bdd64us.gif)
+background-size: contain
+class: inverse
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+## &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Graphing 1,000 time series 
+
+## &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+
+---
+background-image: url(https://i.imgur.com/bdd64us.gif)
+background-size: contain
+class: inverse
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+## &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Graphing 1,000 time series 
+
+## &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+
+<h1 align="right"> 1,000,000 time series!</h2>
 
 ---
 class: center, inverse, middle
@@ -288,11 +359,20 @@ class: center, inverse, middle
 
 Ben Shneiderman
 
+.footnote[
+Popular information visualization perspective
+]
 
 ---
-## [heatmaply](https://github.com/talgalili/heatmaply#readme) is awesome for visualizing a numeric matrices!
+class: center, inverse, middle
 
-<iframe src="05-heatmaply.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+# Visualization surprise, but don't scale well. Models scale well, but don't surprise
+
+Hadley Wickham
+
+.footnote[
+Popular statistical graphics perspective
+]
 
 ---
 class: inverse
@@ -318,7 +398,7 @@ For all CRAN packages that use plotly, see the "Reverse dependencies" section on
 ---
 ## What about *long* time series?
 
-* 10,000s time series points renders with *SVG*
+* *Tens* of thousands points is responsive with *SVG*
 
 ```{r, code=readLines("06-rangeslider.R")}
 ```
@@ -332,7 +412,7 @@ For all CRAN packages that use plotly, see the "Reverse dependencies" section on
 ---
 ## What about *long* time series?
 
-* 100,000 or so time series points renders with *WebGL* (but [no rangeslider (yet)](https://community.plot.ly/t/is-there-a-way-to-keep-the-range-slider-while-using-scattergl/4556/3))
+* *Hundreds* of thousands time series points is responsive with *WebGL* (but [no rangeslider (yet)](https://community.plot.ly/t/is-there-a-way-to-keep-the-range-slider-while-using-scattergl/4556/3))
 
 ```{r, code=readLines("07-webgl.R")}
 ```
@@ -344,30 +424,45 @@ For all CRAN packages that use plotly, see the "Reverse dependencies" section on
 </a>
 
 ---
+## What about performance (beyond time-series)?
+
+### SVG vs Canvas, in general
+
+* The *Scalable* in SVG, means scalable in terms of bounding box size.
+  * No matter the context, your browser will struggle to render > 30,000 SVG elements.
+  * This is why [canvas based elements](https://en.wikipedia.org/wiki/Canvas_element) exist (the difference is similar to pdf vs png)
+  
+#### Time series doesn't scale well, even in a canvas context 
+
+* Time series has performance limitations that other data types don't (this is pretty universal).
+
+### High performance plotly charts
+
+* scattergl -- [most of the niceities](https://github.com/plotly/plotly.js/issues/130) of scatter, but [responsive with >1M points](scattergl.R).
+* pointcloud -- more restricted than scattergl, but [responsive w/ several million points](pointcloud.R).
+* heatmapgl -- [response with >1M cells](heatmapgl.R) in heatmap.
+
+---
 ## More time series tips
 
-### Have *lots* of *long* time series?
+#### Have *lots* of *long* time series?
 
-* Consider projecting each series to a lower dimensional (feature) space. 
-  * See [anomalous](https://github.com/robjhyndman/anomalous) package, for example.
+* Consider [extracting/visualizing features from each series](https://robjhyndman.com/talks/Google-Oct2015-part3.pdf)
+  * Some useful packages: [anomalous](https://github.com/robjhyndman/anomalous) and [tscognostics](https://github.com/earowang/tscognostics)
   * See my work on [visualizing pedestrian traffic](https://github.com/cpsievert/pedestrians) with plotly
-  * See [trelliscope](http://ryanhafen.com/blog/trelliscopejs-plotly)
+  
+* Consider a tool like [trelliscope](http://ryanhafen.com/blog/trelliscopejs-plotly) for exploring many "groups"
 
-### Is seasonality important?
+#### Is seasonality important?
 
 * Consider "wrapping" your time-series 
-  * Get inspired by this [paper](https://arxiv.org/pdf/1412.6675.pdf)
+  * Wrap (i.e., group) your series by hand (get inspired by this [paper](https://arxiv.org/pdf/1412.6675.pdf))
   * Checkout out [sugrrants](https://github.com/earowang/sugrrants) (`ggplotly()` converts the ggplot2 plots)
-  * Wrap (i.e., group) your series by hand
   
-### Visualization of models/predictions?
+#### Visualization of models/predictions?
 
 * Start with [forecast](https://cran.r-project.org/package=forecast) and/or [mgcv](https://cran.r-project.org/package=mgcv) for model fitting.
 * Use a strategy similar to [here](https://plotly-book.cpsievert.me/a-case-study-of-housing-sales-in-texas.html#fig:forecast) to plot forecasts.
-
-.footnote[
-Time series has performance limitations that other data types don't. For instance, [if you really want to](https://www.youtube.com/watch?v=9nazm3_OXac), we can do a scatterplot of >1M points.
-]
 
 ---
 ## Texas housing prices
@@ -438,13 +533,13 @@ background-size: contain
 
 ## Your turn
 
-Visit this post and use trelliscope to visualize all of `txhousing` (or, preferably, your own data!)
+Visit this post, replicate the example (no install needed), and use trelliscope to visualize `txhousing` (or, preferably, your own data!)
 
 <http://ryanhafen.com/blog/trelliscopejs-plotly>
 
 
 .footnote[
-* Now would be a good time to ask me about personal projects!
+Now would be a good time to ask me about personal projects!
 
-* Unfortunately, we won't cover mapping in this workshop, but [day 1 of last years workshop](https://plotcon17.cpsievert.me/workshop/day1/#1) covers the topic in depth.
+Unfortunately, we won't cover maps in this workshop, but [day 1 of last years workshop](https://plotcon17.cpsievert.me/workshop/day1/#1) covers the topic in depth.
 ]

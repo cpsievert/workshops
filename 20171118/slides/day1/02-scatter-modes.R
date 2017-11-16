@@ -1,5 +1,3 @@
-library(plotly)
-
 subplot(shareY = TRUE,
   plot_ly(x = 1:2, y = 1:2),
   plot_ly(x = 1:2, y = 1:2, mode = "lines"),
