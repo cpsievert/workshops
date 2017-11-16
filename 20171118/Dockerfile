@@ -15,18 +15,16 @@ RUN R -e "install.packages('crosstalk')"
 RUN R -e "install.packages('cranlogs')"
 RUN R -e "install.packages('dplyr')"
 RUN R -e "install.packages('DT')"
-
-# Mapping libraries
 RUN R -e "install.packages('sf')"
-RUN R -e "install.packages('leaflet')"
+# needed in order for leaflet to respect highlight()
+RUN R -e "remotes::install_github('rstudio/leaflet#346')"
 
 # currently need dev version of ggplot2 to work well with plotly
 RUN R -e "install.packages('remotes')"
 RUN R -e "remotes::install_github('ropensci/plotly')"
 
+# not really needed, but why not
 RUN R -e "install.packages('GGally')"
-
-# plotly derivatives
 RUN R -e "install.packages('heatmaply')"
 
 # to have plot_mapbox work out-of-the...box 

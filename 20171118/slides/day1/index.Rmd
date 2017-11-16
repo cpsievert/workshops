@@ -1,5 +1,5 @@
 ---
-title: "Practical tools for exploratory visualization on the web"
+title: "plotly fundamentals"
 venue: "plotcon 18"
 type: "workshop"
 recording: "NA"
@@ -17,11 +17,18 @@ output:
 date: "Slides: https://bit.ly/plotcon18-day1 <br /> <br /> Slides released under <a href='https://github.com/cpsievert/talks/blob/gh-pages/LICENSE'>Creative Commons</a>"
 author: "Carson Sievert"
 ---
+class: center, middle
+
+# Thanks for coming!
+
+## Sorry about the reschedule...
+
+---
 class: inverse, center
 background-image: url(../your-turn.jpeg)
 background-size: contain
 
-## Your Turn
+## Your turn
 
 (1) Install the required software <https://workshops.cpsievert.me/20171118/>
 
@@ -131,7 +138,7 @@ class: inverse, center
 background-image: url(../your-turn.jpeg)
 background-size: contain
 
-## Your Turn
+## Your turn
 
 Open the `day1/your-turn.R` script and work through the comments/code/questions.
 
