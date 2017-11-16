@@ -427,7 +427,7 @@ class: center, middle
 # Hello &lt;img src="https://www.rstudio.com/wp-content/uploads/2014/04/shiny.png" width=100 /&gt; 👋
 
 ```r
-withr::with_dir("~/day2/shiny/01", shiny::runApp(display.mode = "showcase"))
+shiny::runApp("~/day2/shiny/01", display.mode = "showcase")
 ```
 
 ---
@@ -436,7 +436,7 @@ class: center, middle
 # Accessing plotly user events
 
 ```r
-withr::with_dir("~/day2/shiny/02", shiny::runApp(display.mode = "showcase"))
+shiny::runApp("~/day2/shiny/02", display.mode = "showcase")
 ```
 
 ---
@@ -465,7 +465,7 @@ class: center, middle
 # Targetting events (only if we have time)
 
 ```r
-withr::with_dir("~/day2/shiny/03", shiny::runApp(display.mode = "showcase"))
+shiny::runApp("~/day2/shiny/03", display.mode = "showcase")
 ```
 
 .footnote[
@@ -478,26 +478,43 @@ class: center, middle
 # plotly proxies
 
 ```r
-withr::with_dir("~/day2/shiny/04", shiny::runApp(display.mode = "showcase"))
+shiny::runApp("~/day2/shiny/04", display.mode = "showcase")
 ```
 
 .footnote[
-By default, **shiny updates require a full redraw**
+* By default, **shiny updates require a full redraw**
 
-We can leverage [the plotly.js API](https://plot.ly/javascript/plotlyjs-function-reference/) to modify graphs more efficiently
+* We can leverage [the plotly.js API](https://plot.ly/javascript/plotlyjs-function-reference/) to modify graphs more efficiently
 ]
 
 ---
 class: center, middle
 
-# streaming data
+# Streaming data
 
 ```r
-withr::with_dir("~/day2/shiny/05", shiny::runApp(display.mode = "showcase"))
+shiny::runApp("~/day2/shiny/05", display.mode = "showcase")
 ```
 
 .footnote[
 Inspired by &lt;https://plot.ly/r/streaming/&gt;
+]
+
+---
+class: inverse
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+&lt;h2 align="center"&gt; Your turn &lt;/h2&gt;
+
+Open the last example (`day2/shiny/05/app.R`) and try the following:
+
+1. Add `sliderInput()` for controlling the streaming interval and the number of points added in each update.
+
+2. Add another (streaming) trace
+
+.footnote[
+This is the last your turn, and I have a 6pm flight to catch, so ask me any other questions now!
 ]
 
 ---

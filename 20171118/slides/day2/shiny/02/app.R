@@ -1,20 +1,22 @@
-library(ggplot2)
+library(plotly)
 library(shiny)
 
+# plotlyOutput(), not plotOutput()
 ui <- fluidPage(
-  plotOutput("plotID", brush = brushOpts(id = "plotBrushID")),
+  plotlyOutput("plotID"),
   verbatimTextOutput("brushInfo")
 )
 
 server <- function(input, output) {
   
-  output$plotID <- renderPlot({
-    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  # renderPlotly(), not renderPlot()
+  output$plotID <- renderPlotly({
+    p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
+    layout(ggplotly(p), dragmode = "select")
   })
   
   output$brushInfo <- renderPrint({
-    cat("input$plot_brush:\n")
-    str(input$plotBrushID)
+    event_data("plotly_selected")
   })
   
 }

@@ -2,34 +2,53 @@ library(shiny)
 library(plotly)
 
 ui <- fluidPage(
+  actionButton("stream", "Turn stream on/off"),
   plotlyOutput("plot")
 )
 
 server <- function(input, output, session) {
   
-  y <- c(0, 1)
+  # initial values
+  yint <- c(0, 1)
   
   output$plot <- renderPlotly({
-    plot_ly(y = y, x = seq_along(y), mode = "lines", type = "scatter") 
+    plot_ly(y = yint, x = seq_along(yint)) %>%
+      add_lines()
   })
   
+  # reactiveValues() act very much like input values, but may be used to 
+  # maintain state (e.g., are we currently streaming?)
   rv <- reactiveValues(
-    yt = sum(y), 
-    n = length(y)
+    stream = FALSE,
+    yend = sum(yint), 
+    n = length(yint)
   )
   
+  # turn streaming on/off when the button is pressed
+  observeEvent(input$stream, {
+    rv$stream <- if (rv$stream) FALSE else TRUE
+  })
+  
   observe({
+    # if we're not streaming, don't do anything
+    if (!rv$stream) return()
+    
+    # re-execute this code block to every 100 milliseconds
     invalidateLater(100, session)
-    new_y <- sample(c(-1, 1), 1)
+    # changing a reactive value "invalidates" it, so isolate() is needed 
+    # to avoid recursion
     isolate({
-      rv$yt <- rv$yt + new_y
       rv$n <- rv$n + 1
+      rv$yend <- rv$yend + sample(c(-1, 1), 1)
     })
+    
+    # add the new value to the plot
+    # https://plot.ly/javascript/plotlyjs-function-reference/#plotlyextendtraces
     plotlyProxy("plot", session) %>%
       plotlyProxyInvoke(
         "extendTraces", 
         list(
-          y = list(list(rv$yt)), 
+          y = list(list(rv$yend)), 
           x = list(list(rv$n))
         ), 
         list(0)
