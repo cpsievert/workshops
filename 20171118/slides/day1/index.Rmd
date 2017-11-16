@@ -7,6 +7,7 @@ recording: "NA"
 output:
   xaringan::moon_reader:
     chakra: "../remark-latest.min.js"
+    mathjax: null
     seal: false
     nature:
       # approx the golden ratio
@@ -18,12 +19,12 @@ output:
         scroll: false
 ---
 class: bottom, left
-background-image: url(../plotly-for-r.svg)
+background-image: url(plotly-for-r.svg)
 background-size: contain
 
-# Thanks for coming!
+# Welcome
 
-## Sorry about the reschedule...
+## Thanks for coming!
 
 ---
 class: inverse, center
@@ -353,7 +354,7 @@ class: inverse
 <h1 align="right"> 1,000,000 time series!</h2>
 
 ---
-class: center, inverse, middle
+class: center, middle
 
 # Overview first, then zoom and filter, then details on demand 
 

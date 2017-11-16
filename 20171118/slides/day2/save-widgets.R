@@ -12,7 +12,8 @@ save_html_ <- function(...) {
 }
 
 x <- demo("crosstalk-highlight-pipeline", package = "plotly")
-save_widget(x$value, "01-pipeline.html")
+# dependencies must conflict with crosstalk widgets.....
+htmlwidgets::saveWidget(x$value, "01-pipeline.html", selfcontained = TRUE)
 x <- demo("crosstalk-highlight-binned-target-a", package = "plotly")
 save_widget(x$value, "02-binned-target-a.html")
 x <- demo("crosstalk-highlight-binned-target-b", package = "plotly")

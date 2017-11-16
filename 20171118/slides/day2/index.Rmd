@@ -1,5 +1,6 @@
 ---
 title: "Advanced plotly"
+author: "Carson Sievert"
 venue: "plotcon 18"
 type: "workshop"
 recording: "NA"
@@ -7,7 +8,7 @@ output:
   xaringan::moon_reader:
     chakra: "../remark-latest.min.js"
     mathjax: null
-    
+    seal: false
     nature:
       # approx the golden ratio
       ratio: '14.6:9'
@@ -16,10 +17,10 @@ output:
       countIncrementalSlides: false
       navigation:
         scroll: false
-date: "Slides: https://bit.ly/plotcon18-day2 <br /> <br /> Slides released under <a href='https://github.com/cpsievert/talks/blob/gh-pages/LICENSE'>Creative Commons</a>"
-author: "Carson Sievert"
 ---
-
+class: bottom, left
+background-image: url(adv-plotly-for-r.svg)
+background-size: contain
 
 ```{r, include = FALSE}
 library(plotly)
@@ -33,6 +34,7 @@ knitr::opts_chunk$set(
 )
 ```
 
+---
 ## Texas housing prices
 
 ```{r, eval = TRUE}
@@ -77,7 +79,7 @@ class: inverse, middle, bottom
 background-image: url(https://i.imgur.com/H9vOG9f.gif)
 background-size: contain
 
-# Britney: I can do this with shiny. What's the big deal?
+# Britney: So what? I can do this with shiny.
 
 ---
 class: inverse, bottom, left
@@ -122,8 +124,7 @@ background-size: contain
 
 (1) Modify the ['pipeline' demo](https://github.com/ropensci/plotly/blob/master/demo/crosstalk-highlight-pipeline.R) so that markers (instead of bars) encode # of missing values (like it does in the diagram).
 
-(2) Once you have (1) enable *brushing* a marker highlights those cities (hint: see `help(highlight)`)
-
+(2) Highlight cities by *brushing* marker(s) (hint: linked brushing isn't be enabled by default, see `help(highlight)`)
 
 ---
 ## Aggregating selections
@@ -167,20 +168,29 @@ See <https://plotly-book.cpsievert.me/linking-animated-views.html>
 ]
 
 ---
-class: inverse, center
+class: inverse
 background-image: url(../your-turn.jpeg)
 background-size: contain
 
-## Your turn
+<h2 align="center"> Your turn </h2>
 
 Check out one or two more demos that come with the package 
 
-`demo(package = "plotly")`
+```r
+demo(package = "plotly")
+```
 
 .footnote[
-Hints: 
-1. Once you have a topic, say "ternary", you can run it like this `demo("ternary", package = "plotly")`.
-2. If you'd like to see/edit the source code, do something like `file.edit(system.file("demo", "ternary.R", package = "plotly"))`
+**PS**
+
+* Once you have a topic, say "ternary", you can run it like this 
+```r
+demo("ternary", package = "plotly")
+```
+* If you'd like to see/edit the source code, do something like 
+```r
+file.edit(system.file("demo", "ternary.R", package = "plotly"))
+```
 ]
 
 
@@ -302,7 +312,7 @@ class: center, middle, inverse
 ## Expectations vs reality
 
 .pull-left[
-  <img src="https://i.imgur.com/p5Lay8l.gif" height = "500" width = "350" />
+  <img src="https://i.imgur.com/fZIenVE.jpg" height = "500" />
 ]
 
 .pull-right[
@@ -374,15 +384,11 @@ class: center, middle
 
 # plotly proxies
 
+By default, **shiny updates require a full redraw**, but proxies allows us to leverage [the plotly.js API](https://plot.ly/javascript/plotlyjs-function-reference/) to modify/update graphs more efficiently
+
 ```r
 shiny::runApp("~/day2/shiny/04", display.mode = "showcase")
 ```
-
-.footnote[
-* By default, **shiny updates require a full redraw**
-
-* We can leverage [the plotly.js API](https://plot.ly/javascript/plotlyjs-function-reference/) to modify graphs more efficiently
-]
 
 ---
 class: center, middle
@@ -404,14 +410,20 @@ background-size: contain
 
 <h2 align="center"> Your turn </h2>
 
-Open the last example (`day2/shiny/05/app.R`) and try the following:
+Open the last example 
+
+```r
+file.edit("day2/shiny/05/app.R")
+```
+
+Try to do the following:
 
 1. Add `sliderInput()` for controlling the streaming interval and the number of points added in each update.
 
 2. Add another (streaming) trace
 
 .footnote[
-This is the last your turn, and I have a 6pm flight to catch, so ask me any other questions now!
+### This is the last your turn, and I have a 6pm flight to catch, so ask me any other questions now!
 ]
 
 ---
@@ -434,7 +446,7 @@ https://github.com/cpsievert/apps <br />
 
 Reach out to me
 
-Web: <http://cpsievert.me/>
+Web: <http://cpsievert.me/> <br />
 Twitter: [@cpsievert](https://twitter.com/cpsievert) <br />
 GitHub: [@cpsievert](https://github.com/cpsievert) <br />
 Email: <cpsievert1@gmail.com>
