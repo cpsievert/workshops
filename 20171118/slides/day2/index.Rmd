@@ -360,9 +360,9 @@ Program an app to populate a bar chart reflecting the selection, sort of like th
 </div>
 
 .footnote[
-[Full solution](https://github.com/ropensci/plotly/blob/master/inst/examples/plotlyLinkedBrush/app.R)
+[Full solution](https://github.com/cpsievert/apps/blob/master/shiny/apps/plotlyLinkedBrush/app.R)
 
-[Partial solution, <br /> without shiny](03-your-turn.R)
+[Partial solution, <br /> without shiny](your-turn/02.R)
 ]
 
 
