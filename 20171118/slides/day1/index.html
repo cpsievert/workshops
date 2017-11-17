@@ -24,15 +24,29 @@ background-size: contain
 
 ## Your turn
 
+.pull-left[
 (1) Install the required software &lt;https://workshops.cpsievert.me/20171118/&gt;
 
 (2) Run the docker container so that RStudio appears when you visit &lt;http://localhost:8787&gt; (in Chrome or Firefox, please!)
 
-(3) In the R console, enter `browseURL("~/day1/index.html")`. If you see [this popup](popup.png), just press "Try Again".
+(3) In the R console, enter 
+```r
+browseURL("~/day1/index.html")
+```
 
-(4) In the toolbar, go to Tools -&gt; Global Options, then configure your pane layout [like this](panes.png).
+If you see [this popup](popup.png), press "Try Again".
 
-(4) Share (with your neighbor) 3 things you're hoping to take away from this workshop (share them with me, via [Slack](https://plotconrworkshop.slack.com) if you like!)
+&lt;img src="popup.png" /&gt;
+]
+
+.pull-right[
+(4) Go to Tools -&gt; Global Options and configure your pane layout [like this](panes.png).
+
+&lt;img src="panes.png" height="325"/&gt;
+
+(5) Share (w/ your neighbor) 3 things you're hoping to take away from this workshop (share them via Slack if you like!)
+]
+
 
 ---
 class: middle
@@ -450,7 +464,7 @@ plot_ly(x = x, y = cumsum(y)) %&gt;% add_lines() %&gt;% toWebGL()
 
 ### High performance plotly charts
 
-* scattergl -- [most of the niceities](https://github.com/plotly/plotly.js/issues/130) of scatter, but [responsive with &gt;1M points](scattergl.R).
+* scattergl -- basically same as scatter (with [limitations](https://github.com/plotly/plotly.js/issues/130)), but [responsive with &gt;1M points](scattergl.R).
 * pointcloud -- more restricted than scattergl, but [responsive w/ several million points](pointcloud.R).
 * heatmapgl -- [response with &gt;1M cells](heatmapgl.R) in heatmap.
 
@@ -465,16 +479,16 @@ plot_ly(x = x, y = cumsum(y)) %&gt;% add_lines() %&gt;% toWebGL()
   
 * Consider a tool like [trelliscope](http://ryanhafen.com/blog/trelliscopejs-plotly) for exploring many "groups"
 
+#### Visualization of models/predictions?
+
+* Start with [forecast](https://cran.r-project.org/package=forecast) and/or [mgcv](https://cran.r-project.org/package=mgcv) for model fitting.
+* Use a strategy similar to [here](https://plotly-book.cpsievert.me/a-case-study-of-housing-sales-in-texas.html#fig:forecast) to plot forecasts.
+
 #### Is seasonality important?
 
 * Consider "wrapping" your time-series 
   * Wrap (i.e., group) your series by hand (get inspired by this [paper](https://arxiv.org/pdf/1412.6675.pdf))
   * Checkout out [sugrrants](https://github.com/earowang/sugrrants) (`ggplotly()` converts the ggplot2 plots)
-  
-#### Visualization of models/predictions?
-
-* Start with [forecast](https://cran.r-project.org/package=forecast) and/or [mgcv](https://cran.r-project.org/package=mgcv) for model fitting.
-* Use a strategy similar to [here](https://plotly-book.cpsievert.me/a-case-study-of-housing-sales-in-texas.html#fig:forecast) to plot forecasts.
 
 ---
 ## Texas housing prices
@@ -583,15 +597,13 @@ background-size: contain
 
 ## Your turn
 
-Visit this post, replicate the example (no install needed), and use trelliscope to visualize `txhousing` (or, preferably, your own data!)
-
-&lt;http://ryanhafen.com/blog/trelliscopejs-plotly&gt;
+Visit [this post](http://ryanhafen.com/blog/trelliscopejs-plotly), replicate the example (no install needed), and use trelliscope to visualize `txhousing` (or, more preferably, your own data!)
 
 
 .footnote[
-Now would be a good time to ask me about personal projects!
+## Now would be a good time to ask me about personal projects (I have a 6pm flight tomorrow)!
 
-Unfortunately, we won't cover maps in this workshop, but [day 1 of last years workshop](https://plotcon17.cpsievert.me/workshop/day1/#1) covers the topic in depth.
+#### Unfortunately, we won't cover maps in this workshop, but [day 1 of last years workshop](https://plotcon17.cpsievert.me/workshop/day1/#1) covers the topic in depth.
 ]
     </textarea>
 <script src="../remark-latest.min.js"></script>

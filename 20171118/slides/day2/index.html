@@ -79,10 +79,10 @@ base &lt;- plot_ly(sd, color = I("black"), height = 400) %&gt;%
   group_by(city)
 
 p1 &lt;- base %&gt;%
-  summarise(has = sum(is.na(median))) %&gt;%
-  filter(has &gt; 0) %&gt;%
-  arrange(has) %&gt;%
-  add_bars(x = ~has, y = ~factor(city, levels = city), hoverinfo = "x+y") %&gt;%
+  summarise(miss = sum(is.na(median))) %&gt;%
+  filter(miss &gt; 0) %&gt;%
+  arrange(miss) %&gt;%
+  add_bars(x = ~miss, y = ~factor(city, levels = city), hoverinfo = "x+y") %&gt;%
   layout(
     barmode = "overlay",
     xaxis = list(title = "Number of months missing"),
@@ -250,7 +250,7 @@ class: middle
 background-image: url(https://i.imgur.com/jQXFzZw.gif)
 background-size: contain
 
-## You can animate selections!
+## Selections inherit animation frames!
 
 .footnote[
 See &lt;https://plotly-book.cpsievert.me/linking-animated-views.html&gt;
@@ -457,9 +457,9 @@ Program an app to populate a bar chart reflecting the selection, sort of like th
 &lt;/div&gt;
 
 .footnote[
-[Full solution](https://github.com/ropensci/plotly/blob/master/inst/examples/plotlyLinkedBrush/app.R)
+[Full solution](https://github.com/cpsievert/apps/blob/master/shiny/apps/plotlyLinkedBrush/app.R)
 
-[Partial solution, &lt;br /&gt; without shiny](03-your-turn.R)
+[Partial solution, &lt;br /&gt; without shiny](your-turn/02.R)
 ]
 
 

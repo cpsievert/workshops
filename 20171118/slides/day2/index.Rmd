@@ -161,7 +161,7 @@ class: middle
 background-image: url(https://i.imgur.com/jQXFzZw.gif)
 background-size: contain
 
-## You can animate selections!
+## Selections inherit animation frames!
 
 .footnote[
 See <https://plotly-book.cpsievert.me/linking-animated-views.html>

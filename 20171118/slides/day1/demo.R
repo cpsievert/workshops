@@ -159,12 +159,20 @@ View(plotly_build(p)$x$data)
 #  * What are benefits/drawbacks of each approach?
 # ----------------------------------------------------------------------
 
-plot_ly(logs, x = ~date, y = ~count) %>%
-  group_by(package) %>%
-  add_lines(text = ~package, hoverinfo = "x+y+text")
-
 plot_ly(logs, x = ~date, y = ~count, color = ~package) %>%
   add_lines()
+
+plot_ly(logs, x = ~date, y = ~count) %>%
+  group_by(package) %>%
+  add_lines(text = ~package, hoverinfo = "x+y+text") %>%
+  slice(which.max(date)) %>%
+  # pro tip: use `plotly_data()` to examine the data 
+  # attached to the visual at any point in the "pipeline"
+  # plotly_data()
+  add_annotations(
+    text = ~package, x = ~date, y = ~count, 
+    ax = ~ifelse(package == "ggvis", -50, 50)
+  )  
 
 # ----------------------------------------------------------------------
 # Your turn: 
