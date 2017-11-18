@@ -21,6 +21,11 @@ This workshop is highly interactive. Attendees are expected to participate in ha
 
 By the end of this workshop, you should be able to leverage interactive visualization techniques to perform/present data analysis tasks/findings using [the R package plotly](https://plot.ly/r/). Though it would be beneficial to have some prior knowledge of R and [ggplot2](http://ggplot2.tidyverse.org/), we do not require it, and as such, we avoid assuming pre-existing knowledge as much as possible. Furthermore, this workshop is _not_ designed to make you an R programming expert -- it's designed to get you [doing powerful things quickly](http://varianceexplained.org/r/teach-hard-way/) regardless of your experience with R or programming in general.
 
+# Accessing materials
+
+Once you've [opened RStudio](#open-rstudio) via the docker container, open the index.html file in the day1 (or day2) folder. These slides have various examples/content and reference files that reside in your RStudio session.
+
+Alternatively, you may access the slides online: [day1](slides/day1) and [day2](slides/day2).
 
 # Installation
 
