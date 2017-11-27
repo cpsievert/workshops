@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Carson Sievert" />
+
+
+<title>‘plotly for R’ workshop</title>
+
+<link href="index_files/tufte-css/tufte.css" rel="stylesheet" />
+<link href="index_files/highlightjs/default.css" rel="stylesheet" />
+<script src="index_files/highlightjs/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<link rel="stylesheet" href="main.css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">‘plotly for R’ workshop</h1>
+<h4 class="author"><em><a href="https://cpsievert.me/">Carson Sievert</a></em></h4>
+<h4 class="date"><em>Montréal, Canada ❄️ <br /> March 3rd &amp; 4th, 2018</em></h4>
+
+
+
+<section id="about-the-workshop" class="level1">
+<h1>About the workshop</h1>
+<p>This workshop is highly interactive. Attendees are expected to participate in hands-on exercises which augment the lecture material and are encouraged to ask questions. To participate in the exercises, attendees should bring a laptop with relevant software installed <strong>prior to the workshop</strong>. Click <a href="#installation">here</a> for installation directions.</p>
+<p>By the end of this workshop, you should be able to leverage interactive visualization techniques to perform/present data analysis tasks/findings using <a href="https://plot.ly/r/">the R package plotly</a>. Though it would be beneficial to have some prior knowledge of R and <a href="http://ggplot2.tidyverse.org/">ggplot2</a>, we do not require it, and as such, we avoid assuming pre-existing knowledge as much as possible. Furthermore, this workshop is <em>not</em> designed to make you an R programming expert – it’s designed to get you <a href="http://varianceexplained.org/r/teach-hard-way/">doing powerful things quickly</a> regardless of your experience with R or programming in general.</p>
+<section id="day-1-outline" class="level2">
+<h2>Day 1 outline</h2>
+<ul>
+<li>An overview of plotly for R
+<ul>
+<li>Motivating examples/demos</li>
+<li>How does it all work (htmlwidgets for R, plotly.js, SVG vs WebGL, etc)?</li>
+<li>Mapping data to visuals (theory and practice)</li>
+<li>Tips for learning, debugging, and getting “un-stuck”</li>
+</ul></li>
+<li>Data wrangling for visualization
+<ul>
+<li>Reshaping with <strong>tidyr</strong>, manipulation with <strong>dplyr</strong></li>
+<li>The data-plot-pipeline</li>
+</ul></li>
+<li>Interactive maps made simple
+<ul>
+<li>scattermapbox</li>
+<li>scattergeo</li>
+<li><strong>sf</strong> and geom_sf()</li>
+</ul></li>
+</ul>
+</section>
+<section id="day-2-outline" class="level2">
+<h2>Day 2 outline</h2>
+<ul>
+<li>Animations via <code>plot_ly()</code> and <code>ggplotly()</code></li>
+<li>Linking multiple views via <strong>crosstalk</strong>
+<ul>
+<li>Highlighting via direct/indirect manipulation</li>
+<li>Filtering via indirect manipulation</li>
+</ul></li>
+<li>Getting the most of out plotly in <strong>shiny</strong>
+<ul>
+<li>Quick intro to <strong>shiny</strong></li>
+<li>Accessing/responding to plotly events in <strong>shiny</strong></li>
+<li>Efficient updates via <code>plotlyProxy()</code></li>
+</ul></li>
+<li>An intro to <strong>dasher</strong> (dash for R)
+<ul>
+<li>Why <strong>dasher</strong>?</li>
+<li>Quick overview of dash components</li>
+<li><strong>dasher</strong> basics: layout &amp; callbacks</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="installation" class="level1">
+<h1>Installation</h1>
+<section id="docker" class="level2">
+<h2>Docker</h2>
+<p><label for="tufte-mn-1" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote">NOTE: if you already have Docker and are comfortable running terminal commands, you can skip most of these directions and run:</span> <label for="tufte-mn-2" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-2" class="margin-toggle"><span class="marginnote"><code>docker run -p 8787:8787 cpsievert/workshops</code></span></p>
+<p><a href="https://www.docker.com/">Docker</a> provides the most seamless installation experience and <em>guarantees</em> consistency in computational results (which is why I highly recommend this installation approach). If you don’t already have Docker, or have never heard of it, don’t worry! I’ll walk you through how to use it for our purposes. First off, download and install the <a href="https://www.docker.com/products/docker-toolbox">Docker toolbox</a> (completely free to use!). The toolbox ships with a number of things, one of them being a graphical interface called Kitematic which makes it easy to find/download/use Docker images. If you’re comfortable running Docker from the command line, feel free to run the command in the side margin (then <a href="#open-rstudio">open RStudio</a>) and skip the Kitematic directions.</p>
+<p>After installing the Docker toolbox, you should be able to find Kitematic in your applications. Go ahead and open it. You should see a welcome page like this:</p>
+<p><img src="kitematic-welcome.png" width="1736"  /></p>
+<p>There is no need to create a Docker Hub account (so go ahead and press ‘skip’ or ‘close’), but we’ll be downloading an image I’ve provided <a href="https://hub.docker.com/r/cpsievert/workshops">specifically for this workshop</a> from Docker Hub. To download it, just type ‘cpsievert’ in the search bar and ‘create’ the relevant image:</p>
+<p><img src="kitematic-images.png" width="1640"  /></p>
+<p>This will download the image, which may take a few minutes (we’re downloading an entire virtual comuting environment!). Once the image is done downloading, you should see something similar to this:</p>
+<p>
+<span class="marginnote shownote">–&gt; <img src="kitematic-settings.png" alt="You might need to map docker port 8787 to port 8787 on the host (click gear icon, then go to &quot;Configure Ports&quot; section of the &quot;Hostname/Ports&quot; tab)" width="778"  /> <!--
+<p class="caption marginnote">-->You might need to map docker port 8787 to port 8787 on the host (click gear icon, then go to “Configure Ports” section of the “Hostname/Ports” tab)<!--</p>--> <!--</div>--></span>
+</p>
+<p><img src="kitematic-logs.png" width="1694"  /></p>
+<section id="open-rstudio" class="level3">
+<h3>Open RStudio</h3>
+<p>Finally, point your web browser to <a href="http://locahost:8787" class="uri">http://locahost:8787</a>, and you’ll see a log-in page for RStudio. Enter ‘rstudio’ for both the username and password. Once you see an RStudio window like this one, high-five yourself; you’re all set up for the workshop! 🎉 🎉 🎉</p>
+<p>
+<span class="marginnote shownote">–&gt; <img src="rstudio-login.png" alt="Use 'rstudio' for both login and password." width="371"  /> <!--
+<p class="caption marginnote">-->Use ‘rstudio’ for both login and password.<!--</p>--> <!--</div>--></span>
+</p>
+<p><img src="rstudio.png" width="1900"  /></p>
+</section>
+</section>
+</section>
+<section id="code-of-conduct" class="level1">
+<h1>Code of Conduct</h1>
+<p>We are committed to providing a welcoming and harassment-free experience for everyone, regardless of gender, gender identity and expression, age, sexual orientation, disability, physical appearance, body size, race, ethnicity, religion (or lack thereof), or technology choices. We do not tolerate harassment of conference participants in any form. Sexual language and imagery is not appropriate for any conference venue, including talks, workshops, parties, Twitter and other online media. Participants violating these rules may be sanctioned or expelled from the event at the discretion of the organizers.</p>
+<p>This code of conduct applies to all participants, including the organizers and applies to all modes of interaction, both in-person and online, including the Slack channel and Twitter.</p>
+<p>Workshop participants agree to:</p>
+<ul>
+<li><p>Be considerate in speech and actions, and actively seek to acknowledge and respect the boundaries of fellow attendees.</p></li>
+<li><p>Refrain from demeaning, discriminatory, or harassing behavior and speech. Harassment includes, but is not limited to: deliberate intimidation; stalking; unwanted photography or recording; sustained or willful disruption of talks or other events; inappropriate physical contact; use of sexual or discriminatory imagery, comments, or jokes; and unwelcome sexual attention. If you feel that someone has harassed you or otherwise treated you inappropriately, please alert any member of the conference team in person.</p></li>
+<li><p>Take care of each other. Alert a member of the conference team if you notice a dangerous situation, someone in distress, or violations of this code of conduct, even if they seem inconsequential.</p></li>
+</ul>
+<section id="need-help" class="level2">
+<h2>Need Help?</h2>
+<p><b>Please speak with Carson Sievert if you have any concerns.</b></p>
+<p>If any attendee engages in harassing behavior, the workshop organizers may take any lawful action we deem appropriate, including but not limited to warning the offender or asking the offender to leave the workshop. (If you feel you have been unfairly accused of violating this code of conduct, you should contact the workshop team with a concise description of your grievance.)</p>
+<p>We welcome your feedback on this event, and thank you for working with us to make it a safe, enjoyable, and friendly experience for everyone who participates.</p>
+<p>Parts of above text is licensed CC BY-SA 4.0. Credit to <a href="https://srccon.org">SRCCON</a> and <a href="http://textworkshop17.ropensci.org/">rOpenSci</a>.</p>
+</section>
+</section>
+
+
+
+
+</body>
+</html>
