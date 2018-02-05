@@ -24,33 +24,32 @@ By the end of this workshop, you will be able to rapidly pose queries about data
 ## Day 1 outline
 
 * An overview of plotly for R
-  * Motivating examples and demos
-  * How does it all fit together (htmlwidgets for R, plotly.js, SVG vs WebGL, etc)?
-  * Mapping data to visuals (theory and practice)
-  * Tips for learning more, debugging, and generally getting "un-stuck"
+    * Motivating examples and demos
+    * How does it all fit together (htmlwidgets for R, plotly.js, SVG vs WebGL, etc)?
+    * Mapping data to visuals (theory and practice)
+    * Tips for learning more, debugging, and generally getting "un-stuck"
 * Data wrangling for visualization
-  * tidy data principles
-  * Reshaping with **tidyr**, manipulation with **dplyr**
-  * The data-plot-pipeline
+    * Reshaping with **tidyr**, manipulation with **dplyr**
+    * The data-plot-pipeline
 * Interactive maps made simple
-  * scattermapbox
-  * scattergeo
-  * **sf** and geom_sf()
+    * scattermapbox
+    * scattergeo
+    * **sf** and geom_sf()
 
 ## Day 2 outline
 
 * Animations via `plot_ly()` and `ggplotly()`
 * Linking multiple views via **crosstalk**
-  * Highlighting via direct/indirect manipulation
-  * Filtering via indirect manipulation
+    * Highlighting via direct/indirect manipulation
+    * Filtering via indirect manipulation
 * Getting the most of out plotly in **shiny**
-  * Quick intro to **shiny**
-  * Accessing/responding to plotly events in **shiny**
-  * Efficient updates via `plotlyProxy()`
+    * Quick intro to **shiny**
+    * Accessing/responding to plotly events in **shiny**
+    * Efficient updates via `plotlyProxy()`
 * An intro to **dasher** (dash for R)
-  * Why **dasher**?
-  * Quick overview of dash components
-  * **dasher** basics: layout & callbacks
+    * Why **dasher**?
+    * Quick overview of dash components
+    * **dasher** basics: layout & callbacks
 
 # Code of Conduct
 
