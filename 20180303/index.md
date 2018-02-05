@@ -24,11 +24,12 @@ By the end of this workshop, you will be able to rapidly pose queries about data
 ## Day 1 outline
 
 * An overview of plotly for R
-  * Motivating examples/demos
-  * How does it all work (htmlwidgets for R, plotly.js, SVG vs WebGL, etc)?
+  * Motivating examples and demos
+  * How does it all fit together (htmlwidgets for R, plotly.js, SVG vs WebGL, etc)?
   * Mapping data to visuals (theory and practice)
-  * Tips for learning, debugging, and getting "un-stuck"
+  * Tips for learning more, debugging, and generally getting "un-stuck"
 * Data wrangling for visualization
+  * tidy data principles
   * Reshaping with **tidyr**, manipulation with **dplyr**
   * The data-plot-pipeline
 * Interactive maps made simple
