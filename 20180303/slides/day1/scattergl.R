@@ -1,0 +1,1 @@
+plotly::plot_ly(x = rnorm(1e6), y = rnorm(1e6), alpha = 0.1, type = "scattergl")

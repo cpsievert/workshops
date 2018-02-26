@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Advanced plotly</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Carson Sievert" />
+    <link href="index_files/remark-css/example.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: bottom, left
+background-image: url(adv-plotly-for-r.svg)
+background-size: contain
+
+
+
+---
+## Texas housing prices
+
+
+```r
+library(dplyr)
+tx &lt;- txhousing %&gt;%
+  select(city, year, month, median) %&gt;%
+  filter(city %in% c("Galveston", "Midland", "Odessa", "South Padre Island"))
+tx
+#&gt; # A tibble: 748 x 4
+#&gt;         city  year month median
+#&gt;        &lt;chr&gt; &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
+#&gt;  1 Galveston  2000     1  95000
+#&gt;  2 Galveston  2000     2 100000
+#&gt;  3 Galveston  2000     3  98300
+#&gt;  4 Galveston  2000     4 111100
+#&gt;  5 Galveston  2000     5  89200
+#&gt;  6 Galveston  2000     6 108600
+#&gt;  7 Galveston  2000     7  99000
+#&gt;  8 Galveston  2000     8  96200
+#&gt;  9 Galveston  2000     9 104000
+#&gt; 10 Galveston  2000    10 118800
+#&gt; # ... with 738 more rows
+```
+
+---
+## Highlighting in small multiples
+
+
+```r
+* TX &lt;- SharedData$new(tx, ~year)
+p &lt;- ggplot(TX, aes(month, median, group = year)) + geom_line() +
+  facet_wrap(~city, ncol = 2)
+(gg &lt;- ggplotly(p, tooltip = "year"))
+```
+
+&lt;iframe src="../day1/08-small-multiples.html" width="100%" height="420" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+---
+## Query missing values by city
+
+&lt;iframe src="01-pipeline.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+---
+class: bottom, left 
+background-image: url(pipeline.svg)
+background-size: contain
+
+## The 'data pipeline'
+
+---
+
+
+```r
+library(plotly)
+library(crosstalk)
+
+sd &lt;- SharedData$new(txhousing, ~city, "Select a city")
+
+base &lt;- plot_ly(sd, color = I("black"), height = 400) %&gt;%
+  group_by(city)
+
+p1 &lt;- base %&gt;%
+  summarise(miss = sum(is.na(median))) %&gt;%
+  filter(miss &gt; 0) %&gt;%
+  arrange(miss) %&gt;%
+  add_bars(x = ~miss, y = ~factor(city, levels = city), hoverinfo = "x+y") %&gt;%
+  layout(
+    barmode = "overlay",
+    xaxis = list(title = "Number of months missing"),
+    yaxis = list(title = "")
+  ) 
+
+p2 &lt;- base %&gt;%
+  add_lines(x = ~date, y = ~median, alpha = 0.3) %&gt;%
+  layout(xaxis = list(title = ""))
+
+ subplot(p1, p2, titleX = TRUE, widths = c(0.3, 0.7)) %&gt;% 
+  layout(margin = list(l = 120)) %&gt;%
+  hide_legend() %&gt;%
+  highlight(dynamic = TRUE, persistent = TRUE, selectize = TRUE)
+```
+
+---
+class: inverse, middle, bottom
+background-image: url(https://i.imgur.com/H9vOG9f.gif)
+background-size: contain
+
+# Britney: So what? I can do this with shiny.
+
+---
+class: inverse, bottom, left
+background-image: url(https://i.imgur.com/UDwYyGP.gif)
+background-size: contain
+
+---
+class: middle, bottom
+background-image: url(pipeline.svg)
+background-size: contain
+
+# Where is the pipeline?
+
+---
+background-image: url(server-client.svg)
+background-size: contain
+
+---
+class: middle, center
+background-image: url(server-client.svg)
+background-size: contain
+
+# Standalone web pages are **much** easier to share, deploy, maintain.
+
+---
+background-image: url(crosstalk.svg)
+background-size: contain
+
+## The general model
+
+.footnote[
+### Links are specified in R, but the "updating logic" is JavaScript -- no server required!
+]
+
+
+---
+class: inverse, center
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+## Your turn
+
+(1) Modify the ['pipeline' demo](https://github.com/ropensci/plotly/blob/master/demo/crosstalk-highlight-pipeline.R) so that markers (instead of bars) encode # of missing values (like it does in the diagram).
+
+(2) Highlight cities by *brushing* marker(s) (hint: linked brushing isn't be enabled by default, see `help(highlight)`)
+
+---
+## Aggregating selections
+
+&lt;iframe src="02-binned-target-b.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+---
+
+
+```r
+# These examples demonstrate ways to display binned/aggregated selections
+library(crosstalk)
+library(plotly)
+
+d &lt;- SharedData$new(mtcars)
+sp &lt;- plot_ly(d, x = ~mpg, y = ~disp) %&gt;%
+  add_markers(color = I("black"))
+
+# hist/box/violin are all 'statistical trace types' meaning
+# they compute aggregations on the fly
+hist &lt;- plot_ly(d, x = ~factor(cyl)) %&gt;% 
+  add_histogram(color = I("black"))
+box &lt;- plot_ly(d, y = ~disp, color = I("black")) %&gt;% 
+  add_boxplot(name = " ")
+violin &lt;- plot_ly(d, y = ~disp, color = I("black")) %&gt;%
+  add_trace(type = "violin", name = " ")
+
+subplot(sp, box, violin, shareY = TRUE, titleX = TRUE, titleY = TRUE) %&gt;%
+  subplot(hist, widths = c(.75, .25), titleX = TRUE, titleY = TRUE) %&gt;%
+  layout(
+    barmode = "overlay", 
+    title = "Click and drag scatterplot",
+    showlegend = FALSE
+  ) %&gt;%
+  highlight(
+    "plotly_selected",
+    selected = attrs_selected(showlegend = FALSE)
+  )
+```
+
+---
+## Aggregating selections (continued)
+
+&lt;iframe src="02-binned-target-a.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+---
+
+
+```r
+# These examples demonstrate ways to display binned/aggregated selections
+library(crosstalk)
+library(plotly)
+
+d &lt;- SharedData$new(mpg)
+dots &lt;- plot_ly(d, color = ~class, x = ~displ, y = ~cyl)
+boxs &lt;- plot_ly(d, color = ~class, x = ~class, y = ~cty) %&gt;% add_boxplot()
+bars &lt;- plot_ly(d, x = ~class, color = ~class)
+
+subplot(dots, boxs, titleX = TRUE, titleY = TRUE) %&gt;%
+  subplot(bars, nrows = 2, titleX = TRUE, titleY = TRUE) %&gt;%
+  layout(
+    title = "Click and drag on scatterplot",
+    barmode = "overlay",
+    showlegend = FALSE
+  ) %&gt;%
+  highlight("plotly_selected")
+```
+
+---
+## Aggregating selections (continued)
+
+&lt;iframe src="02-binned-target-c.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+---
+
+
+```r
+# These examples demonstrate ways to display binned/aggregated selections
+library(crosstalk)
+library(plotly)
+
+tx &lt;- SharedData$new(txhousing, ~city)
+p1 &lt;- ggplot(tx, aes(date, median, group = city)) + geom_line() + xlab(NULL)
+gg1 &lt;- ggplotly(p1, tooltip = c("city", "date", "median"))
+p2 &lt;- plot_ly(tx, x = ~median, color = I("black")) %&gt;% 
+  add_histogram(histnorm = "probability density")
+
+subplot(gg1, p2, titleX = TRUE, titleY = TRUE) %&gt;% 
+  layout(barmode = "overlay") %&gt;%
+  highlight(
+    dynamic = TRUE, persistent = TRUE, 
+    selected = attrs_selected(opacity = 0.3)
+  )
+```
+
+---
+class: middle
+background-image: url(https://i.imgur.com/jQXFzZw.gif)
+background-size: contain
+
+## Selections inherit animation frames!
+
+.footnote[
+See &lt;https://plotly-book.cpsievert.me/linking-animated-views.html&gt;
+]
+
+---
+class: inverse
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+&lt;h2 align="center"&gt; Your turn &lt;/h2&gt;
+
+Check out one or two more demos that come with the package 
+
+```r
+demo(package = "plotly")
+```
+
+.footnote[
+**PS**
+
+* Once you have a topic, say "ternary", you can run it like this 
+```r
+demo("ternary", package = "plotly")
+```
+* If you'd like to see/edit the source code, do something like 
+```r
+file.edit(system.file("demo", "ternary.R", package = "plotly"))
+```
+]
+
+
+---
+class: inverse, center, middle
+
+# You can only go so far without shiny...
+
+---
+class: bottom
+background-image: url(https://i.imgur.com/T7GSpv9.gif)
+background-size: contain
+
+### https://github.com/cpsievert/zikar
+
+---
+class: bottom
+background-image: url(https://i.imgur.com/csIUJX0.gif)
+background-size: contain
+
+
+### https://github.com/cpsievert/apps
+
+---
+class: center, middle
+background-image: url(https://i.imgur.com/tlRv98y.gif)
+background-size: contain
+
+# ...but we can combine powers
+
+---
+class: bottom
+background-image: url(https://i.imgur.com/MGbR5AI.gif)
+background-size: contain
+
+### https://github.com/cpsievert/bcviz
+
+---
+class: center, middle
+
+# I promise...
+
+We will get to shiny, but we haven't covered *filter* events yet!
+
+---
+class: inverse, middle, center
+
+# Filter vs highlight
+
+The `highlight()` function sets options for *highlight events*.
+
+*Highlight* events **dim the opacity** of existing marks.
+
+*Filter* events **completely removes** existing marks and rescales axes.&lt;sup&gt;1&lt;/sup&gt;
+
+At least currently, *filter* events must be fired from **crosstalk** widgets.
+
+.footnote[
+[1]: when using `ggplotly()`, you need to specify `dynamicTicks = TRUE`
+]
+
+---
+## Crosstalk's filtering widgets
+
+
+```r
+tx &lt;- SharedData$new(txhousing)
+widgets &lt;- bscols(
+  widths = c(12, 12, 12),
+  filter_select("city", "Cities", tx, ~city),
+  filter_slider("sales", "Sales", tx, ~sales),
+  filter_checkbox("year", "Years", tx, ~year, inline = TRUE)
+)
+widgets
+```
+
+&lt;iframe src="03-filter-widgets.html" width="100%" height="420" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+---
+## Filtering
+
+
+```r
+bscols(
+  widths = c(4, 8), widgets, 
+  plot_ly(tx, x = ~date, y = ~median, showlegend = FALSE) %&gt;% 
+    add_lines(color = ~city, colors = "black")
+)
+```
+
+&lt;iframe src="04-filter.html" width="100%" height="420" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+
+---
+## Talk to other crosstalk-enabled widgets
+
+
+```r
+library(leaflet)
+sd &lt;- SharedData$new(quakes)
+p &lt;- plot_ly(sd, x = ~depth, y = ~mag) %&gt;% add_markers(alpha = 0.5) %&gt;% highlight("plotly_selected")
+map &lt;- leaflet(sd) %&gt;% addTiles() %&gt;% addCircles()
+bscols(p, map)
+```
+
+&lt;iframe src="05-leaflet.html" width="100%" height="420" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+
+---
+class: inverse, center
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+## Your turn
+
+Add some filter widgets to the earthquakes example. Use `htmltools::save_html()` to save the result
+
+Recreate the `leaflet()` map with `plot_mapbox()`
+
+.footnote[
+Full solution is in `your-turn/01.R` file
+]
+
+---
+class: center, middle, inverse
+
+## Expectations vs reality
+
+.pull-left[
+  &lt;img src="https://i.imgur.com/fZIenVE.jpg" height = "500" /&gt;
+]
+
+.pull-right[
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+
+  **plotly** has advanced support for *highlight* events (e.g., `persistent`, `dynamic`, `selectize`)
+
+  Other [**crosstalk**-enabled htmlwidgets](https://rstudio.github.io/crosstalk/) likely won't respect (non-default) `highlight()` options.
+  
+  However, *filter* events should generally be supported.
+]
+
+---
+class: center, middle
+
+# Hello &lt;img src="https://www.rstudio.com/wp-content/uploads/2014/04/shiny.png" width=100 /&gt; 👋
+
+```r
+shiny::runApp("~/day2/shiny/01", display.mode = "showcase")
+```
+
+---
+class: center, middle
+
+# Accessing plotly user events
+
+```r
+shiny::runApp("~/day2/shiny/02", display.mode = "showcase")
+```
+
+---
+class: inverse, center
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+## Your turn
+
+Program an app to populate a bar chart reflecting the selection, sort of like this (using `cars` data):
+
+&lt;div align="center" &gt;
+  &lt;img src="events-plotly-linked.gif" width="600" height="500" /&gt;
+&lt;/div&gt;
+
+.footnote[
+[Full solution](https://github.com/cpsievert/apps/blob/master/shiny/apps/plotlyLinkedBrush/app.R)
+
+[Partial solution, &lt;br /&gt; without shiny](your-turn/02.R)
+]
+
+
+---
+class: center, middle
+
+# Targetting events (only if we have time)
+
+```r
+shiny::runApp("~/day2/shiny/03", display.mode = "showcase")
+```
+
+.footnote[
+See also &lt;https://plotly-book.cpsievert.me/linking-views-with-shiny.html#targeting-views&gt;
+]
+
+---
+class: center, middle
+
+# plotly proxies
+
+By default, **shiny updates require a full redraw**, but proxies allows us to leverage [the plotly.js API](https://plot.ly/javascript/plotlyjs-function-reference/) to modify/update graphs more efficiently
+
+```r
+shiny::runApp("~/day2/shiny/04", display.mode = "showcase")
+```
+
+---
+class: center, middle
+
+# Streaming data
+
+```r
+shiny::runApp("~/day2/shiny/05", display.mode = "showcase")
+```
+
+.footnote[
+Inspired by &lt;https://plot.ly/r/streaming/&gt;
+]
+
+---
+class: inverse
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+&lt;h2 align="center"&gt; Your turn &lt;/h2&gt;
+
+Open the last example 
+
+```r
+file.edit("day2/shiny/05/app.R")
+```
+
+Try to do the following:
+
+1. Add `sliderInput()` for controlling the streaming interval and the number of points added in each update.
+
+2. Add another (streaming) trace
+
+.footnote[
+### This is the last your turn, and I have a 6pm flight to catch, so ask me any other questions now!
+]
+
+---
+background-image: url(plotly.svg)
+background-size: 100px
+background-position: 90% 8%
+class: center, middle
+
+# Thanks!
+
+Resources for more learning:
+
+https://plot.ly/r/ &lt;br /&gt;
+https://plotly-book.cpsievert.me &lt;br /&gt;
+https://talks.cpsievert.me &lt;br /&gt;
+https://github.com/cpsievert/phd-thesis &lt;br /&gt;
+https://github.com/cpsievert/pedestrians &lt;br /&gt;
+https://github.com/cpsievert/bcviz &lt;br /&gt;
+https://github.com/cpsievert/apps &lt;br /&gt;
+
+Reach out to me
+
+Web: &lt;http://cpsievert.me/&gt; &lt;br /&gt;
+Twitter: [@cpsievert](https://twitter.com/cpsievert) &lt;br /&gt;
+GitHub: [@cpsievert](https://github.com/cpsievert) &lt;br /&gt;
+Email: &lt;cpsievert1@gmail.com&gt;
+
+
+---
+background-image: url(plotly.svg)
+background-size: contain
+
+# Ask me anything!!
+
+.footnote[
+Want something to do? Some ideas:
+
+1. Read about the new api interface -- `help(api)`. &lt;br /&gt;
+2. Read about [JavaScript customization](https://cpsievert.github.io/plotly_book/custom-behavior-via-javascript.html)
+
+]
+    </textarea>
+<script src="../remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "14.6:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"navigation": {
+"scroll": false
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
+(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+
+  </body>
+</html>
