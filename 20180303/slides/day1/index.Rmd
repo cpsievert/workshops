@@ -1,7 +1,7 @@
 ---
 title: "plotly fundamentals"
 author: "Carson Sievert"
-venue: "plotcon 18"
+venue: "plotcon montreal 2018"
 type: "workshop"
 recording: "NA"
 output:
@@ -33,28 +33,9 @@ background-size: contain
 
 ## Your turn
 
-.pull-left[
-(1) Install the required software <https://workshops.cpsievert.me/20171118/>
+(1) Go to this address <https://rstudio.cloud/project/14090>. Follow the directions you see in the 'hello.R' script.
 
-(2) Run the docker container so that RStudio appears when you visit <http://localhost:8787> (in Chrome or Firefox, please!)
-
-(3) In the R console, enter 
-```r
-browseURL("~/day1/index.html")
-```
-
-If you see [this popup](popup.png), press "Try Again".
-
-<img src="popup.png" />
-]
-
-.pull-right[
-(4) Go to Tools -> Global Options and configure your pane layout [like this](panes.png).
-
-<img src="panes.png" height="325"/>
-
-(5) Share (w/ your neighbor) 3 things you're hoping to take away from this workshop (share them via Slack if you like!)
-]
+(2) Share (w/ your neighbor) 3 things you're hoping to take away from this workshop (share them via Slack if you like!)
 
 
 ---
@@ -62,70 +43,17 @@ class: middle
 
 <h3 align="center"> About me </h3>
 
-* Maintainer of plotly's R package (for nearly 3 years!)
-    * Before that: animint, LDAvis, pitchRx, rdom
+* PhD in statistics at Iowa State with Heike Hofmann & Di Cook (Dec 2016) 
+  
+  * Thesis: [Interfacing R with web technologies](http://lib.dr.iastate.edu/etd/15422/)
+  
+* CEO of [Sievert Consulting](https://consulting.cpsievert.me/) LLC (Jan 2017)
 
-* PhD in statistics from Iowa State
-    * Thesis: [Interfacing R with Web Technologies for Interactive Statistical Graphics and Computing with Data](https://search.proquest.com/openview/3a91971f82fd4af20a78bebb079f5035/1.pdf?pq-origsite=gscholar&cbl=18750&diss=y)
-
-* Founder & CEO, [Sievert Consulting LLC](https://consulting.cpsievert.me/)
-    * Currently looking for more projects!
-
----
-## About you
-
-<iframe src="attendees.html" width="100%" height="450" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
-
-<https://plot.ly/ggplot2/geom_density/>
-
----
-## Same data, another look
-
-<iframe src="attendees2.html" width="100%" height="450" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
-
-<https://plot.ly/r/parallel-coordinates-plot/>
-
-
----
-## Is there anything in particular that you would like covered?
-
-* I'm most interested in **linking and animating views without shiny**. Already pretty well acquainted with R/RStudio/Plotly, but hoping to learn how to use Plotly more efficiently and extend my current usage with animation, crosstalk, etc.  I use Plotly most often within flexdashboard applications, so most interested in non-Shiny options.
-* I want to learn how to **animate my plotly graphs/charts.**
-* More **shiny** dev
-* **Creating documents with data visualizations in Markdown files**. I've been working to get better with Markdown, but if there's a way to include interactive visualizations and/or animations in Markdown files that can be sent to readers that would be great. I work in consulting so I often need to send reports to executives and including interactive data visualizations in those reports would be incredibly useful for me.
-* Looks good! Stoked for the class. For me, I **don't use rmarkdown** and rarely use ggplot2 - so those could be dropped from the list.
-* Looks like all of Day1 currently would be old news. Wouldn't **half a day of R/RStudio/ggplot2** suffice for your audience?
-
----
-## Is there anything else that we can help you with at the workshop?
-
-* I'd like to know how plotly performs with displaying **large data** sets
-* Plotting large amounts of **time series** data efficiently
-* Plotly custom **controls and mapping** options. 
-* Learn how to apply **interactive filters** in Plotly if that's supported (e.g. click on a single bar within a bar chart on the left which filters the heat-map to the right). 
-* More advanced visualization techniques such as a chord diagram or a sunburst 
-  * Check out [sunburstR](https://github.com/timelyportfolio/sunburstR)
-* Suggestions/hints on how to create clean, **good code** would be especially appreciated.
-  * Check out [tidyverse](https://www.tidyverse.org/)
-* **Extended breakout session** time for help on specific project i am bringing 
-
----
-## Is there anything else that we can help you with at the workshop?
-
-* I'd like to know how plotly performs with displaying **large data** sets
-* Plotting large amounts of **time series** data efficiently
-* Plotly custom **controls and mapping** options. 
-* Learn how to apply **interactive filters** in Plotly if that's supported (e.g. click on a single bar within a bar chart on the left which filters the heat-map to the right). 
-* More advanced visualization techniques such as a chord diagram or a sunburst 
-  * Check out [sunburstR](https://github.com/timelyportfolio/sunburstR)
-* Suggestions/hints on how to create clean, **good code** would be especially appreciated.
-  * Check out [tidyverse](https://www.tidyverse.org/)
-* **Extended breakout session** time for help on specific project i am bringing 
-
-.footnote[
-### I'll try my best -- 2 days is not enough!
-### PLEASE PLEASE PLEASE stop me to clarify and/or ask questions
-]
+  * Clients: plotly, NOAA, Sandia Labs, O'Reilly
+  
+* I `r emo::ji("heart")` interactive data visualization
+  
+  * Maintain/author R `r emo::ji("package")`s: plotly, LDAvis, animint
 
 ```{r, include = FALSE}
 library(plotly)
