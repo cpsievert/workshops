@@ -180,10 +180,6 @@ background-size: contain
 
 ---
 
-# Seems simple, but incredibly profound
-
----
-
 # What is the observational unit?
 
 <iframe src="sf-us-ggplotly-tooltip.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
@@ -327,8 +323,17 @@ background-size: contain
 * Use `api_create()` to send this diamonds graph to your plotly account ([sign up](https://help.plot.ly/how-to-sign-up-to-plotly/))
   * Go to the JSON tab -- how many traces does this chart have?
   * Improve the labelling on this chart (use the 'Style' menu)
-  
-  
+
+
+---
+class: middle
+
+<h2 align="center"> Let's work through the 'demo.R' script </h2>
+
+The 'demo.R' file should be open in your source pane, but it resides under 'workshops' -> '20180303' -> 'slides' -> 'day1'
+
+These examples help to understand how `plot_ly()` works.
+
 
 ---
 ## Which visualization is better?
