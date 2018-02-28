@@ -6,6 +6,7 @@ type: "workshop"
 recording: "NA"
 output:
   xaringan::moon_reader:
+    css: ["default", "default-fonts", "../main.css"]
     chakra: "../remark-latest.min.js"
     mathjax: null
     seal: false
@@ -49,7 +50,7 @@ tx
 ## Highlighting in small multiples
 
 ```{r}
-* TX <- SharedData$new(tx, ~year)
+*TX <- SharedData$new(tx, ~year)
 p <- ggplot(TX, aes(month, median, group = year)) + geom_line() +
   facet_wrap(~city, ncol = 2)
 (gg <- ggplotly(p, tooltip = "year"))
@@ -116,11 +117,11 @@ background-size: contain
 
 
 ---
-class: inverse, center
+class: inverse, center, middle
 background-image: url(../your-turn.jpeg)
 background-size: contain
 
-## Your turn
+<h2 align="center"> Your turn </h2>
 
 (1) Modify the ['pipeline' demo](https://github.com/ropensci/plotly/blob/master/demo/crosstalk-highlight-pipeline.R) so that markers (instead of bars) encode # of missing values (like it does in the diagram).
 
@@ -157,41 +158,78 @@ background-size: contain
 ```
 
 ---
-class: middle
-background-image: url(https://i.imgur.com/jQXFzZw.gif)
-background-size: contain
+## Highlighting works in conjunction with animation! ([code](https://plotly-book.cpsievert.me/linking-animated-views.html))
 
-## Selections inherit animation frames!
-
-.footnote[
-See <https://plotly-book.cpsievert.me/linking-animated-views.html>
-]
+<a href="gapminder.html" target="_blank">
+  <img src="https://plotly-book.cpsievert.me/images/gapminder-highlight-animation.gif" width = "100%" />
+</a>
 
 ---
-class: inverse
+class: middle
+
+<h2 align="center"> plotly's client-side reactivity options </h2>
+
+* Multiple linked views via `crosstalk::SharedData` and `plotly::highlight()`
+  * Explore subsets of data
+
+* Partial updates via [sliders](https://plot.ly/r/sliders/), [buttons](https://plot.ly/r/custom-buttons/), and [dropdowns](https://plot.ly/r/dropdowns/)
+  * Use [plotly.js functions](https://plot.ly/javascript/plotlyjs-function-reference/) to modify a plot
+
+* Layer-on additional JavaScript via `htmlwidgets::onRender()`
+
+---
+## Dropdown example
+
+<iframe src="dropdown.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+## The implementation
+
+```r
+styles <- schema()$layout$layoutAttributes$mapbox$style$values
+style_buttons <- lapply(styles, function(s) {
+  list(label = s, method = "relayout", args = list("mapbox.style", s))
+})
+
+storms <- sf::st_read(system.file("shape/storms_xyz.shp", package = "sf"), quiet = TRUE)
+plot_mapbox(storms, color = I("red")) %>%
+  layout(
+    title = "Changing the base layer",
+    updatemenus = list(list(y = 0.8, buttons = style_buttons))
+  )
+```
+
+---
+### Google search on click
+
+```r
+plot_ly(mtcars, x = ~wt, y = ~mpg) %>%
+  add_markers(text = ~paste0("http://google.com/#q=", rownames(mtcars))) %>%
+  htmlwidgets::onRender("function(el, x) {
+    el.on('plotly_click', function(d) {
+      var pt = d.points[0];
+      var url = pt.data.text[pt.pointNumber];
+      window.open(url);
+    });
+  }")
+```
+
+<iframe src="google.html" width="100%" height="300" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+class: inverse, middle
 background-image: url(../your-turn.jpeg)
 background-size: contain
 
 <h2 align="center"> Your turn </h2>
 
-Check out one or two more demos that come with the package 
+### Some helpful info
 
-```r
-demo(package = "plotly")
-```
+Enter `demo(package = "plotly")` to see a list of all the demos. Once you have a topic, say "sf-mapbox-dt", you can run it like this: `demo("sf-mapbox-dt", package = "plotly")`. If you'd like to see/edit the source code, do: `file.edit(system.file("demo", "sf-mapbox-dt.R", package = "plotly"))`
 
-.footnote[
-**PS**
+### The challenge
 
-* Once you have a topic, say "ternary", you can run it like this 
-```r
-demo("ternary", package = "plotly")
-```
-* If you'd like to see/edit the source code, do something like 
-```r
-file.edit(system.file("demo", "ternary.R", package = "plotly"))
-```
-]
+Reproduce a demo, or any example seen thus far, and save it as an HTML file. In most cases, this can be done via `htmlwidgets::saveWidget()` *or* `htmltools::save_html()`. How do these two approaches differ?
 
 
 ---
@@ -292,11 +330,11 @@ bscols(
 
 
 ---
-class: inverse, center
+class: inverse, center, middle
 background-image: url(../your-turn.jpeg)
 background-size: contain
 
-## Your turn
+<h2 align="center"> Your turn </h2>
 
 Add some filter widgets to the earthquakes example. Use `htmltools::save_html()` to save the result
 
@@ -334,7 +372,7 @@ class: center, middle
 # Hello <img src="https://www.rstudio.com/wp-content/uploads/2014/04/shiny.png" width=100 /> `r emo::ji("wave")`
 
 ```r
-shiny::runApp("~/day2/shiny/01", display.mode = "showcase")
+shiny::runApp("~/workshops/20180303/slides/day2/shiny/01", display.mode = "showcase")
 ```
 
 ---
@@ -343,15 +381,15 @@ class: center, middle
 # Accessing plotly user events
 
 ```r
-shiny::runApp("~/day2/shiny/02", display.mode = "showcase")
+shiny::runApp("~/workshops/20180303/slides/day2/shiny/02", display.mode = "showcase")
 ```
 
 ---
-class: inverse, center
+class: inverse, center, middle
 background-image: url(../your-turn.jpeg)
 background-size: contain
 
-## Your turn
+<h2 align="center"> Your turn </h2>
 
 Program an app to populate a bar chart reflecting the selection, sort of like this (using `cars` data):
 
@@ -372,7 +410,7 @@ class: center, middle
 # Targetting events (only if we have time)
 
 ```r
-shiny::runApp("~/day2/shiny/03", display.mode = "showcase")
+shiny::runApp("~/workshops/20180303/slides/day2/shiny/03", display.mode = "showcase")
 ```
 
 .footnote[
@@ -387,7 +425,7 @@ class: center, middle
 By default, **shiny updates require a full redraw**, but proxies allows us to leverage [the plotly.js API](https://plot.ly/javascript/plotlyjs-function-reference/) to modify/update graphs more efficiently
 
 ```r
-shiny::runApp("~/day2/shiny/04", display.mode = "showcase")
+shiny::runApp("~/workshops/20180303/slides/day2/shiny/04", display.mode = "showcase")
 ```
 
 ---
@@ -396,7 +434,7 @@ class: center, middle
 # Streaming data
 
 ```r
-shiny::runApp("~/day2/shiny/05", display.mode = "showcase")
+shiny::runApp("~/workshops/20180303/slides/day2/shiny/05", display.mode = "showcase")
 ```
 
 .footnote[
@@ -404,7 +442,7 @@ Inspired by <https://plot.ly/r/streaming/>
 ]
 
 ---
-class: inverse
+class: inverse, middle
 background-image: url(../your-turn.jpeg)
 background-size: contain
 
@@ -413,7 +451,7 @@ background-size: contain
 Open the last example 
 
 ```r
-file.edit("day2/shiny/05/app.R")
+file.edit("~/workshops/20170303/day2/shiny/05/app.R")
 ```
 
 Try to do the following:
@@ -421,10 +459,6 @@ Try to do the following:
 1. Add `sliderInput()` for controlling the streaming interval and the number of points added in each update.
 
 2. Add another (streaming) trace
-
-.footnote[
-### This is the last your turn, and I have a 6pm flight to catch, so ask me any other questions now!
-]
 
 ---
 background-image: url(plotly.svg)
@@ -444,7 +478,7 @@ https://github.com/cpsievert/pedestrians <br />
 https://github.com/cpsievert/bcviz <br />
 https://github.com/cpsievert/apps <br />
 
-Reach out to me
+Find me online:
 
 Web: <http://cpsievert.me/> <br />
 Twitter: [@cpsievert](https://twitter.com/cpsievert) <br />
@@ -463,5 +497,4 @@ Want something to do? Some ideas:
 
 1. Read about the new api interface -- `help(api)`. <br />
 2. Read about [JavaScript customization](https://cpsievert.github.io/plotly_book/custom-behavior-via-javascript.html)
-
 ]
