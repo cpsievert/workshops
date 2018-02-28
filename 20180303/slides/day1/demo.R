@@ -1,51 +1,69 @@
 # ---------------------------------------------------------------------------
-# Working with actual data
+# Obtain last year's CRAN downloads of some popular int vis packages
 # ---------------------------------------------------------------------------
 
-library(plotly)
-
-# Obtain last month's CRAN downloads of some popular int vis packages
 library(cranlogs)
-logs <- cran_downloads(c("plotly", "ggvis", "leaflet", "networkD3", "rbokeh"), "last-month")
+logs <- cran_downloads(
+  c("plotly", "ggvis", "leaflet", "networkD3", "rbokeh"), 
+  from = "2017-02-28", 
+  to = "2018-02-28"
+)
 DT::datatable(logs)
+
+# ---------------------------------------------------------------------------
+# Visualizing that data with plot_ly()
+# ---------------------------------------------------------------------------
+library(plotly)
 
 # When referencing column(s) in a data frame (e.g., `logs`), 
 # you **must** prefix the expression with a tilde `~`
-p <- plot_ly(logs, x = ~date, y = ~count)
+plot_ly(logs, x = ~date, y = ~count)
 
-# add_*() functions make plotly.js look a little more like ggplot2
-add_markers(add_boxplot(p))
+# Note that you can provide any valid R expression 
+plot_ly(logs, x = ~date, y = ~log(count))
 
-
+# plotly.js has some nice support for rendering interactive log axes
 # %>% (pronounced 'then') allows us to read left-to-right versus inside-out
-p %>% 
+plot_ly(logs, x = ~date, y = ~count) %>%
+  layout(yaxis = list(type = "log"))
+
+# 3 ways to specify a trace type (last approach is recommended)
+plot_ly(logs, x = ~date, y = ~count, type = "box")
+plot_ly(logs, x = ~date, y = ~count) %>% add_trace(type = "box")
+plot_ly(logs, x = ~date, y = ~count) %>% add_boxplot()
+
+# `plot_ly()` doesn't create a trace unless `type` is provided
+plot_ly(logs, x = ~date, y = ~count, type = "box") %>% add_markers()
+plot_ly(logs, x = ~date, y = ~count) %>% add_boxplot() %>% add_markers()
+
+# Put global mappings in `plot_ly()`
+plot_ly(logs, x = ~date, y = ~count, boxpoints = FALSE, showlegend = FALSE) %>% 
   add_boxplot() %>% 
   add_markers()
 
 
-# can always use the more general `add_trace()`...
-p %>% 
-  add_boxplot() %>% 
-  add_trace(type = "violin")
-
-
 # how to ensure one line *per package*?
-p %>% 
+plot_ly(logs, x = ~date, y = ~count) %>%
   add_paths()
 
-
-# plotly respects dplyr's data-manipulation verbs
-p %>% 
+# plotly adopts dplyr's data-manipulation verbs
+plot_ly(logs, x = ~date, y = ~count) %>%
   group_by(package) %>%
   add_paths()
 
-
-# Use add_lines() over add_paths() 
-# if you want your data arranged by x
-p %>%
+# Note that add_paths() connects rows by order
+# Use add_lines() if you want lines to be ordered by x 
+plot_ly(logs, x = ~date, y = ~count) %>%
   group_by(package) %>%
   arrange(count) %>%
-  add_paths()
+  add_lines()
+
+# `plotly_data()` retrieves the data associated with a plotly graph
+plot_ly(logs, x = ~date, y = ~count) %>% 
+  group_by(package) %>%
+  arrange(count) %>%
+  plotly_data()
+
 
 # ----------------------------------------------------------------------
 # Special arguments (e.g., color/linetype/symbol/size)
@@ -77,11 +95,14 @@ plot_ly(logs, x = ~date, y = ~count, color = I("black"), symbol = I(3))
 # Customizing tooltips and layout options
 # -----------------------------------------------------------
 
+# hoverinfo controls which attributes are shown in tooltip (defaults to everything)
 col %>%
   add_lines(
-    hoverinfo = "text", hoverlabel = list(bgcolor = "white"),
-    text = ~paste(count, "downloads")
+    hoverinfo = "text", 
+    text = ~paste(count, "downloads"),
+    hoverlabel = list(bgcolor = "white")
   ) %>% 
+  rangeslider() %>%
   layout(hovermode = "x")
 
 
@@ -89,68 +110,6 @@ col %>%
 gg <- ggplot(logs, aes(x = date, y = count, group = package)) +
   geom_line(aes(text = paste(package, "downloads")))
 ggplotly(gg, tooltip = "text")
-
-
-# ----------------------------------------------------------------------
-# 'global' vs 'local' attributes
-# ----------------------------------------------------------------------
-
-# attributes set in `plot_ly()` are considered 'global'
-plot_ly(logs, x = ~date, y = ~count, color = I("black")) %>%
-  add_markers() %>%
-  filter(package == "plotly") %>%
-  add_lines()
-
-# `plot_ly()` creates a trace only if `type` is specified 
-plot_ly(logs, x = ~date, y = ~count, type = "scatter") %>%
-  filter(package == "plotly") %>%
-  add_lines(color = I("red"))
-
-# ----------------------------------------------------------------------
-# Exposing the magic 
-# ----------------------------------------------------------------------
-
-# What happens when you print a plotly object?
-r <- png::readPNG("~/day1/printing.png")
-plotly_empty() %>%
-  layout(
-    images = list(
-      source = raster2uri(r),
-      xref = "paper", 
-      yref = "paper", 
-      x = 0, y = 0, 
-      sizex = 1, sizey = 1, 
-      xanchor = "left", yanchor = "bottom"
-    )
-  )
-
-# Every plotly graph is "seralized" as JSON 
-# As far as plotly.js itself is concerned, only three parts are relevant:
-# layout, config, and data (a list of traces)
-col %>% add_lines() %>% plotly_json()
-
-# Even works with ggplot2! 
-# (this is a nice way to learn plotly.js if you already know ggplot2)
-gg <- ggplotly(qplot(1:10))
-plotly_json(gg)
-
-# plotly objects inherit from htmlwidget class
-class(gg)
-
-# so, if you directly `View()` a plotly object, it has some
-# htmlwidget specific info attached. The plotly-specific info
-# is under 'x'
-View(gg)
-
-# what, no `data` attribute?!?
-p <- plot_ly(logs, x = ~date, y = ~count)
-View(p$x)
-
-# plotly objects are 'built' at print-time
-plot_ly()$preRenderHook
-
-# that's better...
-View(plotly_build(p)$x$data)
 
 
 # ----------------------------------------------------------------------
@@ -165,7 +124,7 @@ plot_ly(logs, x = ~date, y = ~count, color = ~package) %>%
 plot_ly(logs, x = ~date, y = ~count) %>%
   group_by(package) %>%
   add_lines(text = ~package, hoverinfo = "x+y+text") %>%
-  slice(which.max(date)) %>%
+  slice(which.max(date) - 1) %>%
   # pro tip: use `plotly_data()` to examine the data 
   # attached to the visual at any point in the "pipeline"
   # plotly_data()
@@ -179,8 +138,6 @@ plot_ly(logs, x = ~date, y = ~count) %>%
 #   * Be creative! Use a trace type we haven't discussed yet to visualize `logs` 
 #   * What visualization we've seen thus far is the best? Why?
 # ----------------------------------------------------------------------
-
-
 
 
 # bonus: did someone say animation?

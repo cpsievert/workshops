@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>plotly fundamentals</title>
+    <title>Mastering plotly for R</title>
     <meta charset="utf-8">
     <meta name="author" content="Carson Sievert" />
     <link href="index_files/remark-css/default.css" rel="stylesheet" />
@@ -50,18 +50,56 @@ class: middle
 
 
 ---
-## A minimal bar chart
+background-image: url(workflow.svg)
+background-size: contain
+class: inverse
 
-* Every **plotly** chart is powered by [plotly.js](https://github.com/plotly/plotly.js), plus some extra R/JS magic 🎩 🐰.
-* How/why did `plot_ly()` draw a bar chart? What if we want something different?
+# Data science workflow
 
 
-```r
-library(plotly)
-plot_ly(x = c("A", "B"), y = 1:2)
-```
+---
+background-image: url(workflow1.svg)
+background-size: contain
+class: inverse
 
-&lt;iframe src="01-simple-bar.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+# Expository vis
+
+
+---
+background-image: url(workflow2.svg)
+background-size: contain
+class: inverse
+
+# Exploratory vis
+
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+
+## Problem: analysts juggle many languages (R, JavaScript, python)
+
+
+---
+background-image: url(workflow2.svg)
+background-size: 400px
+background-position: 90% 8%
+class: inverse, middle, center
+
+## Interactive graphics *can* augment exploratory analysis, but are only *practical when we can iterate quickly*
 
 ---
 class: inverse, center
@@ -70,48 +108,209 @@ background-size: contain
 
 ## Your turn
 
-In your R console enter:
+With your neighbor, discuss some R packages that allow you to iterate quickly (and/or generally be productive)
 
-```r
-file.edit('~/day1/your-turn.R')
-```
 
-Work through the comments/code/questions in this R script.
+---
+class: center
+background-image: url(tidyverse.png)
+background-size: contain
 
-Feel free to work with your neighbor and ask me questions!
+
+---
+background-image: url(workflow2.svg)
+background-size: 400px
+background-position: 90% 8%
+class: inverse, middle, center
+
+## No matter how complex and polished the individual operations are, it is often the quality of the glue that most directly determines the power of the system.
+
+— Hal Abelson
 
 .footnote[
-If you have question(s) about it **rmarkdown**, now would be a good time to ask (we won't have time to cover it together).
+Quoted in the [tidyverse manifesto](https://cran.r-project.org/web/packages/tidyverse/vignettes/manifesto.html)
+]
 
-**PS.** Did you know [the workshop slides](index.Rmd) were created with **rmarkdown**?
+---
+class: inverse
+background-image: url(workflow-tidy.svg)
+background-size: contain
+
+## What binds the *tidy*-verse?
+
+
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+
+### [Tidy data](https://www.jstatsoft.org/article/view/v059i10) principle: each observation in a row, each variable in a column.
+
+---
+
+# Seems simple, but incredibly profound
+
+---
+
+# What is the observational unit?
+
+&lt;iframe src="sf-us-ggplotly-tooltip.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+---
+
+* The [simple features](https://cran.r-project.org/package=sf) (**sf**) package applies tidy data principles to geo-spatial features.
+
+* The __albersusa__ package provides access to US boundaries as simple featues:
+
+```r
+library(albersusa)
+usa &lt;- usa_sf("laea")
+
+library(dplyr)
+usa %&gt;%
+ select(name, pop_2010, geometry) %&gt;%
+ View()
+```
+
+&lt;div align="center"&gt;
+  &lt;img src="sf-albers.png" width="100%" /&gt;
+&lt;/div&gt;
+
+---
+
+## The data frame is more than a table!
+
+&lt;div align="center" &gt;
+  &lt;img src="list-column.png" width="50%"/&gt;
+&lt;/div&gt;
+
+.footnote[
+Image from Jenny Bryan's [brilliant talk](https://www.youtube.com/watch?v=4MfUCX_KpdE) on embracing list-columns.
+]
+
+---
+class: bottom
+background-image: url(https://i.imgur.com/jQXFzZw.gif)
+background-size: contain
+
+
+### **plotly** leverages list-columns to implement [hierarchial selection](https://i.imgur.com/jQXFzZw.gif)
+
+---
+
+```r
+subplot(
+  ggplot(usa) + geom_sf(),
+  ggplot(usa) + geom_sf(aes(fill = pop_2010))
+)
+```
+
+&lt;iframe src="sf-us-ggplotly-subplot.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+---
+
+#### Customize the tooltip
+
+```r
+usa$txt &lt;- with(usa, paste("The state of", name, "had \n", pop_2010, "people in 2010"))
+p &lt;- ggplot(usa) + geom_sf(aes(fill = pop_2010, text = txt)) 
+(gg &lt;- ggplotly(p, tooltip = "text"))
+```
+
+&lt;iframe src="sf-us-ggplotly-tooltip.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+---
+class: inverse
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+&lt;h2 align="center"&gt; Your turn &lt;/h2&gt;
+
+Reproduce the last map (named `gg`), then do the following:
+
+* Enter `style(gg, hoveron="fill")` in your console, how is this different from `gg`?
+* Enter `plotly_json(gg)`. Navigate to 'data' -&gt; '1'. What does this list represent? What is the value of the "hoveron" attribute?
+* Enter `schema()` in your console. Navigate to 'traces' -&gt; 'scatter' -&gt; 'attributes' -&gt; 'hoveron'. What are the acceptable values for this attribute? What does the description say?
+
+.footnote[
+PS. the RStudio Cloud project is running a developmental version of **plotly** with similar **sf** support for `plot_mapbox()`/`plot_ly()`/`plot_geo()`. Try it out with `plot_mapbox(usa)` and let me know if you want to see or know more!
 ]
 
 ---
 
-The **scatter** trace type is quite general. It provides the foundation for many charts (e.g., [polygons](https://plot.ly/ggplot2/geom_polygon/), [ribbons](https://plot.ly/ggplot2/geom_ribbon/), [filled areas](https://plot.ly/r/filled-area-plots/), etc), extends to different coordinate systems (e.g, [scatter3d](https://plot.ly/r/3d-line-plots/), [scattergeo](https://plot.ly/r/bubble-maps/), and [scattermapbox](https://plot.ly/r/scattermapbox/)), and rendering systems (e.g., [scattergl](https://plot.ly/r/webgl-vs-svg/))
+&lt;h2 align="center"&gt; plotly is much more than ggplotly! &lt;/h2&gt;
 
+#### Initiate a plotly graph (without ggplot2):
 
-```r
-subplot(shareY = TRUE,
-  plot_ly(x = 1:2, y = 1:2),
-  plot_ly(x = 1:2, y = 1:2, mode = "lines"),
-  plot_ly(x = 1:2, y = 1:2, mode = "markers+lines"),
-  plot_ly(x = 1:2, y = 1:2, text = 1:2, mode = "text"),
-  plot_ly(x = 1:2, y = 1:2, text = 1:2, mode = "markers+lines+text")
-)
-```
+* `plot_ly()`: non-ggplot2 interface to underlying [plotly.js](https://github.com/plotly/plotly.js) library
+* `plot_mapbox()`: `plot_ly()` wrapper/shortcut for [scattermapbox](https://plot.ly/r/scattermapbox/)
+* `plot_geo()`: `plot_ly()` wrapper/shortcut for [scattergeo](https://plot.ly/r/choropleth-maps/)
 
-&lt;iframe src="02-scatter-modes.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+#### Add data (i.e., traces) to a graph
+
+* `add_markers()`, `add_bars()`, etc (see [`help(add_trace)`](https://www.rdocumentation.org/packages/plotly/versions/4.7.1/topics/add_trace) for full list)
+
+#### Modify a graph (before printing)
+
+* `style()` to modify traces of an existing plotly graph
+* `layout()` to add/modify to a [layout component](https://plot.ly/r/reference/#layout)
+
+#### Tools for talking with plotly cloud
+
+* Send data and/or graphs with `api_create()`
+* Retrieve data and/or graphs with `api_download_plot()`/`api_download_grid()`
+* Do anything the [plotly's server API](https://api.plot.ly/v2/) supports with `api()`
 
 ---
-class: inverse, middle, center
+## A minimal bar chart
 
+* Every **plotly** chart is powered by [plotly.js](https://github.com/plotly/plotly.js), *plus some extra R/JS magic* 🎩 🐰.
+* `plot_ly()` is designed to default to sensible graphs
 
-# Working with actual data
 
 ```r
-file.edit('~/day1/demo.R')
+plot_ly(x = c("A", "B"), y = 1:2)
 ```
+
+&lt;iframe src="01-simple-bar.html" width="100%" height="300" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+What actually happens when a plotly object is printed and rendered locally?
+
+---
+class: inverse
+background-image: url(printing.svg)
+background-size: contain
+
+---
+class: inverse
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+&lt;h2 align = "center"&gt; Your Turn &lt;/h2&gt;
+
+* Enter in the console: `plot_ly(diamonds, x = ~cut, color = ~clarity)`
+  * What information does this visualize? For context, see [`help(diamonds)`](https://www.rdocumentation.org/packages/ggplot2/versions/2.2.1/topics/diamonds)
+  * What is the R console message trying to tell you?
+  * Compare this message to the one that `plot_ly(x = c("A", "B"), y = 1:2)` gives you, what's different about these charts?
+  
+* Use `api_create()` to send this diamonds graph to your plotly account ([sign up](https://help.plot.ly/how-to-sign-up-to-plotly/))
+  * Go to the JSON tab -- how many traces does this chart have?
+  * Improve the labelling on this chart (use the 'Style' menu)
+  
+  
 
 ---
 ## Which visualization is better?
@@ -124,10 +323,10 @@ subplot(shareX = TRUE, nrows = 2,
 )
 ```
 
-&lt;iframe src="03-heatmap.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;iframe src="../../../20171118/slides/day1/03-heatmap.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
 
 ---
-background-image: url(bostock-heer-groups.png)
+background-image: url(../../../20171118/slides/day1/bostock-heer-groups.png)
 background-size: contain
 
 ## Famous question: which is larger (and by how much)? &lt;font color="#DEE5FF"&gt;A&lt;/font&gt; or &lt;font color="#FDDFA4"&gt;B&lt;/font&gt;?
@@ -142,7 +341,7 @@ This figure is from [Data Visualization for Social Science](http://socviz.co/) (
 ]
 
 ---
-background-image: url(bostock-heer-findings.png)
+background-image: url(../../../20171118/slides/day1/bostock-heer-findings.png)
 background-size: contain
 
 ## Position is best, especially along common scale and baseline
@@ -152,7 +351,7 @@ Figure from [Heer and Bostock (2010)](http://vis.stanford.edu/files/2010-MTurk-C
 ]
 
 ---
-background-image: url(hierarchy.png)
+background-image: url(../../../20171118/slides/day1/hierarchy.png)
 background-size: contain
 
 ## A more general guideline from Cleveland and McGill 
@@ -169,7 +368,7 @@ class: center, inverse, middle
 ---
 ## Again, which is better?
 
-&lt;iframe src="03-heatmap.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;iframe src="../../../20171118/slides/day1/03-heatmap.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
 
 ---
 background-image: url(https://i.imgur.com/bdd64us.gif)
@@ -229,7 +428,7 @@ class: inverse
 plot_ly(logz, x = ~date, y = ~count) %&gt;% group_by(package) %&gt;% add_lines(alpha=0.3)
 ```
 
-&lt;iframe src="04-lines.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;iframe src="../../../20171118/slides/day1/04-lines.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
 
 ---
 ## Can improve a bit with interaction
@@ -242,7 +441,7 @@ SharedData$new(logz, ~package, "Select package(s)") %&gt;%
   highlight(dynamic = TRUE, selectize = TRUE, persistent = TRUE)
 ```
 
-&lt;iframe src="04-lines-b.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;iframe src="../../../20171118/slides/day1/04-lines-b.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
 
 ---
 ## [heatmaply](https://github.com/talgalili/heatmaply#readme) is awesome for visualizing a numeric matrices!
@@ -354,9 +553,9 @@ x &lt;- seq(Sys.time(), Sys.time() + length(y) - 1, by = "1 sec")
 plot_ly(x = x, y = cumsum(y)) %&gt;% add_lines() %&gt;% rangeslider()
 ```
 
-&lt;a href="06-rangeslider.html" target="_blank"&gt;
+&lt;a href="../../../20171118/slides/day1/06-rangeslider.html" target="_blank"&gt;
  &lt;div align="center"&gt;
-   &lt;img src="svg.png" width="100%" /&gt;
+   &lt;img src="../../../20171118/slides/day1/svg.png" width="100%" /&gt;
  &lt;/div&gt;
 &lt;/a&gt;
 
@@ -372,9 +571,9 @@ x &lt;- seq(Sys.time(), Sys.time() + length(y) - 1, by = "1 sec")
 plot_ly(x = x, y = cumsum(y)) %&gt;% add_lines() %&gt;% toWebGL()
 ```
 
-&lt;a href="07-webgl.html" target="_blank"&gt;
+&lt;a href="../../../20171118/slides/day1/07-webgl.html" target="_blank"&gt;
  &lt;div align="center"&gt;
-   &lt;img src="webgl.png" width="100%" /&gt;
+   &lt;img src="../../../20171118/slides/day1/webgl.png" width="100%" /&gt;
  &lt;/div&gt;
 &lt;/a&gt;
 
@@ -393,9 +592,9 @@ plot_ly(x = x, y = cumsum(y)) %&gt;% add_lines() %&gt;% toWebGL()
 
 ### High performance plotly charts
 
-* scattergl -- basically same as scatter (with [limitations](https://github.com/plotly/plotly.js/issues/130)), but [responsive with &gt;1M points](scattergl.R).
-* pointcloud -- more restricted than scattergl, but [responsive w/ several million points](pointcloud.R).
-* heatmapgl -- [response with &gt;1M cells](heatmapgl.R) in heatmap.
+* scattergl -- basically same as scatter (with [limitations](https://github.com/plotly/plotly.js/issues/130)), but [responsive with &gt;1M points](../../../20171118/slides/day1/scattergl.R).
+* pointcloud -- more restricted than scattergl, but [responsive w/ several million points](../../../20171118/slides/day1/pointcloud.R).
+* heatmapgl -- [response with &gt;1M cells](../../../20171118/slides/day1/heatmapgl.R) in heatmap.
 
 ---
 ## More time series tips
@@ -454,7 +653,7 @@ ggplot(tx, aes(month, median, group = year)) + geom_line() +
   facet_wrap(~city, ncol = 2)
 ```
 
-![](index_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+![](index_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 
 ---
 ## Compare across cities within year *and* across years within city
@@ -467,7 +666,7 @@ p &lt;- ggplot(TX, aes(month, median, group = year)) + geom_line() +
 (gg &lt;- ggplotly(p, tooltip = "year"))
 ```
 
-&lt;iframe src="08-small-multiples.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;iframe src="../../../20171118/slides/day1/08-small-multiples.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
 
 ---
 ## Set selection mode and default selections
@@ -477,7 +676,7 @@ p &lt;- ggplot(TX, aes(month, median, group = year)) + geom_line() +
 highlight(gg, "plotly_hover", defaultValues = "2006")
 ```
 
-&lt;iframe src="08-modes.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;iframe src="../../../20171118/slides/day1/08-modes.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
 
 
 ---
@@ -488,7 +687,7 @@ highlight(gg, "plotly_hover", defaultValues = "2006")
 highlight(gg, dynamic = TRUE, persistent = TRUE, selectize = TRUE)
 ```
 
-&lt;iframe src="08-dynamic.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;iframe src="../../../20171118/slides/day1/08-dynamic.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
 
 ---
 ## Customize the appearance of selections
@@ -501,7 +700,7 @@ highlight(
 )
 ```
 
-&lt;iframe src="08-custom.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;iframe src="../../../20171118/slides/day1/08-custom.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
 
 ---
 ## Automate queries via animation
@@ -515,7 +714,7 @@ p &lt;- ggplot(tx, aes(month, median)) +
 ggplotly(p)
 ```
 
-&lt;iframe src="08-automate.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;iframe src="../../../20171118/slides/day1/08-automate.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
 
 
 ---
@@ -530,9 +729,9 @@ Visit [this post](http://ryanhafen.com/blog/trelliscopejs-plotly), replicate the
 
 
 .footnote[
-## Now would be a good time to ask me about personal projects (I have a 6pm flight tomorrow)!
+## Now would be a good time to ask me about personal projects!
 
-#### Unfortunately, we won't cover maps in this workshop, but [day 1 of last years workshop](https://plotcon17.cpsievert.me/workshop/day1/#1) covers the topic in depth.
+#### Want something to do? Peruse the package demos `demo(package = "plotly")`! Any demo prefixed by 'sf' is for the newer mapping stuff
 ]
     </textarea>
 <script src="../remark-latest.min.js"></script>

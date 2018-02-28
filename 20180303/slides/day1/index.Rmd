@@ -1,5 +1,5 @@
 ---
-title: "plotly fundamentals"
+title: "Mastering plotly for R"
 author: "Carson Sievert"
 venue: "plotcon montreal 2018"
 type: "workshop"
@@ -69,15 +69,56 @@ knitr::opts_chunk$set(
 ```
 
 ---
-## A minimal bar chart
+background-image: url(workflow.svg)
+background-size: contain
+class: inverse
 
-* Every **plotly** chart is powered by [plotly.js](https://github.com/plotly/plotly.js), plus some extra R/JS magic `r emo::ji("tophat")` `r emo::ji("rabbit")`.
-* How/why did `plot_ly()` draw a bar chart? What if we want something different?
+# Data science workflow
 
-```{r, code=readLines("01-simple-bar.R")}
-```
 
-<iframe src="01-simple-bar.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+---
+background-image: url(workflow1.svg)
+background-size: contain
+class: inverse
+
+# Expository vis
+
+
+---
+background-image: url(workflow2.svg)
+background-size: contain
+class: inverse
+
+# Exploratory vis
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+## Problem: analysts juggle many languages (R, JavaScript, python)
+
+
+---
+background-image: url(workflow2.svg)
+background-size: 400px
+background-position: 90% 8%
+class: inverse, middle, center
+
+## Interactive graphics *can* augment exploratory analysis, but are only *practical when we can iterate quickly*
 
 ---
 class: inverse, center
@@ -86,51 +127,219 @@ background-size: contain
 
 ## Your turn
 
-In your R console enter:
+With your neighbor, discuss some R packages that allow you to iterate quickly (and/or generally be productive)
 
-```r
-file.edit('~/day1/your-turn.R')
-```
 
-Work through the comments/code/questions in this R script.
+---
+class: center
+background-image: url(tidyverse.png)
+background-size: contain
 
-Feel free to work with your neighbor and ask me questions!
+
+---
+background-image: url(workflow2.svg)
+background-size: 400px
+background-position: 90% 8%
+class: inverse, middle, center
+
+## No matter how complex and polished the individual operations are, it is often the quality of the glue that most directly determines the power of the system.
+
+— Hal Abelson
 
 .footnote[
-If you have question(s) about it **rmarkdown**, now would be a good time to ask (we won't have time to cover it together).
+Quoted in the [tidyverse manifesto](https://cran.r-project.org/web/packages/tidyverse/vignettes/manifesto.html)
+]
 
-**PS.** Did you know [the workshop slides](index.Rmd) were created with **rmarkdown**?
+---
+class: inverse
+background-image: url(workflow-tidy.svg)
+background-size: contain
+
+## What binds the *tidy*-verse?
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+### [Tidy data](https://www.jstatsoft.org/article/view/v059i10) principle: each observation in a row, each variable in a column.
+
+---
+
+# Seems simple, but incredibly profound
+
+---
+
+# What is the observational unit?
+
+<iframe src="sf-us-ggplotly-tooltip.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+
+* The [simple features](https://cran.r-project.org/package=sf) (**sf**) package applies tidy data principles to geo-spatial features.
+
+* The __albersusa__ package provides access to US boundaries as simple featues:
+
+```r
+library(albersusa)
+usa <- usa_sf("laea")
+
+library(dplyr)
+usa %>%
+ select(name, pop_2010, geometry) %>%
+ View()
+```
+
+<div align="center">
+  <img src="sf-albers.png" width="100%" />
+</div>
+
+---
+
+## The data frame is more than a table!
+
+<div align="center" >
+  <img src="list-column.png" width="50%"/>
+</div>
+
+.footnote[
+Image from Jenny Bryan's [brilliant talk](https://www.youtube.com/watch?v=4MfUCX_KpdE) on embracing list-columns.
+]
+
+---
+class: bottom
+background-image: url(https://i.imgur.com/jQXFzZw.gif)
+background-size: contain
+
+
+### **plotly** leverages list-columns to implement [hierarchial selection](https://i.imgur.com/jQXFzZw.gif)
+
+---
+
+```r
+subplot(
+  ggplot(usa) + geom_sf(),
+  ggplot(usa) + geom_sf(aes(fill = pop_2010))
+)
+```
+
+<iframe src="sf-us-ggplotly-subplot.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+
+#### Customize the tooltip
+
+```r
+usa$txt <- with(usa, paste("The state of", name, "had \n", pop_2010, "people in 2010"))
+p <- ggplot(usa) + geom_sf(aes(fill = pop_2010, text = txt)) 
+(gg <- ggplotly(p, tooltip = "text"))
+```
+
+<iframe src="sf-us-ggplotly-tooltip.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+class: inverse
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+<h2 align="center"> Your turn </h2>
+
+Reproduce the last map (named `gg`), then do the following:
+
+* Enter `style(gg, hoveron="fill")` in your console, how is this different from `gg`?
+* Enter `plotly_json(gg)`. Navigate to 'data' -> '1'. What does this list represent? What is the value of the "hoveron" attribute?
+* Enter `schema()` in your console. Navigate to 'traces' -> 'scatter' -> 'attributes' -> 'hoveron'. What are the acceptable values for this attribute? What does the description say?
+
+.footnote[
+PS. the RStudio Cloud project is running a developmental version of **plotly** with similar **sf** support for `plot_mapbox()`/`plot_ly()`/`plot_geo()`. Try it out with `plot_mapbox(usa)` and let me know if you want to see or know more!
 ]
 
 ---
 
-The **scatter** trace type is quite general. It provides the foundation for many charts (e.g., [polygons](https://plot.ly/ggplot2/geom_polygon/), [ribbons](https://plot.ly/ggplot2/geom_ribbon/), [filled areas](https://plot.ly/r/filled-area-plots/), etc), extends to different coordinate systems (e.g, [scatter3d](https://plot.ly/r/3d-line-plots/), [scattergeo](https://plot.ly/r/bubble-maps/), and [scattermapbox](https://plot.ly/r/scattermapbox/)), and rendering systems (e.g., [scattergl](https://plot.ly/r/webgl-vs-svg/))
+<h2 align="center"> plotly is much more than ggplotly! </h2>
 
-```{r, code=readLines("02-scatter-modes.R")}
-```
+#### Initiate a plotly graph (without ggplot2):
 
-<iframe src="02-scatter-modes.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+* `plot_ly()`: non-ggplot2 interface to underlying [plotly.js](https://github.com/plotly/plotly.js) library
+* `plot_mapbox()`: `plot_ly()` wrapper/shortcut for [scattermapbox](https://plot.ly/r/scattermapbox/)
+* `plot_geo()`: `plot_ly()` wrapper/shortcut for [scattergeo](https://plot.ly/r/choropleth-maps/)
+
+#### Add data (i.e., traces) to a graph
+
+* `add_markers()`, `add_bars()`, etc (see [`help(add_trace)`](https://www.rdocumentation.org/packages/plotly/versions/4.7.1/topics/add_trace) for full list)
+
+#### Modify a graph (before printing)
+
+* `style()` to modify traces of an existing plotly graph
+* `layout()` to add/modify to a [layout component](https://plot.ly/r/reference/#layout)
+
+#### Tools for talking with plotly cloud
+
+* Send data and/or graphs with `api_create()`
+* Retrieve data and/or graphs with `api_download_plot()`/`api_download_grid()`
+* Do anything the [plotly's server API](https://api.plot.ly/v2/) supports with `api()`
 
 ---
-class: inverse, middle, center
+## A minimal bar chart
 
+* Every **plotly** chart is powered by [plotly.js](https://github.com/plotly/plotly.js), *plus some extra R/JS magic* `r emo::ji("tophat")` `r emo::ji("rabbit")`.
+* `plot_ly()` is designed to default to sensible graphs
 
-# Working with actual data
-
-```r
-file.edit('~/day1/demo.R')
+```{r}
+plot_ly(x = c("A", "B"), y = 1:2)
 ```
+
+<iframe src="01-simple-bar.html" width="100%" height="300" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+What actually happens when a plotly object is printed and rendered locally?
+
+---
+class: inverse
+background-image: url(printing.svg)
+background-size: contain
+
+---
+class: inverse
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+<h2 align = "center"> Your Turn </h2>
+
+* Enter in the console: `plot_ly(diamonds, x = ~cut, color = ~clarity)`
+  * What information does this visualize? For context, see [`help(diamonds)`](https://www.rdocumentation.org/packages/ggplot2/versions/2.2.1/topics/diamonds)
+  * What is the R console message trying to tell you?
+  * Compare this message to the one that `plot_ly(x = c("A", "B"), y = 1:2)` gives you, what's different about these charts?
+  
+* Use `api_create()` to send this diamonds graph to your plotly account ([sign up](https://help.plot.ly/how-to-sign-up-to-plotly/))
+  * Go to the JSON tab -- how many traces does this chart have?
+  * Improve the labelling on this chart (use the 'Style' menu)
+  
+  
 
 ---
 ## Which visualization is better?
 
-```{r, code=readLines("03-heatmap.R")}
+```{r, code=readLines("../../../20171118/slides/day1/03-heatmap.R")}
 ```
 
-<iframe src="03-heatmap.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<iframe src="../../../20171118/slides/day1/03-heatmap.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
 
 ---
-background-image: url(bostock-heer-groups.png)
+background-image: url(../../../20171118/slides/day1/bostock-heer-groups.png)
 background-size: contain
 
 ## Famous question: which is larger (and by how much)? <font color="#DEE5FF">A</font> or <font color="#FDDFA4">B</font>?
@@ -145,7 +354,7 @@ This figure is from [Data Visualization for Social Science](http://socviz.co/) (
 ]
 
 ---
-background-image: url(bostock-heer-findings.png)
+background-image: url(../../../20171118/slides/day1/bostock-heer-findings.png)
 background-size: contain
 
 ## Position is best, especially along common scale and baseline
@@ -155,7 +364,7 @@ Figure from [Heer and Bostock (2010)](http://vis.stanford.edu/files/2010-MTurk-C
 ]
 
 ---
-background-image: url(hierarchy.png)
+background-image: url(../../../20171118/slides/day1/hierarchy.png)
 background-size: contain
 
 ## A more general guideline from Cleveland and McGill 
@@ -172,7 +381,7 @@ class: center, inverse, middle
 ---
 ## Again, which is better?
 
-<iframe src="03-heatmap.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<iframe src="../../../20171118/slides/day1/03-heatmap.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
 
 ---
 background-image: url(https://i.imgur.com/bdd64us.gif)
@@ -227,18 +436,18 @@ class: inverse
 ---
 ## With all my `installed.packages()`, yikes!
 
-```{r, code=readLines("04-lines.R")}
+```{r, code=readLines("../../../20171118/slides/day1/04-lines.R")}
 ```
 
-<iframe src="04-lines.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<iframe src="../../../20171118/slides/day1/04-lines.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
 
 ---
 ## Can improve a bit with interaction
 
-```{r, code=readLines("04-lines-b.R")}
+```{r, code=readLines("../../../20171118/slides/day1/04-lines-b.R")}
 ```
 
-<iframe src="04-lines-b.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<iframe src="../../../20171118/slides/day1/04-lines-b.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
 
 ---
 ## [heatmaply](https://github.com/talgalili/heatmaply#readme) is awesome for visualizing a numeric matrices!
@@ -343,12 +552,12 @@ For all CRAN packages that use plotly, see the "Reverse dependencies" section on
 
 * *Tens* of thousands points is responsive with *SVG*
 
-```{r, code=readLines("06-rangeslider.R")}
+```{r, code=readLines("../../../20171118/slides/day1/06-rangeslider.R")}
 ```
 
-<a href="06-rangeslider.html" target="_blank">
+<a href="../../../20171118/slides/day1/06-rangeslider.html" target="_blank">
  <div align="center">
-   <img src="svg.png" width="100%" />
+   <img src="../../../20171118/slides/day1/svg.png" width="100%" />
  </div>
 </a>
 
@@ -357,12 +566,12 @@ For all CRAN packages that use plotly, see the "Reverse dependencies" section on
 
 * *Hundreds* of thousands time series points is responsive with *WebGL* (but [no rangeslider (yet)](https://community.plot.ly/t/is-there-a-way-to-keep-the-range-slider-while-using-scattergl/4556/3))
 
-```{r, code=readLines("07-webgl.R")}
+```{r, code=readLines("../../../20171118/slides/day1/07-webgl.R")}
 ```
 
-<a href="07-webgl.html" target="_blank">
+<a href="../../../20171118/slides/day1/07-webgl.html" target="_blank">
  <div align="center">
-   <img src="webgl.png" width="100%" />
+   <img src="../../../20171118/slides/day1/webgl.png" width="100%" />
  </div>
 </a>
 
@@ -381,9 +590,9 @@ For all CRAN packages that use plotly, see the "Reverse dependencies" section on
 
 ### High performance plotly charts
 
-* scattergl -- basically same as scatter (with [limitations](https://github.com/plotly/plotly.js/issues/130)), but [responsive with >1M points](scattergl.R).
-* pointcloud -- more restricted than scattergl, but [responsive w/ several million points](pointcloud.R).
-* heatmapgl -- [response with >1M cells](heatmapgl.R) in heatmap.
+* scattergl -- basically same as scatter (with [limitations](https://github.com/plotly/plotly.js/issues/130)), but [responsive with >1M points](../../../20171118/slides/day1/scattergl.R).
+* pointcloud -- more restricted than scattergl, but [responsive w/ several million points](../../../20171118/slides/day1/pointcloud.R).
+* heatmapgl -- [response with >1M cells](../../../20171118/slides/day1/heatmapgl.R) in heatmap.
 
 ---
 ## More time series tips
@@ -429,43 +638,43 @@ ggplot(tx, aes(month, median, group = year)) + geom_line() +
 ---
 ## Compare across cities within year *and* across years within city
 
-```{r, code=readLines("08-small-multiples.R")}
+```{r, code=readLines("../../../20171118/slides/day1/08-small-multiples.R")}
 ```
 
-<iframe src="08-small-multiples.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<iframe src="../../../20171118/slides/day1/08-small-multiples.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
 
 ---
 ## Set selection mode and default selections
 
-```{r, code=readLines("08-modes.R")}
+```{r, code=readLines("../../../20171118/slides/day1/08-modes.R")}
 ```
 
-<iframe src="08-modes.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<iframe src="../../../20171118/slides/day1/08-modes.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
 
 
 ---
 ## Make comparisons with dynamic brush
 
-```{r, code=readLines("08-dynamic.R")}
+```{r, code=readLines("../../../20171118/slides/day1/08-dynamic.R")}
 ```
 
-<iframe src="08-dynamic.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<iframe src="../../../20171118/slides/day1/08-dynamic.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
 
 ---
 ## Customize the appearance of selections
 
-```{r, code=readLines("08-custom.R")}
+```{r, code=readLines("../../../20171118/slides/day1/08-custom.R")}
 ```
 
-<iframe src="08-custom.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<iframe src="../../../20171118/slides/day1/08-custom.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
 
 ---
 ## Automate queries via animation
 
-```{r, code=readLines("08-automate.R")}
+```{r, code=readLines("../../../20171118/slides/day1/08-automate.R")}
 ```
 
-<iframe src="08-automate.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<iframe src="../../../20171118/slides/day1/08-automate.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
 
 
 ---
@@ -480,7 +689,7 @@ Visit [this post](http://ryanhafen.com/blog/trelliscopejs-plotly), replicate the
 
 
 .footnote[
-## Now would be a good time to ask me about personal projects (I have a 6pm flight tomorrow)!
+## Now would be a good time to ask me about personal projects!
 
-#### Unfortunately, we won't cover maps in this workshop, but [day 1 of last years workshop](https://plotcon17.cpsievert.me/workshop/day1/#1) covers the topic in depth.
+#### Want something to do? Peruse the package demos `demo(package = "plotly")`! Any demo prefixed by 'sf' is for the newer mapping stuff
 ]
