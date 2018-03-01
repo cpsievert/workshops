@@ -329,7 +329,7 @@ background-size: contain
 ---
 class: middle
 
-<h2 align="center"> Let's work through the 'demo.R' script </h2>
+<h2 align="center"> Demo </h2>
 
 The 'demo.R' file should be open in your source pane, but it resides under 'workshops' -> '20180303' -> 'slides' -> 'day1'
 

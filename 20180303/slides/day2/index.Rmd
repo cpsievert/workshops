@@ -88,22 +88,25 @@ background-image: url(https://i.imgur.com/UDwYyGP.gif)
 background-size: contain
 
 ---
-class: middle, bottom
-background-image: url(pipeline.svg)
-background-size: contain
-
-# Where is the pipeline?
-
----
 background-image: url(server-client.svg)
 background-size: contain
+class: middle, right
+
+# Where is the pipeline?  &nbsp;
 
 ---
-class: middle, center
-background-image: url(server-client.svg)
+background-image: url(server-client-dim.svg)
 background-size: contain
+class: middle, right
 
-# Standalone web pages are **much** easier to share, deploy, maintain.
+# No server required! &nbsp;
+
+---
+background-image: url(server-client-dim.svg)
+background-size: contain
+class: middle, right
+
+# Easier to share, scale, & maintain &nbsp;
 
 ---
 background-image: url(crosstalk.svg)
@@ -454,11 +457,16 @@ Open the last example
 file.edit("~/workshops/20170303/day2/shiny/05/app.R")
 ```
 
-Try to do the following:
+Modify it to do the following:
 
-1. Add `sliderInput()` for controlling the streaming interval and the number of points added in each update.
+1. Add `sliderInput()` for controlling the streaming interval.
 
-2. Add another (streaming) trace
+2. Add a widgets to:
+  * Change *only* the width of the line
+  * Change *only* the color of the line
+  * *Only* add/remove markers (e.g. points) for each data point
+  
+Hint: some of these shiny example apps will be helpful (e.g. `proxy_restyle_economics`) -- <https://github.com/ropensci/plotly/tree/master/inst/examples/shiny>
 
 ---
 background-image: url(plotly.svg)
@@ -491,10 +499,3 @@ background-image: url(plotly.svg)
 background-size: contain
 
 # Ask me anything!!
-
-.footnote[
-Want something to do? Some ideas:
-
-1. Read about the new api interface -- `help(api)`. <br />
-2. Read about [JavaScript customization](https://cpsievert.github.io/plotly_book/custom-behavior-via-javascript.html)
-]

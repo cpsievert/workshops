@@ -11,6 +11,7 @@ server <- function(input, output, session) {
   # initial values
   yint <- c(0, 1)
   
+  # initiate graph with initial values
   output$plot <- renderPlotly({
     plot_ly(y = yint, x = seq_along(yint)) %>%
       add_lines()
