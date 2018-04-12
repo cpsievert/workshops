@@ -75,16 +75,16 @@ background-size: contain
 library(plotly)
 library(crosstalk)
 
-sd &lt;- SharedData$new(txhousing, ~city, "Select a city")
+sd &lt;- SharedData$new(txhousing, ~city)
 
-base &lt;- plot_ly(sd, color = I("black"), height = 400) %&gt;%
+base &lt;- plot_ly(sd, color = I("black")) %&gt;%
   group_by(city)
 
 p1 &lt;- base %&gt;%
-  summarise(miss = sum(is.na(median))) %&gt;%
-  filter(miss &gt; 0) %&gt;%
-  arrange(miss) %&gt;%
-  add_bars(x = ~miss, y = ~factor(city, levels = city), hoverinfo = "x+y") %&gt;%
+  summarise(has = sum(is.na(median))) %&gt;%
+  filter(has &gt; 0) %&gt;%
+  arrange(has) %&gt;%
+  add_bars(x = ~has, y = ~factor(city, levels = city), hoverinfo = "x") %&gt;%
   layout(
     barmode = "overlay",
     xaxis = list(title = "Number of months missing"),
@@ -98,7 +98,7 @@ p2 &lt;- base %&gt;%
  subplot(p1, p2, titleX = TRUE, widths = c(0.3, 0.7)) %&gt;% 
   layout(margin = list(l = 120)) %&gt;%
   hide_legend() %&gt;%
-  highlight(dynamic = TRUE, selectize = TRUE)
+  highlight(color = "red")
 ```
 
 ---
@@ -164,36 +164,6 @@ background-size: contain
 ---
 
 
-```r
-# These examples demonstrate ways to display binned/aggregated selections
-library(crosstalk)
-library(plotly)
-
-d &lt;- SharedData$new(mtcars)
-sp &lt;- plot_ly(d, x = ~mpg, y = ~disp) %&gt;%
-  add_markers(color = I("black"))
-
-# hist/box/violin are all 'statistical trace types' meaning
-# they compute aggregations on the fly
-hist &lt;- plot_ly(d, x = ~factor(cyl)) %&gt;% 
-  add_histogram(color = I("black"))
-box &lt;- plot_ly(d, y = ~disp, color = I("black")) %&gt;% 
-  add_boxplot(name = " ")
-violin &lt;- plot_ly(d, y = ~disp, color = I("black")) %&gt;%
-  add_trace(type = "violin", name = " ")
-
-subplot(sp, box, violin, shareY = TRUE, titleX = TRUE, titleY = TRUE) %&gt;%
-  subplot(hist, widths = c(.75, .25), titleX = TRUE, titleY = TRUE) %&gt;%
-  layout(
-    barmode = "overlay", 
-    title = "Click and drag scatterplot",
-    showlegend = FALSE
-  ) %&gt;%
-  highlight(
-    "plotly_selected",
-    selected = attrs_selected(showlegend = FALSE)
-  )
-```
 
 ---
 ## Aggregating selections (continued)
@@ -203,34 +173,6 @@ subplot(sp, box, violin, shareY = TRUE, titleX = TRUE, titleY = TRUE) %&gt;%
 ---
 
 
-```r
-# These examples demonstrate ways to display binned/aggregated selections
-library(crosstalk)
-library(plotly)
-
-d &lt;- SharedData$new(mpg)
-dots &lt;- plot_ly(d, colors = "Set1", color = ~class, x = ~displ, y = ~cyl) %&gt;%
-  layout(
-    xaxis = list(title = "Engine displacement"),
-    yaxis = list(title = "Number of cylinders")
-  )
-boxs &lt;- plot_ly(d, colors = "Set1", color = ~class, x = ~class, y = ~cty) %&gt;% 
-  add_boxplot() %&gt;%
-  layout(
-    xaxis = list(title = ""),
-    yaxis = list(title = "Miles per gallon (city)")
-  )
-bars &lt;- plot_ly(d, colors = "Set1", x = ~class, color = ~class)
-
-subplot(dots, boxs, titleX = TRUE, titleY = TRUE) %&gt;%
-  subplot(bars, nrows = 2, titleX = TRUE, titleY = TRUE) %&gt;%
-  layout(
-    title = "Dynamic 2-way ANOVA (click &amp; drag on scatterplot)",
-    barmode = "overlay",
-    showlegend = FALSE
-  ) %&gt;%
-  highlight("plotly_selected", opacityDim = 0.6)
-```
 
 ---
 ## Aggregating selections (continued)
@@ -240,21 +182,6 @@ subplot(dots, boxs, titleX = TRUE, titleY = TRUE) %&gt;%
 ---
 
 
-```r
-# These examples demonstrate ways to display binned/aggregated selections
-library(crosstalk)
-library(plotly)
-
-tx &lt;- SharedData$new(txhousing, ~city)
-p1 &lt;- ggplot(tx, aes(date, median, group = city)) + geom_line() + xlab(NULL)
-gg1 &lt;- ggplotly(p1, tooltip = c("city", "date", "median"))
-p2 &lt;- plot_ly(tx, x = ~median, color = I("black")) %&gt;% 
-  add_histogram(histnorm = "probability density")
-
-subplot(gg1, p2, titleX = TRUE, titleY = TRUE) %&gt;% 
-  layout(barmode = "overlay") %&gt;%
-  highlight(dynamic = TRUE, selected = attrs_selected(opacity = 0.3))
-```
 
 ---
 ## Highlighting works in conjunction with animation! ([code](https://plotly-book.cpsievert.me/linking-animated-views.html))
@@ -479,7 +406,7 @@ class: center, middle
 # Hello &lt;img src="https://www.rstudio.com/wp-content/uploads/2014/04/shiny.png" width=100 /&gt; 👋
 
 ```r
-shiny::runApp("~/workshops/20180303/slides/day2/shiny/01", display.mode = "showcase")
+shiny::runApp("~/workshops/20180414/slides/day2/shiny/01", display.mode = "showcase")
 ```
 
 ---
@@ -488,7 +415,7 @@ class: center, middle
 # Accessing plotly user events
 
 ```r
-shiny::runApp("~/workshops/20180303/slides/day2/shiny/02", display.mode = "showcase")
+shiny::runApp("~/workshops/20180414/slides/day2/shiny/02", display.mode = "showcase")
 ```
 
 ---
@@ -517,7 +444,7 @@ class: center, middle
 # Targetting events (only if we have time)
 
 ```r
-shiny::runApp("~/workshops/20180303/slides/day2/shiny/03", display.mode = "showcase")
+shiny::runApp("~/workshops/20180414/slides/day2/shiny/03", display.mode = "showcase")
 ```
 
 .footnote[
@@ -532,7 +459,7 @@ class: center, middle
 By default, **shiny updates require a full redraw**, but proxies allows us to leverage [the plotly.js API](https://plot.ly/javascript/plotlyjs-function-reference/) to modify/update graphs more efficiently
 
 ```r
-shiny::runApp("~/workshops/20180303/slides/day2/shiny/04", display.mode = "showcase")
+shiny::runApp("~/workshops/20180414/slides/day2/shiny/04", display.mode = "showcase")
 ```
 
 ---
@@ -541,7 +468,7 @@ class: center, middle
 # Streaming data
 
 ```r
-shiny::runApp("~/workshops/20180303/slides/day2/shiny/05", display.mode = "showcase")
+shiny::runApp("~/workshops/20180414/slides/day2/shiny/05", display.mode = "showcase")
 ```
 
 .footnote[

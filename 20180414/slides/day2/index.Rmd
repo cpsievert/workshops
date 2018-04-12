@@ -375,7 +375,7 @@ class: center, middle
 # Hello <img src="https://www.rstudio.com/wp-content/uploads/2014/04/shiny.png" width=100 /> `r emo::ji("wave")`
 
 ```r
-shiny::runApp("~/workshops/20180303/slides/day2/shiny/01", display.mode = "showcase")
+shiny::runApp("~/workshops/20180414/slides/day2/shiny/01", display.mode = "showcase")
 ```
 
 ---
@@ -384,7 +384,7 @@ class: center, middle
 # Accessing plotly user events
 
 ```r
-shiny::runApp("~/workshops/20180303/slides/day2/shiny/02", display.mode = "showcase")
+shiny::runApp("~/workshops/20180414/slides/day2/shiny/02", display.mode = "showcase")
 ```
 
 ---
@@ -413,7 +413,7 @@ class: center, middle
 # Targetting events (only if we have time)
 
 ```r
-shiny::runApp("~/workshops/20180303/slides/day2/shiny/03", display.mode = "showcase")
+shiny::runApp("~/workshops/20180414/slides/day2/shiny/03", display.mode = "showcase")
 ```
 
 .footnote[
@@ -428,7 +428,7 @@ class: center, middle
 By default, **shiny updates require a full redraw**, but proxies allows us to leverage [the plotly.js API](https://plot.ly/javascript/plotlyjs-function-reference/) to modify/update graphs more efficiently
 
 ```r
-shiny::runApp("~/workshops/20180303/slides/day2/shiny/04", display.mode = "showcase")
+shiny::runApp("~/workshops/20180414/slides/day2/shiny/04", display.mode = "showcase")
 ```
 
 ---
@@ -437,7 +437,7 @@ class: center, middle
 # Streaming data
 
 ```r
-shiny::runApp("~/workshops/20180303/slides/day2/shiny/05", display.mode = "showcase")
+shiny::runApp("~/workshops/20180414/slides/day2/shiny/05", display.mode = "showcase")
 ```
 
 .footnote[

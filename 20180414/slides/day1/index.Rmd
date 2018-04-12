@@ -1,7 +1,7 @@
 ---
 title: "Mastering plotly for R"
 author: "Carson Sievert"
-venue: "plotcon montreal 2018"
+venue: "Boston 2018"
 type: "workshop"
 recording: "NA"
 output:
@@ -331,7 +331,7 @@ class: middle
 
 <h2 align="center"> Demo </h2>
 
-The 'demo.R' file should be open in your source pane, but it resides under 'workshops' -> '20180303' -> 'slides' -> 'day1'
+The 'demo.R' file should be open in your source pane, but it resides under 'workshops' -> '20180414' -> 'slides' -> 'day1'
 
 These examples help to understand how `plot_ly()` works.
 
