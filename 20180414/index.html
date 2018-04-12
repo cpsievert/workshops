@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Carson Sievert" />
+
+
+<title>‘plotly for R’ workshop</title>
+
+<link href="index_files/tufte-css/tufte-fonts.css" rel="stylesheet" />
+<link href="index_files/tufte-css/tufte-background.css" rel="stylesheet" />
+<link href="index_files/tufte-css/tufte-italics.css" rel="stylesheet" />
+<link href="index_files/tufte-css/tufte.css" rel="stylesheet" />
+<link href="index_files/highlightjs/default.css" rel="stylesheet" />
+<script src="index_files/highlightjs/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<link rel="stylesheet" href="main.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">‘plotly for R’ workshop</h1>
+<h4 class="author"><em><a href="https://cpsievert.me/">Carson Sievert</a></em></h4>
+<h4 class="date"><em>Boston, Massachusetts <br /> April 14th &amp; 15th, 2018</em></h4>
+
+
+
+<div id="about-the-workshop" class="section level1">
+<h1>About the workshop</h1>
+<p>This workshop is highly interactive and attendees are expected to participate in hands-on exercises designed to reinforce the lecture material. To participate in the exercises, attendees should bring a laptop and make sure they can open <a href="https://rstudio.cloud/project/14090">this RStudio Cloud project</a> before the workshop begins.</p>
+<p>By the end of this workshop, you will be able to rapidly pose queries about data with interactive web graphics made using <a href="https://plot.ly/r/">the R package plotly</a>. You will also learn about useful <a href="https://www.tidyverse.org/">tidyverse</a> tools and concepts such as <a href="https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html">tidy data</a>, reshaping data, and the <a href="https://www.jstatsoft.org/article/view/v040i01">split-apply-combine technique</a>. Though it would be beneficial to have some prior knowledge of R and <a href="http://ggplot2.tidyverse.org/">ggplot2</a>, we do not require it, and as such, we avoid assuming pre-existing knowledge as much as possible. Furthermore, this workshop is <em>not</em> designed to make you an R programming expert – it’s designed to get you <a href="http://varianceexplained.org/r/teach-hard-way/">doing powerful things quickly</a> regardless of your experience with R or programming in general.</p>
+<div id="day-1-outline" class="section level2">
+<h2>Day 1 outline</h2>
+<ul>
+<li>An overview of plotly for R
+<ul>
+<li>Motivating examples and demos</li>
+<li>How does it all fit together (htmlwidgets for R, plotly.js, SVG vs WebGL, etc)?</li>
+<li>Mapping data to visuals (theory and practice)</li>
+<li>Tips for learning more, debugging, and generally getting “un-stuck”</li>
+</ul></li>
+<li>Data wrangling for visualization
+<ul>
+<li>Reshaping with <strong>tidyr</strong>, manipulation with <strong>dplyr</strong></li>
+<li>The data-plot-pipeline</li>
+</ul></li>
+<li>Interactive maps made simple
+<ul>
+<li>scattermapbox</li>
+<li>scattergeo</li>
+<li><strong>sf</strong> and geom_sf()</li>
+</ul></li>
+</ul>
+</div>
+<div id="day-2-outline" class="section level2">
+<h2>Day 2 outline</h2>
+<ul>
+<li>Animations via <code>plot_ly()</code> and <code>ggplotly()</code></li>
+<li>Linking multiple views via <strong>crosstalk</strong>
+<ul>
+<li>Highlighting via direct/indirect manipulation</li>
+<li>Filtering via indirect manipulation</li>
+</ul></li>
+<li>Getting the most of out plotly in <strong>shiny</strong>
+<ul>
+<li>Quick intro to <strong>shiny</strong></li>
+<li>Accessing/responding to plotly events in <strong>shiny</strong></li>
+<li>Efficient updates via <code>plotlyProxy()</code></li>
+</ul></li>
+<li>An intro to <strong>dasher</strong> (dash for R)
+<ul>
+<li>Why <strong>dasher</strong>?</li>
+<li>Quick overview of dash components</li>
+<li><strong>dasher</strong> basics: layout &amp; callbacks</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="code-of-conduct" class="section level1">
+<h1>Code of Conduct</h1>
+<p>We are committed to providing a welcoming and harassment-free experience for everyone, regardless of gender, gender identity and expression, age, sexual orientation, disability, physical appearance, body size, race, ethnicity, religion (or lack thereof), or technology choices. We do not tolerate harassment of conference participants in any form. Sexual language and imagery is not appropriate for any conference venue, including talks, workshops, parties, Twitter and other online media. Participants violating these rules may be sanctioned or expelled from the event at the discretion of the organizers.</p>
+<p>This code of conduct applies to all participants, including the organizers and applies to all modes of interaction, both in-person and online, including the Slack channel and Twitter.</p>
+<p>Workshop participants agree to:</p>
+<ul>
+<li><p>Be considerate in speech and actions, and actively seek to acknowledge and respect the boundaries of fellow attendees.</p></li>
+<li><p>Refrain from demeaning, discriminatory, or harassing behavior and speech. Harassment includes, but is not limited to: deliberate intimidation; stalking; unwanted photography or recording; sustained or willful disruption of talks or other events; inappropriate physical contact; use of sexual or discriminatory imagery, comments, or jokes; and unwelcome sexual attention. If you feel that someone has harassed you or otherwise treated you inappropriately, please alert any member of the conference team in person.</p></li>
+<li><p>Take care of each other. Alert a member of the conference team if you notice a dangerous situation, someone in distress, or violations of this code of conduct, even if they seem inconsequential.</p></li>
+</ul>
+<div id="need-help" class="section level2">
+<h2>Need Help?</h2>
+<p><b>Please contact <a href="mailto:cpsievert1@gmail.com">Carson Sievert</a> if you have any concerns.</b></p>
+<p>If any attendee engages in harassing behavior, the workshop organizers may take any lawful action we deem appropriate, including but not limited to warning the offender or asking the offender to leave the workshop. (If you feel you have been unfairly accused of violating this code of conduct, you should contact the workshop team with a concise description of your grievance.)</p>
+<p>We welcome your feedback on this event, and thank you for working with us to make it a safe, enjoyable, and friendly experience for everyone who participates.</p>
+<p>Parts of above text is licensed CC BY-SA 4.0. Credit to <a href="https://srccon.org">SRCCON</a> and <a href="http://textworkshop17.ropensci.org/">rOpenSci</a>.</p>
+</div>
+</div>
+
+
+
+
+</body>
+</html>

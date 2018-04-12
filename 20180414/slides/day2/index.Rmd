@@ -1,0 +1,501 @@
+---
+title: "Advanced plotly"
+author: "Carson Sievert"
+venue: "plotcon 18"
+type: "workshop"
+recording: "NA"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "../main.css"]
+    chakra: "../remark-latest.min.js"
+    mathjax: null
+    seal: false
+    nature:
+      # approx the golden ratio
+      ratio: '14.6:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      navigation:
+        scroll: false
+---
+class: bottom, left
+background-image: url(adv-plotly-for-r.svg)
+background-size: contain
+
+```{r, include = FALSE}
+library(plotly)
+knitr::opts_chunk$set(
+  message = FALSE,
+  fig.width = 10,
+  fig.height = 4,
+  comment = "#>",
+  collapse = TRUE,
+  eval = FALSE
+)
+```
+
+---
+## Texas housing prices
+
+```{r, eval = TRUE}
+library(dplyr)
+tx <- txhousing %>%
+  select(city, year, month, median) %>%
+  filter(city %in% c("Galveston", "Midland", "Odessa", "South Padre Island"))
+tx
+```
+
+---
+## Highlighting in small multiples
+
+```{r}
+*TX <- SharedData$new(tx, ~year)
+p <- ggplot(TX, aes(month, median, group = year)) + geom_line() +
+  facet_wrap(~city, ncol = 2)
+(gg <- ggplotly(p, tooltip = "year"))
+```
+
+<iframe src="../day1/08-small-multiples.html" width="100%" height="420" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+## Query missing values by city
+
+<iframe src="01-pipeline.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+class: bottom, left 
+background-image: url(pipeline.svg)
+background-size: contain
+
+## The 'data pipeline'
+
+---
+
+```{r, code=readLines(system.file("demo", "crosstalk-highlight-pipeline.R", package = "plotly"))}
+```
+
+---
+class: inverse, middle, bottom
+background-image: url(https://i.imgur.com/H9vOG9f.gif)
+background-size: contain
+
+# Britney: So what? I can do this with shiny.
+
+---
+class: inverse, bottom, left
+background-image: url(https://i.imgur.com/UDwYyGP.gif)
+background-size: contain
+
+---
+background-image: url(server-client.svg)
+background-size: contain
+class: middle, right
+
+# Where is the pipeline?  &nbsp;
+
+---
+background-image: url(server-client-dim.svg)
+background-size: contain
+class: middle, right
+
+# No server required! &nbsp;
+
+---
+background-image: url(server-client-dim.svg)
+background-size: contain
+class: middle, right
+
+# Easier to share, scale, & maintain &nbsp;
+
+---
+background-image: url(crosstalk.svg)
+background-size: contain
+
+## The general model
+
+.footnote[
+### Links are specified in R, but the "updating logic" is JavaScript -- no server required!
+]
+
+
+---
+class: inverse, center, middle
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+<h2 align="center"> Your turn </h2>
+
+(1) Modify the ['pipeline' demo](https://github.com/ropensci/plotly/blob/master/demo/crosstalk-highlight-pipeline.R) so that markers (instead of bars) encode # of missing values (like it does in the diagram).
+
+(2) Highlight cities by *brushing* marker(s) (hint: linked brushing isn't be enabled by default, see `help(highlight)`)
+
+---
+## Aggregating selections
+
+<iframe src="02-binned-target-b.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+
+```{r, code=readLines(system.file("demo", "crosstalk-highlight-binned-target-b.R", package = "plotly"))}
+```
+
+---
+## Aggregating selections (continued)
+
+<iframe src="02-binned-target-a.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+
+```{r, code=readLines(system.file("demo", "crosstalk-highlight-binned-target-a.R", package = "plotly"))}
+```
+
+---
+## Aggregating selections (continued)
+
+<iframe src="02-binned-target-c.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+
+```{r, code=readLines(system.file("demo", "crosstalk-highlight-binned-target-c.R", package = "plotly"))}
+```
+
+---
+## Highlighting works in conjunction with animation! ([code](https://plotly-book.cpsievert.me/linking-animated-views.html))
+
+<a href="gapminder.html" target="_blank">
+  <img src="https://plotly-book.cpsievert.me/images/gapminder-highlight-animation.gif" width = "100%" />
+</a>
+
+---
+class: middle
+
+<h2 align="center"> plotly's client-side reactivity options </h2>
+
+* Multiple linked views via `crosstalk::SharedData` and `plotly::highlight()`
+  * Explore subsets of data
+
+* Partial updates via [sliders](https://plot.ly/r/sliders/), [buttons](https://plot.ly/r/custom-buttons/), and [dropdowns](https://plot.ly/r/dropdowns/)
+  * Use [plotly.js functions](https://plot.ly/javascript/plotlyjs-function-reference/) to modify a plot
+
+* Layer-on additional JavaScript via `htmlwidgets::onRender()`
+
+---
+## Dropdown example
+
+<iframe src="dropdown.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+## The implementation
+
+```r
+styles <- schema()$layout$layoutAttributes$mapbox$style$values
+style_buttons <- lapply(styles, function(s) {
+  list(label = s, method = "relayout", args = list("mapbox.style", s))
+})
+
+storms <- sf::st_read(system.file("shape/storms_xyz.shp", package = "sf"), quiet = TRUE)
+plot_mapbox(storms, color = I("red")) %>%
+  layout(
+    title = "Changing the base layer",
+    updatemenus = list(list(y = 0.8, buttons = style_buttons))
+  )
+```
+
+---
+### Google search on click
+
+```r
+plot_ly(mtcars, x = ~wt, y = ~mpg) %>%
+  add_markers(text = ~paste0("http://google.com/#q=", rownames(mtcars))) %>%
+  htmlwidgets::onRender("function(el, x) {
+    el.on('plotly_click', function(d) {
+      var pt = d.points[0];
+      var url = pt.data.text[pt.pointNumber];
+      window.open(url);
+    });
+  }")
+```
+
+<iframe src="google.html" width="100%" height="300" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+class: inverse, middle
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+<h2 align="center"> Your turn </h2>
+
+### Some helpful info
+
+Enter `demo(package = "plotly")` to see a list of all the demos. Once you have a topic, say "sf-mapbox-dt", you can run it like this: `demo("sf-mapbox-dt", package = "plotly")`. If you'd like to see/edit the source code, do: `file.edit(system.file("demo", "sf-mapbox-dt.R", package = "plotly"))`
+
+### The challenge
+
+Reproduce a demo, or any example seen thus far, and save it as an HTML file. In most cases, this can be done via `htmlwidgets::saveWidget()` *or* `htmltools::save_html()`. How do these two approaches differ?
+
+
+---
+class: inverse, center, middle
+
+# You can only go so far without shiny...
+
+---
+class: bottom
+background-image: url(https://i.imgur.com/T7GSpv9.gif)
+background-size: contain
+
+### https://github.com/cpsievert/zikar
+
+---
+class: bottom
+background-image: url(https://i.imgur.com/csIUJX0.gif)
+background-size: contain
+
+
+### https://github.com/cpsievert/apps
+
+---
+class: center, middle
+background-image: url(https://i.imgur.com/tlRv98y.gif)
+background-size: contain
+
+# ...but we can combine powers
+
+---
+class: bottom
+background-image: url(https://i.imgur.com/MGbR5AI.gif)
+background-size: contain
+
+### https://github.com/cpsievert/bcviz
+
+---
+class: center, middle
+
+# I promise...
+
+We will get to shiny, but we haven't covered *filter* events yet!
+
+---
+class: inverse, middle, center
+
+# Filter vs highlight
+
+The `highlight()` function sets options for *highlight events*.
+
+*Highlight* events **dim the opacity** of existing marks.
+
+*Filter* events **completely removes** existing marks and rescales axes.<sup>1</sup>
+
+At least currently, *filter* events must be fired from **crosstalk** widgets.
+
+.footnote[
+[1]: when using `ggplotly()`, you need to specify `dynamicTicks = TRUE`
+]
+
+---
+## Crosstalk's filtering widgets
+
+```{r}
+tx <- SharedData$new(txhousing)
+widgets <- bscols(
+  widths = c(12, 12, 12),
+  filter_select("city", "Cities", tx, ~city),
+  filter_slider("sales", "Sales", tx, ~sales),
+  filter_checkbox("year", "Years", tx, ~year, inline = TRUE)
+)
+widgets
+```
+
+<iframe src="03-filter-widgets.html" width="100%" height="420" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+## Filtering
+
+```{r}
+bscols(
+  widths = c(4, 8), widgets, 
+  plot_ly(tx, x = ~date, y = ~median, showlegend = FALSE) %>% 
+    add_lines(color = ~city, colors = "black")
+)
+```
+
+<iframe src="04-filter.html" width="100%" height="420" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+
+---
+## Talk to other crosstalk-enabled widgets
+
+```{r, code=readLines("05-leaflet.R")}
+```
+
+<iframe src="05-leaflet.html" width="100%" height="420" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+
+---
+class: inverse, center, middle
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+<h2 align="center"> Your turn </h2>
+
+Add some filter widgets to the earthquakes example. Use `htmltools::save_html()` to save the result
+
+Recreate the `leaflet()` map with `plot_mapbox()`
+
+.footnote[
+Full solution is in `your-turn/01.R` file
+]
+
+---
+class: center, middle, inverse
+
+## Expectations vs reality
+
+.pull-left[
+  <img src="https://i.imgur.com/fZIenVE.jpg" height = "500" />
+]
+
+.pull-right[
+<br />
+<br />
+<br />
+<br />
+
+  **plotly** has advanced support for *highlight* events (e.g., `persistent`, `dynamic`, `selectize`)
+
+  Other [**crosstalk**-enabled htmlwidgets](https://rstudio.github.io/crosstalk/) likely won't respect (non-default) `highlight()` options.
+  
+  However, *filter* events should generally be supported.
+]
+
+---
+class: center, middle
+
+# Hello <img src="https://www.rstudio.com/wp-content/uploads/2014/04/shiny.png" width=100 /> `r emo::ji("wave")`
+
+```r
+shiny::runApp("~/workshops/20180303/slides/day2/shiny/01", display.mode = "showcase")
+```
+
+---
+class: center, middle
+
+# Accessing plotly user events
+
+```r
+shiny::runApp("~/workshops/20180303/slides/day2/shiny/02", display.mode = "showcase")
+```
+
+---
+class: inverse, center, middle
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+<h2 align="center"> Your turn </h2>
+
+Program an app to populate a bar chart reflecting the selection, sort of like this (using `cars` data):
+
+<div align="center" >
+  <img src="events-plotly-linked.gif" width="600" height="500" />
+</div>
+
+.footnote[
+[Full solution](https://github.com/cpsievert/apps/blob/master/shiny/apps/plotlyLinkedBrush/app.R)
+
+[Partial solution, <br /> without shiny](your-turn/02.R)
+]
+
+
+---
+class: center, middle
+
+# Targetting events (only if we have time)
+
+```r
+shiny::runApp("~/workshops/20180303/slides/day2/shiny/03", display.mode = "showcase")
+```
+
+.footnote[
+See also <https://plotly-book.cpsievert.me/linking-views-with-shiny.html#targeting-views>
+]
+
+---
+class: center, middle
+
+# plotly proxies
+
+By default, **shiny updates require a full redraw**, but proxies allows us to leverage [the plotly.js API](https://plot.ly/javascript/plotlyjs-function-reference/) to modify/update graphs more efficiently
+
+```r
+shiny::runApp("~/workshops/20180303/slides/day2/shiny/04", display.mode = "showcase")
+```
+
+---
+class: center, middle
+
+# Streaming data
+
+```r
+shiny::runApp("~/workshops/20180303/slides/day2/shiny/05", display.mode = "showcase")
+```
+
+.footnote[
+Inspired by <https://plot.ly/r/streaming/>
+]
+
+---
+class: inverse, middle
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+<h2 align="center"> Your turn </h2>
+
+Open the last example 
+
+```r
+file.edit("~/workshops/20170303/day2/shiny/05/app.R")
+```
+
+Modify it to do the following:
+
+1. Add `sliderInput()` for controlling the streaming interval.
+
+2. Add a widgets to:
+  * Change *only* the width of the line
+  * Change *only* the color of the line
+  * *Only* add/remove markers (e.g. points) for each data point
+  
+Hint: some of these shiny example apps will be helpful (e.g. `proxy_restyle_economics`) -- <https://github.com/ropensci/plotly/tree/master/inst/examples/shiny>
+
+---
+background-image: url(plotly.svg)
+background-size: 100px
+background-position: 90% 8%
+class: center, middle
+
+# Thanks!
+
+Resources for more learning:
+
+https://plot.ly/r/ <br />
+https://plotly-book.cpsievert.me <br />
+https://talks.cpsievert.me <br />
+https://github.com/cpsievert/phd-thesis <br />
+https://github.com/cpsievert/pedestrians <br />
+https://github.com/cpsievert/bcviz <br />
+https://github.com/cpsievert/apps <br />
+
+Find me online:
+
+Web: <http://cpsievert.me/> <br />
+Twitter: [@cpsievert](https://twitter.com/cpsievert) <br />
+GitHub: [@cpsievert](https://github.com/cpsievert) <br />
+Email: <cpsievert1@gmail.com>
+
+
+---
+background-image: url(plotly.svg)
+background-size: contain
+
+# Ask me anything!!

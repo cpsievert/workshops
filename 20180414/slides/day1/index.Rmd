@@ -1,0 +1,699 @@
+---
+title: "Mastering plotly for R"
+author: "Carson Sievert"
+venue: "plotcon montreal 2018"
+type: "workshop"
+recording: "NA"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "../main.css"]
+    chakra: "../remark-latest.min.js"
+    mathjax: null
+    seal: false
+    nature:
+      # approx the golden ratio
+      ratio: '14.6:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      navigation:
+        scroll: false
+---
+class: bottom, left
+background-image: url(plotly-for-r.svg)
+background-size: contain
+
+# Welcome
+
+## Thanks for coming!
+
+---
+class: inverse, center, middle
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+## Your turn
+
+(1) Go to this address <https://rstudio.cloud/project/14090>. Follow the directions you see in the 'hello.R' script.
+
+(2) Share (w/ your neighbor) 3 things you're hoping to take away from this workshop (share them via Slack if you like!)
+
+
+---
+class: middle
+
+<h3 align="center"> About me </h3>
+
+* PhD in statistics at Iowa State with Heike Hofmann & Di Cook (Dec 2016) 
+  
+  * Thesis: [Interfacing R with web technologies](http://lib.dr.iastate.edu/etd/15422/)
+  
+* CEO of [Sievert Consulting](https://consulting.cpsievert.me/) LLC (Jan 2017)
+
+  * Clients: plotly, NOAA, Sandia Labs, O'Reilly
+  
+* I `r emo::ji("heart")` interactive data visualization
+  
+  * Maintain/author R `r emo::ji("package")`s: plotly, LDAvis, animint
+
+```{r, include = FALSE}
+library(plotly)
+knitr::opts_chunk$set(
+  eval = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  comment = "#>",
+  collapse = TRUE,
+  fig.width = 12,
+  fig.height = 6
+)
+```
+
+---
+background-image: url(workflow.svg)
+background-size: contain
+class: inverse
+
+# Data science workflow
+
+
+---
+background-image: url(workflow1.svg)
+background-size: contain
+class: inverse
+
+# Expository vis
+
+
+---
+background-image: url(workflow2.svg)
+background-size: contain
+class: inverse
+
+# Exploratory vis
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+## Problem: analysts juggle many languages (R, JavaScript, python)
+
+
+---
+background-image: url(workflow2.svg)
+background-size: 400px
+background-position: 90% 8%
+class: inverse, middle, center
+
+## Interactive graphics *can* augment exploratory analysis, but are only *practical when we can iterate quickly*
+
+---
+class: inverse, center, middle
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+## Your turn
+
+With your neighbor, discuss some R packages that allow you to iterate quickly (and/or generally be productive)
+
+
+---
+class: center
+background-image: url(tidyverse.png)
+background-size: contain
+
+
+---
+background-image: url(workflow2.svg)
+background-size: 400px
+background-position: 90% 8%
+class: inverse, middle, center
+
+## No matter how complex and polished the individual operations are, it is often the quality of the glue that most directly determines the power of the system.
+
+— Hal Abelson
+
+.footnote[
+Quoted in the [tidyverse manifesto](https://cran.r-project.org/web/packages/tidyverse/vignettes/manifesto.html)
+]
+
+---
+class: inverse
+background-image: url(workflow-tidy.svg)
+background-size: contain
+
+## What binds the *tidy*-verse?
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+### [Tidy data](https://www.jstatsoft.org/article/view/v059i10) principle: each observation in a row, each variable in a column.
+
+---
+
+# What is the observational unit?
+
+<iframe src="sf-us-ggplotly-tooltip.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+
+* The [simple features](https://cran.r-project.org/package=sf) (**sf**) package applies tidy data principles to geo-spatial features.
+
+* The __albersusa__ package provides access to US boundaries as simple featues:
+
+```r
+library(albersusa)
+usa <- usa_sf("laea")
+
+library(dplyr)
+usa %>%
+ select(name, pop_2010, geometry) %>%
+ View()
+```
+
+<div align="center">
+  <img src="sf-albers.png" width="100%" />
+</div>
+
+---
+
+## The data frame is more than a table!
+
+<div align="center" >
+  <img src="list-column.png" width="50%"/>
+</div>
+
+.footnote[
+Image from Jenny Bryan's [brilliant talk](https://www.youtube.com/watch?v=4MfUCX_KpdE) on embracing list-columns.
+]
+
+---
+class: bottom
+background-image: url(https://i.imgur.com/jQXFzZw.gif)
+background-size: contain
+
+
+### **plotly** leverages list-columns to implement [hierarchial selection](https://i.imgur.com/jQXFzZw.gif)
+
+---
+
+```r
+subplot(
+  ggplot(usa) + geom_sf(),
+  ggplot(usa) + geom_sf(aes(fill = pop_2010))
+)
+```
+
+<iframe src="sf-us-ggplotly-subplot.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+
+#### Customize the tooltip
+
+```r
+usa$txt <- with(usa, paste("The state of", name, "had \n", pop_2010, "people in 2010"))
+p <- ggplot(usa) + geom_sf(aes(fill = pop_2010, text = txt)) 
+(gg <- ggplotly(p, tooltip = "text"))
+```
+
+<iframe src="sf-us-ggplotly-tooltip.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+class: inverse, middle
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+<h2 align="center"> Your turn </h2>
+
+Reproduce the last map (named `gg`), then do the following:
+
+* Enter `style(gg, hoveron="fill")` in your console, how is this different from `gg`?
+* Enter `plotly_json(gg)`. Navigate to 'data' -> '1'. What does this list represent? What is the value of the "hoveron" attribute?
+* Enter `schema()` in your console. Navigate to 'traces' -> 'scatter' -> 'attributes' -> 'hoveron'. What are the acceptable values for this attribute? What does the description say?
+
+.footnote[
+PS. the RStudio Cloud project is running a developmental version of **plotly** with similar **sf** support for `plot_mapbox()`/`plot_ly()`/`plot_geo()`. Try it out with `plot_mapbox(usa)` and let me know if you want to see or know more!
+]
+
+---
+
+<h2 align="center"> plotly is much more than ggplotly! </h2>
+
+#### Initiate a plotly graph (without ggplot2):
+
+* `plot_ly()`: non-ggplot2 interface to underlying [plotly.js](https://github.com/plotly/plotly.js) library
+* `plot_mapbox()`: `plot_ly()` wrapper/shortcut for [scattermapbox](https://plot.ly/r/scattermapbox/)
+* `plot_geo()`: `plot_ly()` wrapper/shortcut for [scattergeo](https://plot.ly/r/choropleth-maps/)
+
+#### Add data (i.e., traces) to a graph
+
+* `add_markers()`, `add_bars()`, etc (see [`help(add_trace)`](https://www.rdocumentation.org/packages/plotly/versions/4.7.1/topics/add_trace) for full list)
+
+#### Modify a graph (before printing)
+
+* `style()` to modify traces of an existing plotly graph
+* `layout()` to add/modify to a [layout component](https://plot.ly/r/reference/#layout)
+
+#### Tools for talking with plotly cloud
+
+* Send data and/or graphs with `api_create()`
+* Retrieve data and/or graphs with `api_download_plot()`/`api_download_grid()`
+* Do anything the [plotly's server API](https://api.plot.ly/v2/) supports with `api()`
+
+---
+## A minimal bar chart
+
+* Every **plotly** chart is powered by [plotly.js](https://github.com/plotly/plotly.js), *plus some extra R/JS magic* `r emo::ji("tophat")` `r emo::ji("rabbit")`.
+* `plot_ly()` is designed to default to sensible graphs
+
+```{r}
+plot_ly(x = c("A", "B"), y = 1:2)
+```
+
+<iframe src="01-simple-bar.html" width="100%" height="300" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+What actually happens when a plotly object is printed and rendered locally?
+
+---
+class: inverse
+background-image: url(printing.svg)
+background-size: contain
+
+---
+class: inverse, middle
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+<h2 align = "center"> Your Turn </h2>
+
+* Enter in the console: `plot_ly(diamonds, x = ~cut, color = ~clarity)`
+  * What information does this visualize? For context, see [`help(diamonds)`](https://www.rdocumentation.org/packages/ggplot2/versions/2.2.1/topics/diamonds)
+  * What is the R console message trying to tell you?
+  * Compare this message to the one that `plot_ly(x = c("A", "B"), y = 1:2)` gives you, what's different about these charts?
+  
+* Use `api_create()` to send this diamonds graph to your plotly account ([sign up](https://help.plot.ly/how-to-sign-up-to-plotly/))
+  * Go to the JSON tab -- how many traces does this chart have?
+  * Improve the labelling on this chart (use the 'Style' menu)
+
+
+---
+class: middle
+
+<h2 align="center"> Demo </h2>
+
+The 'demo.R' file should be open in your source pane, but it resides under 'workshops' -> '20180303' -> 'slides' -> 'day1'
+
+These examples help to understand how `plot_ly()` works.
+
+
+---
+## Which visualization is better?
+
+```{r, code=readLines("../../../20171118/slides/day1/03-heatmap.R")}
+```
+
+<iframe src="../../../20171118/slides/day1/03-heatmap.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+background-image: url(../../../20171118/slides/day1/bostock-heer-groups.png)
+background-size: contain
+
+## Famous question: which is larger (and by how much)? <font color="#DEE5FF">A</font> or <font color="#FDDFA4">B</font>?
+
+.footnote[
+These questions drive at least two influential papers:
+
+* [Cleveland and McGill (1984)](http://info.slis.indiana.edu/~katy/S637-S11/cleveland84.pdf)
+* [Bostock and Heer (2010)]()
+
+This figure is from [Data Visualization for Social Science](http://socviz.co/) (highly recommended!) in reference to Bostock and Heer.
+]
+
+---
+background-image: url(../../../20171118/slides/day1/bostock-heer-findings.png)
+background-size: contain
+
+## Position is best, especially along common scale and baseline
+
+.footnote[
+Figure from [Heer and Bostock (2010)](http://vis.stanford.edu/files/2010-MTurk-CHI.pdf)
+]
+
+---
+background-image: url(../../../20171118/slides/day1/hierarchy.png)
+background-size: contain
+
+## A more general guideline from Cleveland and McGill 
+
+.footnote[
+* Figure from [Data Points: Visualization That Means Something](https://issuu.com/wiley_publishing/docs/data_points_sample_a15b4e87f1b924) by Nathan Yau
+]
+
+---
+class: center, inverse, middle
+
+# Interactive techniques can aid in these tasks
+
+---
+## Again, which is better?
+
+<iframe src="../../../20171118/slides/day1/03-heatmap.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+background-image: url(https://i.imgur.com/bdd64us.gif)
+background-size: contain
+class: inverse
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+## &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Graphing 5 time series 
+
+## &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+
+---
+background-image: url(https://i.imgur.com/bdd64us.gif)
+background-size: contain
+class: inverse
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+## &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Graphing 5 time series 
+
+## &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+
+<h1 align="right"> 1,000 time series!</h2>
+
+---
+## With all my `installed.packages()`, yikes!
+
+```{r, code=readLines("../../../20171118/slides/day1/04-lines.R")}
+```
+
+<iframe src="../../../20171118/slides/day1/04-lines.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+## Can improve a bit with interaction
+
+```{r, code=readLines("../../../20171118/slides/day1/04-lines-b.R")}
+```
+
+<iframe src="../../../20171118/slides/day1/04-lines-b.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+## [heatmaply](https://github.com/talgalili/heatmaply#readme) is awesome for visualizing a numeric matrices!
+
+<iframe src="05-heatmaply.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+background-image: url(https://i.imgur.com/bdd64us.gif)
+background-size: contain
+class: inverse
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+## &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Graphing 1,000 time series 
+
+## &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+
+---
+background-image: url(https://i.imgur.com/bdd64us.gif)
+background-size: contain
+class: inverse
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+## &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Graphing 1,000 time series 
+
+## &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+
+<h1 align="right"> 1,000,000 time series!</h2>
+
+---
+class: center, middle
+
+# Overview first, then zoom and filter, then details on demand 
+
+Ben Shneiderman
+
+.footnote[
+Popular information visualization perspective
+]
+
+---
+class: center, inverse, middle
+
+# Visualization surprise, but don't scale well. Models scale well, but don't surprise
+
+Hadley Wickham
+
+.footnote[
+Popular statistical graphics perspective
+]
+
+---
+class: inverse, middle
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+<h2 align="center"> Your turn </h2>
+
+Have a look at some plotly "extension" packages!
+  * [heatmaply](https://github.com/talgalili/heatmaply#readme)
+  * [iheatmapr](https://github.com/ropensci/iheatmapr#readme)
+  * [visdat](http://visdat.njtierney.com/articles/experimental_features.html#interactivity)
+  * [vistime](https://github.com/shosaco/vistime#readme)
+  * [ggplotgui](https://github.com/gertstulp/ggplotgui#readme)
+  
+  
+.footnote[
+**Exercise**: Most of these packages have a function that returns a plotly object (e.g., `heatmaply::heatmaply()`). Use a plotly function to modify/customize the result (e.g., add a title with `plotly::layout()`) 
+
+For all CRAN packages that use plotly, see the "Reverse dependencies" section on <https://cran.r-project.org/package=plotly>
+]
+
+---
+## What about *long* time series?
+
+* *Tens* of thousands points is responsive with *SVG*
+
+```{r, code=readLines("../../../20171118/slides/day1/06-rangeslider.R")}
+```
+
+<a href="../../../20171118/slides/day1/06-rangeslider.html" target="_blank">
+ <div align="center">
+   <img src="../../../20171118/slides/day1/svg.png" width="100%" />
+ </div>
+</a>
+
+---
+## What about *long* time series?
+
+* *Hundreds* of thousands time series points is responsive with *WebGL* (but [no rangeslider (yet)](https://community.plot.ly/t/is-there-a-way-to-keep-the-range-slider-while-using-scattergl/4556/3))
+
+```{r, code=readLines("../../../20171118/slides/day1/07-webgl.R")}
+```
+
+<a href="../../../20171118/slides/day1/07-webgl.html" target="_blank">
+ <div align="center">
+   <img src="../../../20171118/slides/day1/webgl.png" width="100%" />
+ </div>
+</a>
+
+---
+## What about performance (beyond time-series)?
+
+### SVG vs Canvas, in general
+
+* The *Scalable* in SVG, means scalable in terms of bounding box size.
+  * No matter the context, your browser will struggle to render > 30,000 SVG elements.
+  * This is why [canvas based elements](https://en.wikipedia.org/wiki/Canvas_element) exist (the difference is similar to pdf vs png)
+  
+#### Time series doesn't scale well, even in a canvas context 
+
+* Time series has performance limitations that other data types don't (this is pretty universal).
+
+### High performance plotly charts
+
+* scattergl -- basically same as scatter (with [limitations](https://github.com/plotly/plotly.js/issues/130)), but [responsive with >1M points](../../../20171118/slides/day1/scattergl.R).
+* pointcloud -- more restricted than scattergl, but [responsive w/ several million points](../../../20171118/slides/day1/pointcloud.R).
+* heatmapgl -- [response with >1M cells](../../../20171118/slides/day1/heatmapgl.R) in heatmap.
+
+---
+## More time series tips
+
+#### Have *lots* of *long* time series?
+
+* Consider [extracting/visualizing features from each series](https://robjhyndman.com/talks/Google-Oct2015-part3.pdf)
+  * Some useful packages: [anomalous](https://github.com/robjhyndman/anomalous) and [tscognostics](https://github.com/earowang/tscognostics)
+  * See my work on [visualizing pedestrian traffic](https://github.com/cpsievert/pedestrians) with plotly
+  
+* Consider a tool like [trelliscope](http://ryanhafen.com/blog/trelliscopejs-plotly) for exploring many "groups"
+
+#### Visualization of models/predictions?
+
+* Start with [forecast](https://cran.r-project.org/package=forecast) and/or [mgcv](https://cran.r-project.org/package=mgcv) for model fitting.
+* Use a strategy similar to [here](https://plotly-book.cpsievert.me/a-case-study-of-housing-sales-in-texas.html#fig:forecast) to plot forecasts.
+
+#### Is seasonality important?
+
+* Consider "wrapping" your time-series 
+  * Wrap (i.e., group) your series by hand (get inspired by this [paper](https://arxiv.org/pdf/1412.6675.pdf))
+  * Checkout out [sugrrants](https://github.com/earowang/sugrrants) (`ggplotly()` converts the ggplot2 plots)
+
+---
+## Texas housing prices
+
+```{r, eval = TRUE}
+library(dplyr)
+tx <- txhousing %>%
+  select(city, year, month, median) %>%
+  filter(city %in% c("Galveston", "Midland", "Odessa", "South Padre Island"))
+tx
+```
+
+---
+## Wrap by year, facet by city
+
+```{r, eval = TRUE}
+ggplot(tx, aes(month, median, group = year)) + geom_line() +
+  facet_wrap(~city, ncol = 2)
+```
+
+---
+## Compare across cities within year *and* across years within city
+
+```{r, code=readLines("../../../20171118/slides/day1/08-small-multiples.R")}
+```
+
+<iframe src="../../../20171118/slides/day1/08-small-multiples.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+## Set selection mode and default selections
+
+```{r, code=readLines("../../../20171118/slides/day1/08-modes.R")}
+```
+
+<iframe src="../../../20171118/slides/day1/08-modes.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+
+---
+## Make comparisons with dynamic brush
+
+```{r, code=readLines("../../../20171118/slides/day1/08-dynamic.R")}
+```
+
+<iframe src="../../../20171118/slides/day1/08-dynamic.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+## Customize the appearance of selections
+
+```{r, code=readLines("../../../20171118/slides/day1/08-custom.R")}
+```
+
+<iframe src="../../../20171118/slides/day1/08-custom.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+---
+## Automate queries via animation
+
+```{r, code=readLines("../../../20171118/slides/day1/08-automate.R")}
+```
+
+<iframe src="../../../20171118/slides/day1/08-automate.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+
+
+---
+class: inverse, center, middle
+background-image: url(../your-turn.jpeg)
+background-size: contain
+
+
+## Your turn
+
+Visit [this post](http://ryanhafen.com/blog/trelliscopejs-plotly), replicate the example (no install needed), and use trelliscope to visualize `txhousing` (or, more preferably, your own data!)
+
+
+.footnote[
+## Now would be a good time to ask me about personal projects!
+]
