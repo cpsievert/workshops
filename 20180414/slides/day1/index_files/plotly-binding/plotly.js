@@ -260,6 +260,17 @@ HTMLWidgets.widget({
       });
     }
     
+    
+    // just a test
+    if (HTMLWidgets.dasherMode) {
+      graphDiv.on('plotly_click', function(d) {
+        HTMLWidgets.onInputChange(
+          ".clientValue-plotly_click-" + x.source, 
+          JSON.stringify(eventDataWithKey(d))
+        );
+      });
+    }
+    
     // send user input event data to shiny
     if (HTMLWidgets.shinyMode) {
       // https://plot.ly/javascript/zoom-events/
@@ -326,7 +337,8 @@ HTMLWidgets.widget({
         // selecting a point of a "simple" trace means: select the 
         // entire key attached to this trace, which is useful for,
         // say clicking on a fitted line to select corresponding observations 
-        var key = trace._isSimpleKey ? trace.key : trace.key[points[i].pointNumber];
+        var pts = points[i].pointNumber || points[i].pointNumbers;
+        var key = trace._isSimpleKey ? trace.key : Array.isArray(pts) ? pts.map(function(idx) { return trace.key[idx]; }) : trace.key[pts];
         // http://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
         var keyFlat = trace._isNestedKey ? [].concat.apply([], key) : key;
         
@@ -639,6 +651,10 @@ TraceManager.prototype.updateSelection = function(group, keys) {
         if (d.textfont) {
           trace.textfont = trace.textfont || {};
           trace.textfont.color =  selectionColour || trace.textfont.color || d.textfont.color;
+        }
+        if (d.fillcolor) {
+          // TODO: should selectionColour inherit alpha from the existing fillcolor?
+          trace.fillcolor = selectionColour || trace.fillcolor || d.fillcolor;
         }
         // attach a sensible name/legendgroup
         trace.name = trace.name || keys.join("<br />");

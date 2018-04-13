@@ -5,8 +5,8 @@
 library(cranlogs)
 logs <- cran_downloads(
   c("plotly", "ggvis", "leaflet", "networkD3", "rbokeh"), 
-  from = "2017-02-28", 
-  to = "2018-02-28"
+  from = "2017-04-13", 
+  to = "2018-04-13"
 )
 DT::datatable(logs)
 
