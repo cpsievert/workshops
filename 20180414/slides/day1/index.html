@@ -332,11 +332,15 @@ subplot(shareX = TRUE, nrows = 2,
 )
 ```
 
-&lt;iframe src="03-heatmap.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;a href="03-heatmap.html" target="_blank"&gt;
+&lt;div align="center"&gt;
+  &lt;img src="03-heatmap.png" width="80%"&gt;
+&lt;/div&gt;
+&lt;/a&gt;
 
 
 ---
-background-image: url(../../../20171118/slides/day1/bostock-heer-groups.png)
+background-image: url(bostock-heer-groups.png)
 background-size: contain
 
 ## Famous question: which is larger (and by how much)? &lt;font color="#DEE5FF"&gt;A&lt;/font&gt; or &lt;font color="#FDDFA4"&gt;B&lt;/font&gt;?
@@ -351,7 +355,7 @@ This figure is from [Data Visualization for Social Science](http://socviz.co/) (
 ]
 
 ---
-background-image: url(../../../20171118/slides/day1/bostock-heer-findings.png)
+background-image: url(bostock-heer-findings.png)
 background-size: contain
 
 ## Position is best, especially along common scale and baseline
@@ -361,7 +365,7 @@ Figure from [Heer and Bostock (2010)](http://vis.stanford.edu/files/2010-MTurk-C
 ]
 
 ---
-background-image: url(../../../20171118/slides/day1/hierarchy.png)
+background-image: url(hierarchy.png)
 background-size: contain
 
 ## A more general guideline from Cleveland and McGill 
@@ -378,7 +382,11 @@ class: center, inverse, middle
 ---
 ## Again, which is better?
 
-&lt;iframe src="../../../20171118/slides/day1/03-heatmap.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;a href="03-heatmap.html" target="_blank"&gt;
+&lt;div align="center"&gt;
+  &lt;img src="03-heatmap.png" width="100%"&gt;
+&lt;/div&gt;
+&lt;/a&gt;
 
 
 ---
@@ -439,7 +447,11 @@ class: inverse
 plot_ly(logz, x = ~date, y = ~count) %&gt;% group_by(package) %&gt;% add_lines(alpha=0.3)
 ```
 
-&lt;iframe src="../../../20171118/slides/day1/04-lines.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;a href="04-lines.html" target="_blank"&gt;
+&lt;div align="center"&gt;
+  &lt;img src="04-lines.png" width="100%"&gt;
+&lt;/div&gt;
+&lt;/a&gt;
 
 ---
 ## Can improve a bit with interaction
@@ -452,12 +464,20 @@ SharedData$new(logz, ~package, "Select package(s)") %&gt;%
   highlight(dynamic = TRUE, selectize = TRUE, persistent = TRUE)
 ```
 
-&lt;iframe src="../../../20171118/slides/day1/04-lines-b.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;a href="04-lines-b.html" target="_blank"&gt;
+&lt;div align="center"&gt;
+  &lt;img src="04-lines-b.png" width="100%"&gt;
+&lt;/div&gt;
+&lt;/a&gt;
 
 ---
 ## [heatmaply](https://github.com/talgalili/heatmaply#readme) is awesome for visualizing a numeric matrices!
 
-&lt;iframe src="05-heatmaply.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;a href="05-heatmaply.html" target="_blank"&gt;
+&lt;div align="center"&gt;
+  &lt;img src="05-heatmaply.png" width="100%"&gt;
+&lt;/div&gt;
+&lt;/a&gt;
 
 ---
 background-image: url(https://i.imgur.com/bdd64us.gif)
@@ -564,9 +584,9 @@ x &lt;- seq(Sys.time(), Sys.time() + length(y) - 1, by = "1 sec")
 plot_ly(x = x, y = cumsum(y)) %&gt;% add_lines() %&gt;% rangeslider()
 ```
 
-&lt;a href="../../../20171118/slides/day1/06-rangeslider.html" target="_blank"&gt;
+&lt;a href="06-rangeslider.html" target="_blank"&gt;
  &lt;div align="center"&gt;
-   &lt;img src="../../../20171118/slides/day1/svg.png" width="100%" /&gt;
+   &lt;img src="svg.png" width="100%" /&gt;
  &lt;/div&gt;
 &lt;/a&gt;
 
@@ -582,9 +602,9 @@ x &lt;- seq(Sys.time(), Sys.time() + length(y) - 1, by = "1 sec")
 plot_ly(x = x, y = cumsum(y)) %&gt;% add_lines() %&gt;% toWebGL()
 ```
 
-&lt;a href="../../../20171118/slides/day1/07-webgl.html" target="_blank"&gt;
+&lt;a href="07-webgl.html" target="_blank"&gt;
  &lt;div align="center"&gt;
-   &lt;img src="../../../20171118/slides/day1/webgl.png" width="100%" /&gt;
+   &lt;img src="webgl.png" width="100%" /&gt;
  &lt;/div&gt;
 &lt;/a&gt;
 
@@ -603,9 +623,9 @@ plot_ly(x = x, y = cumsum(y)) %&gt;% add_lines() %&gt;% toWebGL()
 
 ### High performance plotly charts
 
-* scattergl -- basically same as scatter (with [limitations](https://github.com/plotly/plotly.js/issues/130)), but [responsive with &gt;1M points](../../../20171118/slides/day1/scattergl.R).
-* pointcloud -- more restricted than scattergl, but [responsive w/ several million points](../../../20171118/slides/day1/pointcloud.R).
-* heatmapgl -- [response with &gt;1M cells](../../../20171118/slides/day1/heatmapgl.R) in heatmap.
+* scattergl -- basically same as scatter (with [limitations](https://github.com/plotly/plotly.js/issues/130)), but [responsive with &gt;1M points](scattergl.R).
+* pointcloud -- more restricted than scattergl, but [responsive w/ several million points](pointcloud.R).
+* heatmapgl -- [response with &gt;1M cells](heatmapgl.R) in heatmap.
 
 ---
 ## More time series tips
@@ -677,7 +697,11 @@ p &lt;- ggplot(TX, aes(month, median, group = year)) + geom_line() +
 (gg &lt;- ggplotly(p, tooltip = "year"))
 ```
 
-&lt;iframe src="../../../20171118/slides/day1/08-small-multiples.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;a href="08-small-multiples.html" target="_blank"&gt;
+&lt;div align="center"&gt;
+  &lt;img src="08-small-multiples.png" width="90%"&gt;
+&lt;/div&gt;
+&lt;/a&gt;
 
 ---
 ## Set selection mode and default selections
@@ -687,7 +711,11 @@ p &lt;- ggplot(TX, aes(month, median, group = year)) + geom_line() +
 highlight(gg, "plotly_hover", defaultValues = "2006")
 ```
 
-&lt;iframe src="../../../20171118/slides/day1/08-modes.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;a href="08-modes.html" target="_blank"&gt;
+&lt;div align="center"&gt;
+  &lt;img src="08-modes.png" width="100%"&gt;
+&lt;/div&gt;
+&lt;/a&gt;
 
 
 ---
@@ -698,7 +726,11 @@ highlight(gg, "plotly_hover", defaultValues = "2006")
 highlight(gg, dynamic = TRUE, persistent = TRUE, selectize = TRUE)
 ```
 
-&lt;iframe src="../../../20171118/slides/day1/08-dynamic.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;a href="08-dynamic.html" target="_blank"&gt;
+&lt;div align="center"&gt;
+  &lt;img src="08-dynamic.png" width="90%"&gt;
+&lt;/div&gt;
+&lt;/a&gt;
 
 ---
 ## Customize the appearance of selections
@@ -711,7 +743,11 @@ highlight(
 )
 ```
 
-&lt;iframe src="../../../20171118/slides/day1/08-custom.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;a href="08-custom.html" target="_blank"&gt;
+&lt;div align="center"&gt;
+  &lt;img src="08-custom.png" width="80%"&gt;
+&lt;/div&gt;
+&lt;/a&gt;
 
 ---
 ## Automate queries via animation
@@ -725,7 +761,11 @@ p &lt;- ggplot(tx, aes(month, median)) +
 ggplotly(p)
 ```
 
-&lt;iframe src="../../../20171118/slides/day1/08-automate.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+&lt;a href="08-automate.html" target="_blank"&gt;
+&lt;div align="center"&gt;
+  &lt;img src="08-automate.png" width="90%"&gt;
+&lt;/div&gt;
+&lt;/a&gt;
 
 
 ---

@@ -342,14 +342,18 @@ These examples help to understand how `plot_ly()` works.
 ---
 ## Which visualization is better?
 
-```{r, code=readLines("../../../20171118/slides/day1/03-heatmap.R")}
+```{r, code=readLines("03-heatmap.R")}
 ```
 
-<iframe src="03-heatmap.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<a href="03-heatmap.html" target="_blank">
+<div align="center">
+  <img src="03-heatmap.png" width="80%">
+</div>
+</a>
 
 
 ---
-background-image: url(../../../20171118/slides/day1/bostock-heer-groups.png)
+background-image: url(bostock-heer-groups.png)
 background-size: contain
 
 ## Famous question: which is larger (and by how much)? <font color="#DEE5FF">A</font> or <font color="#FDDFA4">B</font>?
@@ -364,7 +368,7 @@ This figure is from [Data Visualization for Social Science](http://socviz.co/) (
 ]
 
 ---
-background-image: url(../../../20171118/slides/day1/bostock-heer-findings.png)
+background-image: url(bostock-heer-findings.png)
 background-size: contain
 
 ## Position is best, especially along common scale and baseline
@@ -374,7 +378,7 @@ Figure from [Heer and Bostock (2010)](http://vis.stanford.edu/files/2010-MTurk-C
 ]
 
 ---
-background-image: url(../../../20171118/slides/day1/hierarchy.png)
+background-image: url(hierarchy.png)
 background-size: contain
 
 ## A more general guideline from Cleveland and McGill 
@@ -391,7 +395,11 @@ class: center, inverse, middle
 ---
 ## Again, which is better?
 
-<iframe src="../../../20171118/slides/day1/03-heatmap.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<a href="03-heatmap.html" target="_blank">
+<div align="center">
+  <img src="03-heatmap.png" width="100%">
+</div>
+</a>
 
 
 ---
@@ -447,23 +455,35 @@ class: inverse
 ---
 ## With all my `installed.packages()`, yikes!
 
-```{r, code=readLines("../../../20171118/slides/day1/04-lines.R")}
+```{r, code=readLines("04-lines.R")}
 ```
 
-<iframe src="../../../20171118/slides/day1/04-lines.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<a href="04-lines.html" target="_blank">
+<div align="center">
+  <img src="04-lines.png" width="100%">
+</div>
+</a>
 
 ---
 ## Can improve a bit with interaction
 
-```{r, code=readLines("../../../20171118/slides/day1/04-lines-b.R")}
+```{r, code=readLines("04-lines-b.R")}
 ```
 
-<iframe src="../../../20171118/slides/day1/04-lines-b.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<a href="04-lines-b.html" target="_blank">
+<div align="center">
+  <img src="04-lines-b.png" width="100%">
+</div>
+</a>
 
 ---
 ## [heatmaply](https://github.com/talgalili/heatmaply#readme) is awesome for visualizing a numeric matrices!
 
-<iframe src="05-heatmaply.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<a href="05-heatmaply.html" target="_blank">
+<div align="center">
+  <img src="05-heatmaply.png" width="100%">
+</div>
+</a>
 
 ---
 background-image: url(https://i.imgur.com/bdd64us.gif)
@@ -563,12 +583,12 @@ For all CRAN packages that use plotly, see the "Reverse dependencies" section on
 
 * *Tens* of thousands points is responsive with *SVG*
 
-```{r, code=readLines("../../../20171118/slides/day1/06-rangeslider.R")}
+```{r, code=readLines("06-rangeslider.R")}
 ```
 
-<a href="../../../20171118/slides/day1/06-rangeslider.html" target="_blank">
+<a href="06-rangeslider.html" target="_blank">
  <div align="center">
-   <img src="../../../20171118/slides/day1/svg.png" width="100%" />
+   <img src="svg.png" width="100%" />
  </div>
 </a>
 
@@ -577,12 +597,12 @@ For all CRAN packages that use plotly, see the "Reverse dependencies" section on
 
 * *Hundreds* of thousands time series points is responsive with *WebGL* (but [no rangeslider (yet)](https://community.plot.ly/t/is-there-a-way-to-keep-the-range-slider-while-using-scattergl/4556/3))
 
-```{r, code=readLines("../../../20171118/slides/day1/07-webgl.R")}
+```{r, code=readLines("07-webgl.R")}
 ```
 
-<a href="../../../20171118/slides/day1/07-webgl.html" target="_blank">
+<a href="07-webgl.html" target="_blank">
  <div align="center">
-   <img src="../../../20171118/slides/day1/webgl.png" width="100%" />
+   <img src="webgl.png" width="100%" />
  </div>
 </a>
 
@@ -601,9 +621,9 @@ For all CRAN packages that use plotly, see the "Reverse dependencies" section on
 
 ### High performance plotly charts
 
-* scattergl -- basically same as scatter (with [limitations](https://github.com/plotly/plotly.js/issues/130)), but [responsive with >1M points](../../../20171118/slides/day1/scattergl.R).
-* pointcloud -- more restricted than scattergl, but [responsive w/ several million points](../../../20171118/slides/day1/pointcloud.R).
-* heatmapgl -- [response with >1M cells](../../../20171118/slides/day1/heatmapgl.R) in heatmap.
+* scattergl -- basically same as scatter (with [limitations](https://github.com/plotly/plotly.js/issues/130)), but [responsive with >1M points](scattergl.R).
+* pointcloud -- more restricted than scattergl, but [responsive w/ several million points](pointcloud.R).
+* heatmapgl -- [response with >1M cells](heatmapgl.R) in heatmap.
 
 ---
 ## More time series tips
@@ -649,43 +669,63 @@ ggplot(tx, aes(month, median, group = year)) + geom_line() +
 ---
 ## Compare across cities within year *and* across years within city
 
-```{r, code=readLines("../../../20171118/slides/day1/08-small-multiples.R")}
+```{r, code=readLines("08-small-multiples.R")}
 ```
 
-<iframe src="../../../20171118/slides/day1/08-small-multiples.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<a href="08-small-multiples.html" target="_blank">
+<div align="center">
+  <img src="08-small-multiples.png" width="90%">
+</div>
+</a>
 
 ---
 ## Set selection mode and default selections
 
-```{r, code=readLines("../../../20171118/slides/day1/08-modes.R")}
+```{r, code=readLines("08-modes.R")}
 ```
 
-<iframe src="../../../20171118/slides/day1/08-modes.html" width="100%" height="425" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<a href="08-modes.html" target="_blank">
+<div align="center">
+  <img src="08-modes.png" width="100%">
+</div>
+</a>
 
 
 ---
 ## Make comparisons with dynamic brush
 
-```{r, code=readLines("../../../20171118/slides/day1/08-dynamic.R")}
+```{r, code=readLines("08-dynamic.R")}
 ```
 
-<iframe src="../../../20171118/slides/day1/08-dynamic.html" width="100%" height="500" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<a href="08-dynamic.html" target="_blank">
+<div align="center">
+  <img src="08-dynamic.png" width="90%">
+</div>
+</a>
 
 ---
 ## Customize the appearance of selections
 
-```{r, code=readLines("../../../20171118/slides/day1/08-custom.R")}
+```{r, code=readLines("08-custom.R")}
 ```
 
-<iframe src="../../../20171118/slides/day1/08-custom.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<a href="08-custom.html" target="_blank">
+<div align="center">
+  <img src="08-custom.png" width="80%">
+</div>
+</a>
 
 ---
 ## Automate queries via animation
 
-```{r, code=readLines("../../../20171118/slides/day1/08-automate.R")}
+```{r, code=readLines("08-automate.R")}
 ```
 
-<iframe src="../../../20171118/slides/day1/08-automate.html" width="100%" height="400" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<a href="08-automate.html" target="_blank">
+<div align="center">
+  <img src="08-automate.png" width="90%">
+</div>
+</a>
 
 
 ---
