@@ -56,7 +56,11 @@ p <- ggplot(TX, aes(month, median, group = year)) + geom_line() +
 (gg <- ggplotly(p, tooltip = "year"))
 ```
 
-<iframe src="../day1/08-small-multiples.html" width="100%" height="420" scrolling="no" seamless="seamless" frameBorder="0"> </iframe>
+<a href="../day1/08-small-multiples.html" target="_blank">
+<div align="center">
+  <img src="../day1/08-small-multiples.png" width="90%">
+</div>
+</a>
 
 ---
 ## Query missing values by city
