@@ -232,7 +232,7 @@ background-size: contain
 
 ### Some helpful info
 
-Enter `demo(package = "plotly")` to see a list of all the demos. Once you have a topic, say "sf-mapbox-dt", you can run it like this: `demo("sf-mapbox-dt", package = "plotly")`. If you'd like to see/edit the source code, do: `file.edit(system.file("demo", "sf-mapbox-dt.R", package = "plotly"))`
+Enter `demo(package = "plotly")` to see a list of all the demos. Once you have a topic, say "sf-dt", you can run it like this: `demo("sf-dt", package = "plotly")`. If you'd like to see/edit the source code, do: `file.edit(system.file("demo", "sf-dt.R", package = "plotly"))`
 
 ### The challenge
 
