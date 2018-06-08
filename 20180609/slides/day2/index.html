@@ -28,18 +28,18 @@ tx &lt;- txhousing %&gt;%
   filter(city %in% c("Galveston", "Midland", "Odessa", "South Padre Island"))
 tx
 #&gt; # A tibble: 748 x 4
-#&gt;    city       year month  median
-#&gt;    &lt;chr&gt;     &lt;int&gt; &lt;int&gt;   &lt;dbl&gt;
-#&gt;  1 Galveston  2000     1  95000.
-#&gt;  2 Galveston  2000     2 100000.
-#&gt;  3 Galveston  2000     3  98300.
-#&gt;  4 Galveston  2000     4 111100.
-#&gt;  5 Galveston  2000     5  89200.
-#&gt;  6 Galveston  2000     6 108600.
-#&gt;  7 Galveston  2000     7  99000.
-#&gt;  8 Galveston  2000     8  96200.
-#&gt;  9 Galveston  2000     9 104000.
-#&gt; 10 Galveston  2000    10 118800.
+#&gt;    city       year month median
+#&gt;    &lt;chr&gt;     &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
+#&gt;  1 Galveston  2000     1  95000
+#&gt;  2 Galveston  2000     2 100000
+#&gt;  3 Galveston  2000     3  98300
+#&gt;  4 Galveston  2000     4 111100
+#&gt;  5 Galveston  2000     5  89200
+#&gt;  6 Galveston  2000     6 108600
+#&gt;  7 Galveston  2000     7  99000
+#&gt;  8 Galveston  2000     8  96200
+#&gt;  9 Galveston  2000     9 104000
+#&gt; 10 Galveston  2000    10 118800
 #&gt; # ... with 738 more rows
 ```
 
@@ -48,10 +48,11 @@ tx
 
 
 ```r
-*TX &lt;- SharedData$new(tx, ~year)
+library(plotly)
+*TX &lt;- highlight_unit(tx, ~year)
 p &lt;- ggplot(TX, aes(month, median, group = year)) + geom_line() +
   facet_wrap(~city, ncol = 2)
-(gg &lt;- ggplotly(p, tooltip = "year"))
+ggplotly(p)
 ```
 
 &lt;a href="../day1/08-small-multiples.html" target="_blank"&gt;
@@ -77,18 +78,15 @@ background-size: contain
 
 ```r
 library(plotly)
-library(crosstalk)
+txcity &lt;- highlight_unit(txhousing, ~city, "Select a city")
 
-sd &lt;- SharedData$new(txhousing, ~city, "Select a city")
-
-base &lt;- plot_ly(sd, color = I("black"), height = 400) %&gt;%
+base &lt;- plot_ly(txcity, color = I("black")) %&gt;%
   group_by(city)
 
 p1 &lt;- base %&gt;%
   summarise(miss = sum(is.na(median))) %&gt;%
   filter(miss &gt; 0) %&gt;%
-  arrange(miss) %&gt;%
-  add_bars(x = ~miss, y = ~factor(city, levels = city), hoverinfo = "x+y") %&gt;%
+  add_bars(x = ~miss, y = ~forcats::fct_reorder(city, miss), hoverinfo = "x+y") %&gt;%
   layout(
     barmode = "overlay",
     xaxis = list(title = "Number of months missing"),
@@ -100,7 +98,6 @@ p2 &lt;- base %&gt;%
   layout(xaxis = list(title = ""))
 
  subplot(p1, p2, titleX = TRUE, widths = c(0.3, 0.7)) %&gt;% 
-  layout(margin = list(l = 120)) %&gt;%
   hide_legend() %&gt;%
   highlight(dynamic = TRUE, selectize = TRUE)
 ```
@@ -150,7 +147,7 @@ background-size: contain
 
 
 ---
-class: inverse, center, middle
+class: inverse, middle
 background-image: url(../your-turn.jpeg)
 background-size: contain
 
@@ -159,6 +156,38 @@ background-size: contain
 (1) Modify the ['pipeline' demo](https://github.com/ropensci/plotly/blob/master/demo/crosstalk-highlight-pipeline.R) so that markers (instead of bars) encode # of missing values (like it does in the diagram).
 
 (2) Highlight cities by *brushing* marker(s) (hint: linked brushing isn't be enabled by default, see `help(highlight)`)
+
+.footnote[
+---
+
+Time: 3 minutes
+
+]
+
+---
+## Aggregating selections (continued)
+
+&lt;iframe src="02-binned-target-a.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+---
+
+```r
+library(plotly)
+d &lt;- highlight_unit(mpg)
+
+dots &lt;- plot_ly(d, color = ~class, x = ~displ, y = ~cyl)
+boxs &lt;- plot_ly(d, color = ~class, x = ~class, y = ~cty) %&gt;% 
+  add_boxplot()
+bars &lt;- plot_ly(d, colors = "Set1", x = ~class, color = ~class)
+
+subplot(dots, boxs, titleX = TRUE, titleY = TRUE) %&gt;%
+  subplot(bars, nrows = 2, titleX = TRUE, titleY = TRUE) %&gt;%
+  layout(
+    barmode = "overlay",
+    showlegend = FALSE
+  ) %&gt;%
+  highlight("plotly_selected")
+```
 
 ---
 ## Aggregating selections
@@ -169,22 +198,15 @@ background-size: contain
 
 
 ```r
-# These examples demonstrate ways to display binned/aggregated selections
-library(crosstalk)
 library(plotly)
-
-d &lt;- SharedData$new(mtcars)
-sp &lt;- plot_ly(d, x = ~mpg, y = ~disp) %&gt;%
+d &lt;- highlight_unit(mtcars)
+sp &lt;- plot_ly(d, x = ~mpg, y = ~disp) %&gt;% 
   add_markers(color = I("black"))
 
-# hist/box/violin are all 'statistical trace types' meaning
-# they compute aggregations on the fly
-hist &lt;- plot_ly(d, x = ~factor(cyl)) %&gt;% 
-  add_histogram(color = I("black"))
-box &lt;- plot_ly(d, y = ~disp, color = I("black")) %&gt;% 
-  add_boxplot(name = " ")
-violin &lt;- plot_ly(d, y = ~disp, color = I("black")) %&gt;%
-  add_trace(type = "violin", name = " ")
+# 'statistical trace types'
+hist &lt;- plot_ly(d, x = ~factor(cyl)) %&gt;% add_histogram(color = I("black"))
+box &lt;- plot_ly(d, y = ~disp, color = I("black")) %&gt;% add_boxplot(name = " ")
+violin &lt;- plot_ly(d, y = ~disp, color = I("black")) %&gt;% add_trace(type = "violin", name = " ")
 
 subplot(sp, box, violin, shareY = TRUE, titleX = TRUE, titleY = TRUE) %&gt;%
   subplot(hist, widths = c(.75, .25), titleX = TRUE, titleY = TRUE) %&gt;%
@@ -193,48 +215,9 @@ subplot(sp, box, violin, shareY = TRUE, titleX = TRUE, titleY = TRUE) %&gt;%
     title = "Click and drag scatterplot",
     showlegend = FALSE
   ) %&gt;%
-  highlight(
-    "plotly_selected",
-    selected = attrs_selected(showlegend = FALSE)
-  )
+  highlight("plotly_selected")
 ```
 
----
-## Aggregating selections (continued)
-
-&lt;iframe src="02-binned-target-a.html" width="100%" height="550" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
-
----
-
-
-```r
-# These examples demonstrate ways to display binned/aggregated selections
-library(crosstalk)
-library(plotly)
-
-d &lt;- SharedData$new(mpg)
-dots &lt;- plot_ly(d, colors = "Set1", color = ~class, x = ~displ, y = ~cyl) %&gt;%
-  layout(
-    xaxis = list(title = "Engine displacement"),
-    yaxis = list(title = "Number of cylinders")
-  )
-boxs &lt;- plot_ly(d, colors = "Set1", color = ~class, x = ~class, y = ~cty) %&gt;% 
-  add_boxplot() %&gt;%
-  layout(
-    xaxis = list(title = ""),
-    yaxis = list(title = "Miles per gallon (city)")
-  )
-bars &lt;- plot_ly(d, colors = "Set1", x = ~class, color = ~class)
-
-subplot(dots, boxs, titleX = TRUE, titleY = TRUE) %&gt;%
-  subplot(bars, nrows = 2, titleX = TRUE, titleY = TRUE) %&gt;%
-  layout(
-    title = "Dynamic 2-way ANOVA (click &amp; drag on scatterplot)",
-    barmode = "overlay",
-    showlegend = FALSE
-  ) %&gt;%
-  highlight("plotly_selected", opacityDim = 0.6)
-```
 
 ---
 ## Aggregating selections (continued)
@@ -243,14 +226,11 @@ subplot(dots, boxs, titleX = TRUE, titleY = TRUE) %&gt;%
 
 ---
 
-
 ```r
-# These examples demonstrate ways to display binned/aggregated selections
-library(crosstalk)
 library(plotly)
+tx &lt;- highlight_unit(txhousing, ~city)
 
-tx &lt;- SharedData$new(txhousing, ~city)
-p1 &lt;- ggplot(tx, aes(date, median, group = city)) + geom_line() + xlab(NULL)
+p1 &lt;- ggplot(tx, aes(date, median, group = city)) + geom_line()
 gg1 &lt;- ggplotly(p1, tooltip = c("city", "date", "median"))
 p2 &lt;- plot_ly(tx, x = ~median, color = I("black")) %&gt;% 
   add_histogram(histnorm = "probability density")
@@ -272,7 +252,7 @@ class: middle
 
 &lt;h2 align="center"&gt; plotly's client-side reactivity options &lt;/h2&gt;
 
-* Multiple linked views via `crosstalk::SharedData` and `plotly::highlight()`
+* Multiple linked views via `highlight_unit()` and `highlight()`
   * Explore subsets of data
 
 * Partial updates via [sliders](https://plot.ly/r/sliders/), [buttons](https://plot.ly/r/custom-buttons/), and [dropdowns](https://plot.ly/r/dropdowns/)
@@ -305,19 +285,31 @@ plot_mapbox(storms, color = I("red")) %&gt;%
 ---
 ### Google search on click
 
+The `customdata` attribute provides a way to attach "meta-data" to visual attribues that you can access with JavaScript
+
 ```r
 plot_ly(mtcars, x = ~wt, y = ~mpg) %&gt;%
-  add_markers(text = ~paste0("http://google.com/#q=", rownames(mtcars))) %&gt;%
+  add_markers(customdata = ~paste0("http://google.com/#q=", rownames(mtcars))) %&gt;%
   htmlwidgets::onRender("function(el, x) {
     el.on('plotly_click', function(d) {
-      var pt = d.points[0];
-      var url = pt.data.text[pt.pointNumber];
+      var url = d.points[0].customdata;
       window.open(url);
     });
   }")
 ```
 
 &lt;iframe src="google.html" width="100%" height="300" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+---
+class: middle
+
+## Demo
+
+Let's walk through the 'customdata.R' script:
+
+```r
+file.edit("~/customdata.R")
+```
 
 ---
 class: inverse, middle
@@ -328,11 +320,24 @@ background-size: contain
 
 ### Some helpful info
 
-Enter `demo(package = "plotly")` to see a list of all the demos. Once you have a topic, say "sf-mapbox-dt", you can run it like this: `demo("sf-mapbox-dt", package = "plotly")`. If you'd like to see/edit the source code, do: `file.edit(system.file("demo", "sf-mapbox-dt.R", package = "plotly"))`
+```r
+# get a list of all the package demos
+demo(package = "plotly")
+
+# Once you have a topic, say "sf-dt", you can run it like this:
+demo("sf-dt", package = "plotly")
+
+# see/edit the source code
+file.edit(system.file("demo", "sf-dt.R", package = "plotly"))
+```
 
 ### The challenge
 
 Reproduce a demo, or any example seen thus far, and save it as an HTML file. In most cases, this can be done via `htmlwidgets::saveWidget()` *or* `htmltools::save_html()`. How do these two approaches differ?
+
+&lt;hr&gt;
+
+Time: 5 minutes
 
 
 ---
@@ -398,7 +403,8 @@ At least currently, *filter* events must be fired from **crosstalk** widgets.
 
 
 ```r
-tx &lt;- SharedData$new(txhousing)
+library(crosstalk)
+tx &lt;- highlight_unit(txhousing)
 widgets &lt;- bscols(
   widths = c(12, 12, 12),
   filter_select("city", "Cities", tx, ~city),
@@ -431,7 +437,7 @@ bscols(
 
 ```r
 library(leaflet)
-sd &lt;- SharedData$new(quakes)
+sd &lt;- highlight_unit(quakes)
 p &lt;- plot_ly(sd, x = ~depth, y = ~mag) %&gt;% add_markers(alpha = 0.5) %&gt;% highlight("plotly_selected")
 map &lt;- leaflet(sd) %&gt;% addTiles() %&gt;% addCircles()
 bscols(p, map)
@@ -439,9 +445,24 @@ bscols(p, map)
 
 &lt;iframe src="05-leaflet.html" width="100%" height="420" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
 
+---
+### Linking plotly with DT
+
+```r
+library(plotly)
+data(trails, package = "mapview")
+tsd &lt;- highlight_unit(trails)
+bscols(
+  plot_mapbox(tsd, text = ~FKN, hoverinfo = "text"),
+  DT::datatable(tsd)
+)
+```
+
+&lt;iframe src="05-DT.html" width="100%" height="420" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
 
 ---
-class: inverse, center, middle
+class: inverse, middle
 background-image: url(../your-turn.jpeg)
 background-size: contain
 
@@ -452,6 +473,11 @@ Add some filter widgets to the earthquakes example. Use `htmltools::save_html()`
 Recreate the `leaflet()` map with `plot_mapbox()`
 
 .footnote[
+---
+
+Time: 5 minutes
+
+
 Full solution is in `your-turn/01.R` file
 ]
 
@@ -483,7 +509,7 @@ class: center, middle
 # Hello &lt;img src="https://www.rstudio.com/wp-content/uploads/2014/04/shiny.png" width=100 /&gt; 👋
 
 ```r
-shiny::runApp("~/workshops/20180414/slides/day2/shiny/01", display.mode = "showcase")
+shiny::runApp("~/workshops/20180609/slides/day2/shiny/01", display.mode = "showcase")
 ```
 
 ---
@@ -492,36 +518,38 @@ class: center, middle
 # Accessing plotly user events
 
 ```r
-shiny::runApp("~/workshops/20180414/slides/day2/shiny/02", display.mode = "showcase")
+shiny::runApp("~/workshops/20180609/slides/day2/shiny/02", display.mode = "showcase")
 ```
 
 ---
-class: inverse, center, middle
+class: inverse, middle
 background-image: url(../your-turn.jpeg)
 background-size: contain
 
 &lt;h2 align="center"&gt; Your turn &lt;/h2&gt;
 
-Program an app to populate a bar chart reflecting the selection, sort of like this (using `cars` data):
+1. Modify the last app to use `plot_ly()` instead of `ggplotly()`
 
-&lt;div align="center" &gt;
-  &lt;img src="events-plotly-linked.gif" width="600" height="500" /&gt;
-&lt;/div&gt;
+2. Add output blocks that print out data from the following events:
+
+* `"plotly_hover"`
+* `"plotly_click"`
+* `"plotly_relayout"`
 
 .footnote[
-[Full solution](https://github.com/cpsievert/apps/blob/master/shiny/apps/plotlyLinkedBrush/app.R)
+---
 
-[Partial solution, &lt;br /&gt; without shiny](your-turn/02.R)
+Time: 5 minutes
 ]
 
 
 ---
 class: center, middle
 
-# Targetting events (only if we have time)
+# Targetting events
 
 ```r
-shiny::runApp("~/workshops/20180414/slides/day2/shiny/03", display.mode = "showcase")
+shiny::runApp("~/workshops/20180609/slides/day2/shiny/03", display.mode = "showcase")
 ```
 
 .footnote[
@@ -536,7 +564,7 @@ class: center, middle
 By default, **shiny updates require a full redraw**, but proxies allows us to leverage [the plotly.js API](https://plot.ly/javascript/plotlyjs-function-reference/) to modify/update graphs more efficiently
 
 ```r
-shiny::runApp("~/workshops/20180414/slides/day2/shiny/04", display.mode = "showcase")
+shiny::runApp("~/workshops/20180609/slides/day2/shiny/04", display.mode = "showcase")
 ```
 
 ---
@@ -545,7 +573,7 @@ class: center, middle
 # Streaming data
 
 ```r
-shiny::runApp("~/workshops/20180414/slides/day2/shiny/05", display.mode = "showcase")
+shiny::runApp("~/workshops/20180609/slides/day2/shiny/05", display.mode = "showcase")
 ```
 
 .footnote[
@@ -562,7 +590,7 @@ background-size: contain
 Open the last example 
 
 ```r
-file.edit("~/workshops/20170303/day2/shiny/05/app.R")
+file.edit("~/workshops/20180609/day2/shiny/05/app.R")
 ```
 
 Modify it to do the following:
@@ -573,8 +601,14 @@ Modify it to do the following:
   * Change *only* the width of the line
   * Change *only* the color of the line
   * *Only* add/remove markers (e.g. points) for each data point
-  
+
+&lt;hr&gt;
+
+Time: 10 minutes
+
 Hint: some of these shiny example apps will be helpful (e.g. `proxy_restyle_economics`) -- &lt;https://github.com/ropensci/plotly/tree/master/inst/examples/shiny&gt;
+
+
 
 ---
 background-image: url(plotly.svg)

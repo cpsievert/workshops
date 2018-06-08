@@ -34,15 +34,20 @@ background-size: contain
 </style>
 
 ---
-class: inverse, center, middle
+class: inverse, middle
 background-image: url(../your-turn.jpeg)
 background-size: contain
 
-## Your turn
+<h2 align="center"> Your turn </h2>
 
 (1) Go to this address <https://rstudio.cloud/project/14090>. Follow the directions you see in the 'hello.R' script.
 
 (2) Share (w/ your neighbor) 3 things you're hoping to take away from this workshop (share them via Slack if you like!)
+
+.footnote[
+---
+Time: 5 minutes
+]
 
 
 ---
@@ -168,7 +173,7 @@ background-size: 400px
 background-position: 90% 8%
 class: inverse, middle, center
 
-## Interactive graphics can <font color="red">enhance presentation</font>, but are only practical when <font color="red">deployed easily</font>
+## Interactive graphics can <font color="red">enhance presentation</font>, but are only practical when <font color="red">easily distributed</font>
 
 ---
 background-image: url(https://talks.cpsievert.me/20180515/server-client.svg)
@@ -202,6 +207,15 @@ background-size: contain
 class: bottom, left 
 
 ## "Linking as a <br> database query"
+
+---
+class: middle, inverse
+
+<h2 align="center"> Not everything can be (reasonably) framed as a database query!</h2>
+
+.footnote[
+#### But a suprising amount can! 
+]
 
 ---
 class: inverse, middle, principles
@@ -367,12 +381,9 @@ demo("crosstalk-highlight-epl-2", package = "plotly")
 
 This generates the soccer visualization. Compare the performance of 'Liverpool' with 'Chelsea'. What other info can you extract from this graphic?
 
-.footnote[
+<hr>
+
 Time: 5 minutes
-
-
-Bonus: Read the code. How does it work?
-]
 
 ---
 class: center
@@ -511,6 +522,8 @@ file.edit("~/usa.R")
 Walk through the code, complete the tasks, and discuss with a neighbor!
 
 .footnote[
+---
+
 Time: 10 minutes
 ]
 
@@ -575,6 +588,8 @@ background-size: contain
   * Improve the labelling on this chart (use the 'Style' menu)
   
 .footnote[
+---
+
 Time: 5-10 minutes
 ]
 
@@ -710,7 +725,8 @@ class: inverse
 ## With all my `installed.packages()`, yikes!
 
 ```r
-plot_ly(logz, x = ~date, y = ~count) %>% 
+logz %>%
+  plot_ly(x = ~date, y = ~count) %>% 
   group_by(package) %>% 
   add_lines(alpha = 0.3)
 ```
@@ -725,10 +741,12 @@ plot_ly(logz, x = ~date, y = ~count) %>%
 ## Can improve a bit with interaction
 
 ```r
-library(crosstalk)
-highlight_unit(logz, ~package, "Select package(s)") %>% 
-  plot_ly(x = ~date, y = ~count) %>% group_by(package) %>% add_lines(alpha=0.3) %>% 
-  highlight(dynamic = TRUE, selectize = TRUE, persistent = TRUE)
+logz %>%
+* highlight_unit(~package, "Select package(s)") %>% 
+  plot_ly(x = ~date, y = ~count) %>% 
+  group_by(package) %>% 
+  add_lines(alpha=0.3) %>% 
+* highlight(dynamic = TRUE, selectize = TRUE, persistent = TRUE)
 ```
 
 <a href="04-lines-b.html" target="_blank">

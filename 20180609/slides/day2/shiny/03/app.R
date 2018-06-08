@@ -16,13 +16,13 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   output$heat <- renderPlotly({
     plot_ly(x = nms, y = nms, z = ~correlation, 
-            key = correlation, type = "heatmap") %>%
+            key = correlation, type = "heatmap", source = "heat") %>%
       layout(xaxis = list(title = ""), 
              yaxis = list(title = ""))
   })
   
   output$selection <- renderPrint({
-    s <- event_data("plotly_click")
+    s <- event_data("plotly_click", source = "heat")
     if (length(s) == 0) {
       "Click on a cell in the heatmap to display a scatterplot"
     } else {
@@ -32,20 +32,17 @@ server <- function(input, output, session) {
   })
   
   output$scatterplot <- renderPlotly({
-    s <- event_data("plotly_click")
-    if (length(s)) {
-      vars <- c(s[["x"]], s[["y"]])
-      d <- setNames(mtcars[vars], c("x", "y"))
-      yhat <- fitted(lm(y ~ x, data = d))
-      plot_ly(d, x = ~x) %>%
-        add_markers(y = ~y) %>%
-        add_lines(y = ~yhat) %>%
-        layout(xaxis = list(title = s[["x"]]), 
-               yaxis = list(title = s[["y"]]), 
-               showlegend = FALSE)
-    } else {
-      plotly_empty()
-    }
+    s <- event_data("plotly_click", source = "heat")
+    if (!length(s)) return(ggplotly(NULL, "A message"))
+    vars <- c(s[["x"]], s[["y"]])
+    d <- setNames(mtcars[vars], c("x", "y"))
+    yhat <- fitted(lm(y ~ x, data = d))
+    plot_ly(d, x = ~x) %>%
+      add_markers(y = ~y) %>%
+      add_lines(y = ~yhat) %>%
+      layout(xaxis = list(title = s[["x"]]), 
+             yaxis = list(title = s[["y"]]), 
+             showlegend = FALSE)
   })
   
 }
