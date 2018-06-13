@@ -263,7 +263,7 @@ ggplot(tx, aes(month, median, group = year)) +
 
 ```r
 library(plotly)
-*TX &lt;- highlight_unit(tx, ~year)
+*TX &lt;- highlight_key(tx, ~year)
 p &lt;- ggplot(TX, aes(month, median, group = year)) + geom_line() +
   facet_wrap(~city, ncol = 2)
 *ggplotly(p, tooltip = "year")
@@ -725,7 +725,7 @@ logz %&gt;%
 
 ```r
 logz %&gt;%
-* highlight_unit(~package, "Select package(s)") %&gt;% 
+* highlight_key(~package, "Select package(s)") %&gt;% 
   plot_ly(x = ~date, y = ~count) %&gt;% 
   group_by(package) %&gt;% 
   add_lines(alpha=0.3) %&gt;% 

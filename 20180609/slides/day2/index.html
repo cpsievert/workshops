@@ -49,7 +49,7 @@ tx
 
 ```r
 library(plotly)
-*TX &lt;- highlight_unit(tx, ~year)
+*TX &lt;- highlight_key(tx, ~year)
 p &lt;- ggplot(TX, aes(month, median, group = year)) + geom_line() +
   facet_wrap(~city, ncol = 2)
 ggplotly(p)
@@ -78,7 +78,7 @@ background-size: contain
 
 ```r
 library(plotly)
-txcity &lt;- highlight_unit(txhousing, ~city, "Select a city")
+txcity &lt;- highlight_key(txhousing, ~city, "Select a city")
 
 base &lt;- plot_ly(txcity, color = I("black")) %&gt;%
   group_by(city)
@@ -173,7 +173,7 @@ Time: 3 minutes
 
 ```r
 library(plotly)
-d &lt;- highlight_unit(mpg)
+d &lt;- highlight_key(mpg)
 
 dots &lt;- plot_ly(d, color = ~class, x = ~displ, y = ~cyl)
 boxs &lt;- plot_ly(d, color = ~class, x = ~class, y = ~cty) %&gt;% 
@@ -199,7 +199,7 @@ subplot(dots, boxs, titleX = TRUE, titleY = TRUE) %&gt;%
 
 ```r
 library(plotly)
-d &lt;- highlight_unit(mtcars)
+d &lt;- highlight_key(mtcars)
 sp &lt;- plot_ly(d, x = ~mpg, y = ~disp) %&gt;% 
   add_markers(color = I("black"))
 
@@ -228,7 +228,7 @@ subplot(sp, box, violin, shareY = TRUE, titleX = TRUE, titleY = TRUE) %&gt;%
 
 ```r
 library(plotly)
-tx &lt;- highlight_unit(txhousing, ~city)
+tx &lt;- highlight_key(txhousing, ~city)
 
 p1 &lt;- ggplot(tx, aes(date, median, group = city)) + geom_line()
 gg1 &lt;- ggplotly(p1, tooltip = c("city", "date", "median"))
@@ -252,7 +252,7 @@ class: middle
 
 &lt;h2 align="center"&gt; plotly's client-side reactivity options &lt;/h2&gt;
 
-* Multiple linked views via `highlight_unit()` and `highlight()`
+* Multiple linked views via `highlight_key()` and `highlight()`
   * Explore subsets of data
 
 * Partial updates via [sliders](https://plot.ly/r/sliders/), [buttons](https://plot.ly/r/custom-buttons/), and [dropdowns](https://plot.ly/r/dropdowns/)
@@ -404,7 +404,7 @@ At least currently, *filter* events must be fired from **crosstalk** widgets.
 
 ```r
 library(crosstalk)
-tx &lt;- highlight_unit(txhousing)
+tx &lt;- highlight_key(txhousing)
 widgets &lt;- bscols(
   widths = c(12, 12, 12),
   filter_select("city", "Cities", tx, ~city),
@@ -437,7 +437,7 @@ bscols(
 
 ```r
 library(leaflet)
-sd &lt;- highlight_unit(quakes)
+sd &lt;- highlight_key(quakes)
 p &lt;- plot_ly(sd, x = ~depth, y = ~mag) %&gt;% add_markers(alpha = 0.5) %&gt;% highlight("plotly_selected")
 map &lt;- leaflet(sd) %&gt;% addTiles() %&gt;% addCircles()
 bscols(p, map)
@@ -451,7 +451,7 @@ bscols(p, map)
 ```r
 library(plotly)
 data(trails, package = "mapview")
-tsd &lt;- highlight_unit(trails)
+tsd &lt;- highlight_key(trails)
 bscols(
   plot_mapbox(tsd, text = ~FKN, hoverinfo = "text"),
   DT::datatable(tsd)

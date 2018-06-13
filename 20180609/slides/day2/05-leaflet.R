@@ -1,5 +1,5 @@
 library(leaflet)
-sd <- highlight_unit(quakes)
+sd <- highlight_key(quakes)
 p <- plot_ly(sd, x = ~depth, y = ~mag) %>% add_markers(alpha = 0.5) %>% highlight("plotly_selected")
 map <- leaflet(sd) %>% addTiles() %>% addCircles()
 bscols(p, map)

@@ -51,7 +51,7 @@ tx
 
 ```{r}
 library(plotly)
-*TX <- highlight_unit(tx, ~year)
+*TX <- highlight_key(tx, ~year)
 p <- ggplot(TX, aes(month, median, group = year)) + geom_line() +
   facet_wrap(~city, ncol = 2)
 ggplotly(p)
@@ -80,7 +80,7 @@ background-size: contain
 
 ```r
 library(plotly)
-txcity <- highlight_unit(txhousing, ~city, "Select a city")
+txcity <- highlight_key(txhousing, ~city, "Select a city")
 
 base <- plot_ly(txcity, color = I("black")) %>%
   group_by(city)
@@ -175,7 +175,7 @@ Time: 3 minutes
 
 ```r
 library(plotly)
-d <- highlight_unit(mpg)
+d <- highlight_key(mpg)
 
 dots <- plot_ly(d, color = ~class, x = ~displ, y = ~cyl)
 boxs <- plot_ly(d, color = ~class, x = ~class, y = ~cty) %>% 
@@ -200,7 +200,7 @@ subplot(dots, boxs, titleX = TRUE, titleY = TRUE) %>%
 
 ```{r}
 library(plotly)
-d <- highlight_unit(mtcars)
+d <- highlight_key(mtcars)
 sp <- plot_ly(d, x = ~mpg, y = ~disp) %>% 
   add_markers(color = I("black"))
 
@@ -229,7 +229,7 @@ subplot(sp, box, violin, shareY = TRUE, titleX = TRUE, titleY = TRUE) %>%
 
 ```r
 library(plotly)
-tx <- highlight_unit(txhousing, ~city)
+tx <- highlight_key(txhousing, ~city)
 
 p1 <- ggplot(tx, aes(date, median, group = city)) + geom_line()
 gg1 <- ggplotly(p1, tooltip = c("city", "date", "median"))
@@ -253,7 +253,7 @@ class: middle
 
 <h2 align="center"> plotly's client-side reactivity options </h2>
 
-* Multiple linked views via `highlight_unit()` and `highlight()`
+* Multiple linked views via `highlight_key()` and `highlight()`
   * Explore subsets of data
 
 * Partial updates via [sliders](https://plot.ly/r/sliders/), [buttons](https://plot.ly/r/custom-buttons/), and [dropdowns](https://plot.ly/r/dropdowns/)
@@ -404,7 +404,7 @@ At least currently, *filter* events must be fired from **crosstalk** widgets.
 
 ```{r}
 library(crosstalk)
-tx <- highlight_unit(txhousing)
+tx <- highlight_key(txhousing)
 widgets <- bscols(
   widths = c(12, 12, 12),
   filter_select("city", "Cities", tx, ~city),
@@ -444,7 +444,7 @@ bscols(
 ```r
 library(plotly)
 data(trails, package = "mapview")
-tsd <- highlight_unit(trails)
+tsd <- highlight_key(trails)
 bscols(
   plot_mapbox(tsd, text = ~FKN, hoverinfo = "text"),
   DT::datatable(tsd)
